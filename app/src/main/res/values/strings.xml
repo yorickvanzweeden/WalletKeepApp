@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">WalletKeep</string>
+
+    <!--Main activity-->
+    <string name="label_key">Key</string>
+    <string name="label_secret">Secret</string>
+    <string name="label_passphrase">Passphrase</string>
+    <string name="input_key">Key</string>
+    <string name="input_secret">Secret</string>
+    <string name="input_passphrase">Passphrase</string>
+    <string name="button_getData">Get data</string>
+    <string name="button_saveCredentials">Save</string>
+    <string name="text_results">Results</string>
+
+    <!--Key value preferences-->
+    <string name="preference_key">Key</string>
+    <string name="preference_secret">Secret</string>
+    <string name="preference_passphrase">Passphrase</string>
+
 </resources>

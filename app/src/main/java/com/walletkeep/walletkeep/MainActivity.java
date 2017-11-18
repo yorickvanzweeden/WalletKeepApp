@@ -1,18 +1,19 @@
 package com.walletkeep.walletkeep;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,28 +24,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Credentials credentials = new Credentials("","", "");
-
-        final Button button = findViewById(R.id.button);
+        // Call getData() on button click
+        final Button button = findViewById(R.id.button_getData);
         button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Context context = getApplicationContext();
-                CharSequence text = "Getting data!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                long timestamp = System.currentTimeMillis() / 1000;
-                credentials.getSignature();
-
-                requestWithSomeHttpHeaders(credentials);
-            }
+            public void onClick(View v) { getData();}
         });
 
+        // Call saveCredentials() on button click
+        final Button button2 = findViewById(R.id.button_saveCredentials);
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { saveCredentials();}
+        });
+
+        readCredentials();
     }
 
     private void requestWithSomeHttpHeaders(final Credentials credentials) {
-        final TextView mTextView = (TextView) findViewById(R.id.textView);
+        final TextView textView_results = findViewById(R.id.textView_results);
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://api.gdax.com/accounts";
         final StringRequest postRequest = new StringRequest(Request.Method.GET, url,
@@ -52,22 +48,20 @@ public class MainActivity extends AppCompatActivity {
                 {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        mTextView.setText("Response is: "+ response.substring(0,500));
+                        textView_results.setText(response);
+                        textView_results.setMovementMethod(new ScrollingMovementMethod());
                     }
                 },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-
-                        Log.d("ERROR","error => "+error.networkResponse.statusCode);
+                        String errorMessage = "No response data given";
+                        String statusCode = Integer.toString(error.networkResponse.statusCode);
                         try{
-                            Log.d("ERROR","error => "+ new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+                            errorMessage = new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers));
                         } catch (Exception e) {}
-
-                        mTextView.setText("Whoops");
+                        textView_results.setText("Error detected:\n\n" + errorMessage + "\nStatus code: " + statusCode);
                     }
                 }
         ) {
@@ -99,5 +93,47 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         queue.add(postRequest);
+    }
+
+    private void getData(){
+        // Get credentials from field
+        String key = ((EditText)findViewById(R.id.editText_key)).getText().toString();
+        String passphrase = ((EditText)findViewById(R.id.editText_passphrase)).getText().toString();
+        String secret = ((EditText)findViewById(R.id.editText_secret)).getText().toString();
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Getting data", Toast.LENGTH_SHORT);
+        toast.show();
+
+        final Credentials credentials = new Credentials(key,passphrase, secret);
+        credentials.getSignature();
+        requestWithSomeHttpHeaders(credentials);
+    }
+
+    private void saveCredentials() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Saving credentials", Toast.LENGTH_SHORT);
+        toast.show();
+
+        // Get credentials from field
+        String key = ((EditText)findViewById(R.id.editText_key)).getText().toString();
+        String secret = ((EditText)findViewById(R.id.editText_secret)).getText().toString();
+        String passphrase = ((EditText)findViewById(R.id.editText_passphrase)).getText().toString();
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.preference_key), key);
+        editor.putString(getString(R.string.preference_secret), secret);
+        editor.putString(getString(R.string.preference_passphrase), passphrase);
+        editor.commit();
+    }
+
+    private void readCredentials() {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+
+        String key = sharedPref.getString(getString(R.string.preference_key), "");
+        String secret = sharedPref.getString(getString(R.string.preference_secret), "");
+        String passphrase = sharedPref.getString(getString(R.string.preference_passphrase), "");
+        ((EditText)findViewById(R.id.editText_key)).setText(key);
+        ((EditText)findViewById(R.id.editText_secret)).setText(secret);
+        ((EditText)findViewById(R.id.editText_passphrase)).setText(passphrase);
     }
 }
