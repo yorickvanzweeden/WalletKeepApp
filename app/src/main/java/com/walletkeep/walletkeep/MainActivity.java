@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         readCredentials();
+
+        Portfolio p = new Portfolio();
+        p.updateWallets();
     }
 
     private void requestWithSomeHttpHeaders(final Credentials credentials) {
