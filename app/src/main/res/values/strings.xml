@@ -17,4 +17,18 @@
     <string name="preference_secret">Secret</string>
     <string name="preference_passphrase">Passphrase</string>
 
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+    <!--Splash pages-->
+    <string name="Splash1">WalletKeep is the app that makes tracking your cryptocurrency portfolio truly easy and effortless.</string>
+    <string name="Splash2">You enter your wallet address and exchange API View Key and WalletKeep will keep automatic track of all your balances, no more manual editing necessary.</string>
+    <string name="Splash3">All the keys, addresses and work is done and stored only on your phone, so no one else has access to your portfolio</string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
 </resources>
