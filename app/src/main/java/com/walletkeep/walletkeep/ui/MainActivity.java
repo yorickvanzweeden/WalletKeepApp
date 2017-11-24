@@ -1,4 +1,4 @@
-package com.walletkeep.walletkeep;
+package com.walletkeep.walletkeep.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
+import com.walletkeep.walletkeep.*;
+import com.walletkeep.walletkeep.R;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(com.walletkeep.walletkeep.R.layout.activity_main);
 
         checkFirstRun();
 
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Get current version code
-        int currentVersionCode = BuildConfig.VERSION_CODE;
+        int currentVersionCode = com.walletkeep.walletkeep.BuildConfig.VERSION_CODE;
 
         // Get saved version code
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);

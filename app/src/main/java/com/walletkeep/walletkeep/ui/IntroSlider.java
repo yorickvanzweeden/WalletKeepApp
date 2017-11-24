@@ -1,4 +1,4 @@
-package com.walletkeep.walletkeep;
+package com.walletkeep.walletkeep.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ViewFlipper;
+
+import com.walletkeep.walletkeep.R;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
