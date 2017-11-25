@@ -5,15 +5,15 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
-public class Portfolio {
+public class Exchange {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "name")
     private String name;
 
-    // Alternative constructor to empty constructor
-    public Portfolio(int id, String name){
+    // Constructor
+    public Exchange(int id, String name){
         this.id = id;
         this.name = name;
     }

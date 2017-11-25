@@ -1,32 +1,46 @@
 package com.walletkeep.walletkeep.ui.portfolio;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.ui.MainActivity;
+import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
+
+import org.w3c.dom.Text;
 
 public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.ViewHolder> {
-    public String[] mDataset;
+    private String[] mDataset;
+    private Context context;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mTextView;
+        public CardView mCardView;
+        public Button wallet;
         public ViewHolder(View v) {
             super(v);
             // Find the TextView in the LinearLayout
-            mTextView = v.findViewById(R.id.textView);
+            mCardView = v.findViewById(R.id.card_view);
+            wallet = v.findViewById(R.id.button_wallet);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PortfolioAdapter(String[] myDataset) {
+    public PortfolioAdapter(Context context, String[] myDataset) {
         mDataset = myDataset;
+        this.context = context;
     }
 
 
@@ -53,7 +67,16 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
+
+        ((TextView)holder.mCardView.getChildAt(0)).setText(mDataset[position]);
+        holder.wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, WalletActivity.class);
+                intent.putExtra("wallet_id", position);
+                context.startActivity(intent);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

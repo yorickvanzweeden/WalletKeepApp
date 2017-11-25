@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
@@ -37,6 +38,10 @@ public class PortfolioActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setupRecyclerView();
+    }
+
+    private void setupRecyclerView(){
         // Setup portfolio recycler view
         mRecyclerView = findViewById(R.id.recycler_view_portfolios);
 
@@ -52,7 +57,7 @@ public class PortfolioActivity extends AppCompatActivity {
         PortfolioViewModel.Factory factory = new PortfolioViewModel.Factory(getApplication());
         viewModel = ViewModelProviders.of(this, factory).get(PortfolioViewModel.class);
         viewModel.init();
-        mAdapter = new PortfolioAdapter(viewModel.provideDataset());
+        mAdapter = new PortfolioAdapter(this, viewModel.provideDataset());
         mRecyclerView.setAdapter(mAdapter);
         viewModel.loadPortfolios().observe(this, credentials -> {
             // update UI

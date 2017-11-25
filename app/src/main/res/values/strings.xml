@@ -31,5 +31,6 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
     <string name="title_activity_portfolio">PortfolioActivity</string>
+    <string name="title_activity_wallet">WalletActivity</string>
 
 </resources>
