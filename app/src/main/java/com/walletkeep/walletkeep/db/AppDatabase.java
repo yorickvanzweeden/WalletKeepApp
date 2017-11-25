@@ -65,7 +65,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
                             // Generate the data for pre-population
                             AppDatabase database = AppDatabase.getInstance(appContext, executors);
-                            final List<Portfolio> portfolios = DataGenerator.generatePortfolios();
+                            List<Portfolio> portfolios = DataGenerator.generatePortfolios();
                             database.runInTransaction(() -> {
                                 database.portfolioDao().insertAll(portfolios);
                             });

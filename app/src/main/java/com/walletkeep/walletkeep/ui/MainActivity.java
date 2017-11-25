@@ -15,6 +15,7 @@ import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import com.walletkeep.walletkeep.*;
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -40,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { saveCredentials();}
         });
+
+        final Button button3 = findViewById(R.id.button_portfolios);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PortfolioActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         readCredentials();
 
