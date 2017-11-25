@@ -11,16 +11,39 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.walletkeep.walletkeep.AppExecutors;
+import com.walletkeep.walletkeep.db.dao.CoinDao;
+import com.walletkeep.walletkeep.db.dao.CurrencyDao;
+import com.walletkeep.walletkeep.db.dao.ExchangeCredentialsDao;
+import com.walletkeep.walletkeep.db.dao.ExchangeDao;
 import com.walletkeep.walletkeep.db.dao.PortfolioDao;
+import com.walletkeep.walletkeep.db.dao.WalletDao;
+import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.Currency;
+import com.walletkeep.walletkeep.db.entity.Exchange;
+import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
+import com.walletkeep.walletkeep.db.entity.Wallet;
 
 import java.util.List;
 
-@Database(entities = {Portfolio.class}, version = 1)
+@Database(entities = {
+        Coin.class,
+        Currency.class,
+        Exchange.class,
+        ExchangeCredentials.class,
+        Portfolio.class,
+        Wallet.class
+}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     // Entity dao's
+    public abstract CoinDao coinDao();
+    public abstract CurrencyDao currencyDao();
+    public abstract ExchangeCredentialsDao exchangeCredentialsDao();
+    public abstract ExchangeDao exchangeDao();
     public abstract PortfolioDao portfolioDao();
+    public abstract WalletDao walletDao();
+
 
     // Database instance
     private static AppDatabase sInstance;

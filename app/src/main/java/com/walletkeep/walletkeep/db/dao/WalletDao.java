@@ -18,7 +18,7 @@ public interface WalletDao {
     LiveData<List<Wallet>> getAll();
 
     @Query("SELECT * FROM wallet WHERE id LIKE :id LIMIT 1")
-    LiveData<Portfolio> getById(int id);
+    LiveData<Wallet> getById(int id);
 
     @Insert
     void insertAll(List<Wallet> wallets);

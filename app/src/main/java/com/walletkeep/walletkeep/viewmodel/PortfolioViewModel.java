@@ -24,7 +24,7 @@ public class PortfolioViewModel extends ViewModel {
 
     public void init() {
         if (this.portfolios != null) return;
-        this.portfolios = portfolioRepository.loadPortfolios();
+        this.portfolios = portfolioRepository.getPortfolios();
     }
 
     public LiveData<List<Portfolio>> loadPortfolios() {
