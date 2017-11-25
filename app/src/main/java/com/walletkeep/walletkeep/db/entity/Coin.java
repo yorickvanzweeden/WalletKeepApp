@@ -31,15 +31,7 @@ public class Coin {
     private float amount;
 
     // Constructors
-    public Coin(int id, int walletId, int currencyId){
-        this.id = id;
-        this.walletId = walletId;
-        this.currencyId = currencyId;
-        this.amount = 0;
-    }
-
-    public Coin(int id, int walletId, int currencyId, float amount){
-        this.id = id;
+    public Coin(int walletId, int currencyId, float amount){
         this.walletId = walletId;
         this.currencyId = currencyId;
         this.amount = amount;

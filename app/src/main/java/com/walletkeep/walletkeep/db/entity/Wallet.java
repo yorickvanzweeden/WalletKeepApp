@@ -28,19 +28,11 @@ public class Wallet {
     private int portfolioId;
 
     @ColumnInfo(name = "exchange_id")
-    private int exchangeId;
+    private String exchangeId;
 
     // Constructors for ExchangeWallet and NakedWallet
-    public Wallet(int id, int portfolioId, int exchangeId){
-        this.id = id;
+    public Wallet(int portfolioId){
         this.portfolioId = portfolioId;
-        this.exchangeId = exchangeId;
-    }
-
-    public Wallet(int id, int portfolioId, String address){
-        this.id = id;
-        this.portfolioId = portfolioId;
-        this.address = address;
     }
 
     // Getters and setters
@@ -58,7 +50,7 @@ public class Wallet {
 
     public void setPortfolioId(int portfolioId) { this.portfolioId = portfolioId; }
 
-    public int getExchangeId() { return exchangeId; }
+    public String getExchangeId() { return exchangeId; }
 
-    public void setExchangeId(int exchangeId) { this.exchangeId = exchangeId; }
+    public void setExchangeId(String exchangeId) { this.exchangeId = exchangeId; }
 }

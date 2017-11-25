@@ -13,8 +13,7 @@ public class Portfolio {
     private String name;
 
     // Alternative constructor to empty constructor
-    public Portfolio(int id, String name){
-        this.id = id;
+    public Portfolio(String name){
         this.name = name;
     }
 

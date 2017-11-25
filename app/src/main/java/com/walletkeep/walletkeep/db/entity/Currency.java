@@ -16,8 +16,7 @@ public class Currency {
     private String ticker;
 
     // Constructor
-    public Currency(int id, String name, String ticker){
-        this.id = id;
+    public Currency(String name, String ticker){
         this.name = name;
         this.ticker = ticker;
     }

@@ -28,12 +28,7 @@ public class ExchangeCredentials {
     private int nonce;
 
     // Alternative constructor to empty constructor
-    public ExchangeCredentials(int id){
-        this.id = id;
-    }
-
-    public ExchangeCredentials(int id, String key, String secret, String passphrase){
-        this.id = id;
+    public ExchangeCredentials(String key, String secret, String passphrase){
         this.key = key;
         this.secret = secret;
         this.passphrase = passphrase;

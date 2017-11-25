@@ -13,8 +13,7 @@ public class Exchange {
     private String name;
 
     // Constructor
-    public Exchange(int id, String name){
-        this.id = id;
+    public Exchange(String name){
         this.name = name;
     }
 
