@@ -28,62 +28,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(com.walletkeep.walletkeep.R.layout.activity_main);
 
+        // Check if introslider should be shown
         checkFirstRun();
 
         // Call getData() on button click
         final Button button = findViewById(R.id.button_getData);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { getData();}
-        });
+        button.setOnClickListener(v -> getData());
 
         // Call saveCredentials() on button click
         final Button button2 = findViewById(R.id.button_saveCredentials);
-        button2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { saveCredentials();}
-        });
+        button2.setOnClickListener(v -> saveCredentials());
 
         final Button button3 = findViewById(R.id.button_portfolios);
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, PortfolioActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        button3.setOnClickListener(view ->
+                startActivity(new Intent(MainActivity.this, PortfolioActivity.class)));
 
         readCredentials();
-
     }
 
+    /**
+     * Check if Introslider should be shown
+     */
     private void checkFirstRun() {
-        Intent intent = new Intent(this, IntroSlider.class);
-        final String PREFS_NAME = "MyPrefsFile";
-        final String PREF_VERSION_CODE_KEY = "version_code";
-        final int DOESNT_EXIST = -1;
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        boolean show_intro = sharedPref.getBoolean("show_intro", true);
 
-
-        // Get current version code
-        int currentVersionCode = com.walletkeep.walletkeep.BuildConfig.VERSION_CODE;
-
-        // Get saved version code
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
-
-        // Check for first run or upgrade
-        if (currentVersionCode == savedVersionCode) {
-
-            // This is just a normal run
-            return;
-
-        } else if (savedVersionCode == DOESNT_EXIST) {
-            // This is a new install (or the user cleared the shared preferences)
-            startActivity(intent);
-
-
+        if (show_intro) {
+            startActivity(new Intent(this, IntroSlider.class));
+            sharedPref.edit().putBoolean("show_intro", false).apply();
         }
-        // Update the shared preferences with the current version code
-        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
     }
 
     private void requestWithSomeHttpHeaders(final Credentials credentials) {

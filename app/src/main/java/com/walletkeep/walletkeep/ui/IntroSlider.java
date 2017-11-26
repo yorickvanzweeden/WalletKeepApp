@@ -12,55 +12,40 @@ import android.widget.ViewFlipper;
 
 import com.walletkeep.walletkeep.R;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class IntroSlider extends AppCompatActivity {
-
-    private ViewFlipper simpleViewFlipper;
-    Button buttonnext;
-    int clicks;
+    int clicks = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        final Intent intent = new Intent(this, MainActivity.class);
-        clicks =0;
-
         setContentView(R.layout.activity_welcome);
 
-        // get The references of Button and ViewFlipper
-        buttonnext = (Button) findViewById(R.id.buttonnext);
-        simpleViewFlipper = (ViewFlipper) findViewById(R.id.simpleViewFlipper); // get the reference of ViewFlipper
+        // Get references of the Next button and the ViewFlipper
+        Button nextButton = findViewById(R.id.buttonnext);
+        ViewFlipper simpleViewFlipper = findViewById(R.id.simpleViewFlipper); // get the reference of ViewFlipper
+
         // Declare in and out animations and load them using AnimationUtils class
         Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
         Animation out = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
 
-        // set the animation type to ViewFlipper
+        // Set the animation type to ViewFlipper
         simpleViewFlipper.setInAnimation(in);
         simpleViewFlipper.setOutAnimation(out);
 
-        // ClickListener for NEXT button
-        // When clicked on Button ViewFlipper will switch between views
-        // The current view will go out and next view will come in with specified animation
-        buttonnext.setOnClickListener(new View.OnClickListener() {
+        // Switch view to the next view
+        nextButton.setOnClickListener(v -> {
+            simpleViewFlipper.showNext();
+            clicks++;
 
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                // show the next view of ViewFlipper
-                simpleViewFlipper.showNext();
-                clicks++;
-                if(clicks > 1){
-                    buttonnext.setText("GOT IT" );
-                };
-                if (clicks > 2){
-                    startActivity(intent);
-                };
+            // Change action and text dependent on the view
+            if (clicks > 2){
+                // Kill activity to return to main activity
+                finish();
+            } else if (clicks > 1){
+                nextButton.setText("GOT IT" );
             }
         });
-
     }
 
 }
