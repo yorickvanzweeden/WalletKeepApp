@@ -1,21 +1,20 @@
-package com.walletkeep.walletkeep.ui.portfolio;
+package com.walletkeep.walletkeep.ui.wallet;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
-public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.ViewHolder> {
+import java.util.List;
+
+public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {
     // Data of the recycler view
-    private String[] mDataset;
+    private List<WalletWithRelations> wallets;
 
     // Access to the view
     private Context context;
@@ -26,14 +25,12 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        public CardView mCardView;
-        public Button wallet;
+        public TextView mTextView;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mCardView = v.findViewById(R.id.card_view);
-            wallet = v.findViewById(R.id.button_wallet);
+            mTextView = v.findViewById(R.id.wallet_listitem_exchange);
         }
     }
 
@@ -41,17 +38,14 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public PortfolioAdapter(Context context, String[] myDataset) {
-        mDataset = myDataset;
-        this.context = context;
-    }
+    public WalletAdapter(Context context) { this.context = context; }
 
     /**
      * Update data of the list
-     * @param myDataset List of portfolios
+     * @param wallets Wallets containing coins, exchange credentials
      */
-    public void updatePortfolios(String[] myDataset){
-        this.mDataset = myDataset;
+    public void updateWallets(List<WalletWithRelations> wallets){
+        this.wallets = wallets;
         notifyDataSetChanged();
     }
 
@@ -62,27 +56,23 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * @return ViewHolder
      */
     @Override
-    public PortfolioAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
+    public WalletAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                                 int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_portfolio_listitem, parent, false);
+                .inflate(R.layout.content_wallet_listitem, parent, false);
 
-        return new ViewHolder(v);
+        return new com.walletkeep.walletkeep.ui.wallet.WalletAdapter.ViewHolder(v);
     }
-    
+
     /**
      * Specifies the UI elements and actions per list item
      * @param holder View holder (list item) to use
      * @param position The index of the data item
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ((TextView)holder.mCardView.getChildAt(0)).setText(mDataset[position]);
-        holder.wallet.setOnClickListener(view -> {
-            Intent intent = new Intent(context, WalletActivity.class);
-            intent.putExtra("portfolio_id", position);
-            context.startActivity(intent);
-        });
+    public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
+        //TODO: Fill list item with data[position]
+
     }
 
     /**
@@ -91,6 +81,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        if (wallets == null) return 0;
+        return wallets.size();
     }
 }

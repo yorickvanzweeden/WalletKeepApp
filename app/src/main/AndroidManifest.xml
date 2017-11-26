@@ -28,6 +28,7 @@
             android:name=".ui.portfolio.PortfolioActivity"
             android:label="@string/title_activity_portfolio"
             android:parentActivityName=".ui.MainActivity"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

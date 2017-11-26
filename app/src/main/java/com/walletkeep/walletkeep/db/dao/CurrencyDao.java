@@ -16,11 +16,8 @@ public interface CurrencyDao {
     @Query("SELECT * FROM currency")
     LiveData<List<Currency>> getAll();
 
-    @Query("SELECT * FROM currency WHERE id LIKE :id LIMIT 1")
-    LiveData<Currency> getById(int id);
-
     @Query("SELECT * FROM currency WHERE ticker LIKE :ticker LIMIT 1")
-    LiveData<Currency> getByTicker(int ticker);
+    LiveData<Currency> getByTicker(String ticker);
 
     @Insert
     void insertAll(List<Currency> currencies);

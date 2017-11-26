@@ -44,7 +44,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract PortfolioDao portfolioDao();
     public abstract WalletDao walletDao();
 
-
     // Database instance
     private static AppDatabase sInstance;
 

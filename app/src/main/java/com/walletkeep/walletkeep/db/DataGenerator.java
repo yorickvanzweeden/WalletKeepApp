@@ -63,7 +63,7 @@ public class DataGenerator {
         List<Coin> coins = new ArrayList<>(2);
         for (int i = 0; i < 2; i++) {
             int nr = i + 1;
-            Coin coin = new Coin(nr, nr,11.11f);
+            Coin coin = new Coin(nr, "ETH",11.11f);
             coins.add(coin);
         }
         return coins;

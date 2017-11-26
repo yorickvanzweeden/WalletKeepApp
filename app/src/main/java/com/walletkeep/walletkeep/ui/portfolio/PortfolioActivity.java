@@ -12,57 +12,71 @@ import android.view.View;
 import android.widget.Button;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.db.entity.Portfolio;
+import com.walletkeep.walletkeep.ui.wallet.WalletAdapter;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
+import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class PortfolioActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private PortfolioAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private PortfolioViewModel viewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portfolio);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        setupOverlay();
         setupRecyclerView();
     }
 
-    private void setupRecyclerView(){
-        // Setup portfolio recycler view
-        mRecyclerView = findViewById(R.id.recycler_view_portfolios);
+    /**
+     * Setup overlay items such as the toolbar and the fab
+     */
+    private void setupOverlay(){
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // use this setting to improve performance if you know that changes
+        // Setup fab
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> addPortfolio());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * Sets up the recycler view containing the wallets
+     */
+    private void setupRecyclerView(){
+        // Link to the right UI item
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_portfolios);
+
+        // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        // Use a linear layout manager
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
+        // Initialise view model
         PortfolioViewModel.Factory factory = new PortfolioViewModel.Factory(getApplication());
         viewModel = ViewModelProviders.of(this, factory).get(PortfolioViewModel.class);
         viewModel.init();
-        mAdapter = new PortfolioAdapter(this, viewModel.provideDataset());
+
+        // Create and set adapter
+        PortfolioAdapter mAdapter = new PortfolioAdapter(this, viewModel.provideDataset());
         mRecyclerView.setAdapter(mAdapter);
-        viewModel.loadPortfolios().observe(this, credentials -> {
-            // update UI
-            mAdapter.updatePortfolios(viewModel.provideDataset());
-        });
+
+        // Update recycler view if portfolios are changed
+        viewModel.loadPortfolios().observe(this, portfolios ->
+                mAdapter.updatePortfolios(viewModel.provideDataset()));
     }
 
+    /**
+     * Show dialog (todo) and add portfolio
+     */
+    private void addPortfolio(){
+        Portfolio p = new Portfolio("Portfolio");
+        viewModel.savePortfolio(p);
+    }
 }

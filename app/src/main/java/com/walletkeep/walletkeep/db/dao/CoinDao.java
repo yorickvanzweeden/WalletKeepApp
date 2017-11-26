@@ -19,8 +19,13 @@ public interface CoinDao {
     @Query("SELECT * FROM coin WHERE id LIKE :id LIMIT 1")
     LiveData<Coin> getById(int id);
 
-    @Query("SELECT * FROM coin WHERE wallet_id LIKE :walletId LIMIT 1")
-    LiveData<Coin> getByWalletId(int walletId);
+    @Query("SELECT * FROM coin WHERE wallet_id LIKE :walletId")
+    LiveData<List<Coin>> getByWalletId(int walletId);
+
+    @Query("SELECT coin.id, coin.wallet_id, coin.currency_ticker, coin.amount " +
+            "FROM coin JOIN wallet ON coin.wallet_id = wallet.id " +
+            "WHERE wallet.portfolio_id LIKE :portfolioId")
+    LiveData<List<Coin>> getByPortfolioId(int portfolioId);
 
     @Insert
     void insertAll(List<Coin> coins);

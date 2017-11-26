@@ -18,7 +18,7 @@ public interface ExchangeDao {
 
     @Query("SELECT * FROM exchange WHERE id LIKE :id LIMIT 1")
     LiveData<Exchange> getById(int id);
-    
+
     @Insert
     void insertAll(List<Exchange> exchanges);
 

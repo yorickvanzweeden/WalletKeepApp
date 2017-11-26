@@ -3,9 +3,11 @@ package com.walletkeep.walletkeep.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(foreignKeys = {
+@Entity(indices = {@Index("wallet_id"), @Index("currency_ticker")},
+        foreignKeys = {
         @ForeignKey(
                 entity = Wallet.class,
                 parentColumns = "id",
@@ -13,8 +15,8 @@ import android.arch.persistence.room.PrimaryKey;
         ),
         @ForeignKey(
                 entity = Currency.class,
-                parentColumns = "id",
-                childColumns = "currency_id"
+                parentColumns = "ticker",
+                childColumns = "currency_ticker"
         )
 })
 public class Coin {
@@ -24,16 +26,16 @@ public class Coin {
     @ColumnInfo(name = "wallet_id")
     private int walletId;
 
-    @ColumnInfo(name = "currency_id")
-    private int currencyId;
+    @ColumnInfo(name = "currency_ticker")
+    private String currencyTicker;
 
     @ColumnInfo(name = "amount")
     private float amount;
 
     // Constructors
-    public Coin(int walletId, int currencyId, float amount){
+    public Coin(int walletId, String currencyTicker, float amount){
         this.walletId = walletId;
-        this.currencyId = currencyId;
+        this.currencyTicker = currencyTicker;
         this.amount = amount;
     }
 
@@ -48,9 +50,9 @@ public class Coin {
 
     public void setWalletId(int walletId) { this.walletId = walletId; }
 
-    public int getCurrencyId() { return currencyId; }
+    public String getCurrencyTicker() { return currencyTicker; }
 
-    public void setCurrencyId(int currencyId) { this.currencyId = currencyId; }
+    public void setCurrencyTicker(String currencyTicker) { this.currencyTicker = currencyTicker; }
 
     public float getAmount() { return amount; }
 

@@ -7,15 +7,15 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.db.entity.Wallet;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
 import java.util.List;
 
 @Dao
 public interface WalletDao {
-    @Query("SELECT * FROM wallet")
-    LiveData<List<Wallet>> getAll();
+    @Query("SELECT * FROM wallet WHERE portfolio_id LIKE :portfolioId")
+    LiveData<List<WalletWithRelations>> getAll(int portfolioId);
 
     @Query("SELECT * FROM wallet WHERE id LIKE :id LIMIT 1")
     LiveData<Wallet> getById(int id);

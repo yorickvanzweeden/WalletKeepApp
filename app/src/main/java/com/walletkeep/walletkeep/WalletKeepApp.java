@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.repository.PortfolioRepository;
+import com.walletkeep.walletkeep.db.repository.WalletRepository;
 
 public class WalletKeepApp extends Application {
 
@@ -12,7 +13,6 @@ public class WalletKeepApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         mAppExecutors = new AppExecutors();
     }
 
@@ -20,7 +20,10 @@ public class WalletKeepApp extends Application {
         return AppDatabase.getInstance(this, mAppExecutors);
     }
 
-    public PortfolioRepository getRepository() {
+    public PortfolioRepository getPortfolioRepository() {
         return PortfolioRepository.getInstance(getDatabase());
+    }
+    public WalletRepository getWalletRepository() {
+        return WalletRepository.getInstance(getDatabase());
     }
 }

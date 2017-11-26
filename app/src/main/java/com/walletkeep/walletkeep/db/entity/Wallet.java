@@ -1,11 +1,17 @@
 package com.walletkeep.walletkeep.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.Relation;
 
-@Entity(foreignKeys = {
+import java.util.List;
+
+@Entity(indices = {@Index("portfolio_id"), @Index("exchange_id")},
+        foreignKeys = {
         @ForeignKey(
                 entity = Portfolio.class,
                 parentColumns = "id",

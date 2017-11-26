@@ -3,17 +3,16 @@ package com.walletkeep.walletkeep.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity
 public class Currency {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey @NonNull
+    @ColumnInfo(name = "ticker")
+    private String ticker;
 
     @ColumnInfo(name = "name")
     private String name;
-
-    @ColumnInfo(name = "ticker")
-    private String ticker;
 
     // Constructor
     public Currency(String name, String ticker){
@@ -22,12 +21,6 @@ public class Currency {
     }
 
     // Getters and setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) { this.id = id; }
-
     public String getName() { return name; }
 
     public void setName(String name) {

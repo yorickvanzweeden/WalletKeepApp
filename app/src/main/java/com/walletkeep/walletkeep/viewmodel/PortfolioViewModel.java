@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.viewmodel;
 
-
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
@@ -18,17 +17,36 @@ public class PortfolioViewModel extends ViewModel {
     private LiveData<List<Portfolio>> portfolios;
     private PortfolioRepository portfolioRepository;
 
+    /**
+     * Constructor: Sets repository
+     * @param portfolioRepository Repository to interact with database
+     */
     public PortfolioViewModel(PortfolioRepository portfolioRepository) {
         this.portfolioRepository = portfolioRepository;
     }
 
+    /**
+     * Gets the portfolios
+     */
     public void init() {
         if (this.portfolios != null) return;
         this.portfolios = portfolioRepository.getPortfolios();
     }
 
+    /**
+     * Loads all the portfolios (async)
+     * @return Livedata list of portfolios
+     */
     public LiveData<List<Portfolio>> loadPortfolios() {
         return portfolios;
+    }
+
+    /**
+     * Adds portfolio (async)
+     * @param portfolio Portfolio to add
+     */
+    public void savePortfolio(Portfolio portfolio){
+        this.portfolioRepository.addPortfolio(portfolio);
     }
 
     /**
@@ -51,16 +69,13 @@ public class PortfolioViewModel extends ViewModel {
     }
 
     /**
-     * A creator is used to inject the product ID into the ViewModel
-     * <p>
-     * This creator is to showcase how to inject dependencies into ViewModels. It's not
-     * actually necessary in this case, as the product ID can be passed in a public method.
+     * Returns view model with repository
      */
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private final PortfolioRepository mRepository;
 
         public Factory(@NonNull Application application) {
-            mRepository = ((WalletKeepApp) application).getRepository();
+            mRepository = ((WalletKeepApp) application).getPortfolioRepository();
         }
 
         @Override
