@@ -7,7 +7,7 @@
     <color name="black_overlay">#66000000</color>
 
     <!--Main colors for app-->
-    <color name="MainBackground">#ECf0f1</color>
+    <color name="MainBackground">#ecf0f1</color>
     <color name="MainAccent">#CE2029</color>
 
 
