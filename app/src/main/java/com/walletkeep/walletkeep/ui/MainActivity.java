@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
+import com.walletkeep.walletkeep.Credentials;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity;
 
