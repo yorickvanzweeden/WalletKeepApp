@@ -1,11 +1,10 @@
-package com.walletkeep.walletkeep.db.repository;
+package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Coin;
-import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
@@ -24,7 +23,7 @@ public class WalletRepository {
      * @param database Database to use
      */
     public WalletRepository(AppDatabase database) {
-        mDatabase = database;
+        this.mDatabase = database;
     }
 
     /**
@@ -44,21 +43,8 @@ public class WalletRepository {
     }
 
 
-
-    public LiveData<Wallet> getWallet(int walletId) {
-        return mDatabase.walletDao().getById(walletId);
-    }
-
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
         return mDatabase.walletDao().getAll(portfolioId);
-    }
-
-    public LiveData<List<Exchange>> getExchangeNames(){
-        return mDatabase.exchangeDao().getAll();
-    }
-
-    public LiveData<Exchange> getExchangeName(){
-        return mDatabase.exchangeDao().getById(1);
     }
 
     public LiveData<List<Coin>> getPortfolioCoins(int portfolioId){
@@ -66,12 +52,12 @@ public class WalletRepository {
     }
 
     public void addWallet(Wallet wallet) {
-        List<Wallet> walletList = new ArrayList<>();
-        walletList.add(wallet);
-        AsyncTask.execute(() -> mDatabase.walletDao().insertAll(walletList));
+        AsyncTask.execute(() -> mDatabase.walletDao().insert(wallet));
     }
 
-    public void addWallets(List<Wallet> wallets) {
-        AsyncTask.execute(() -> mDatabase.walletDao().insertAll(wallets));
+    public void fetchWalletData(WalletWithRelations wallet){
+//        String name = wallet.getFlatWallet().getAddress();
+//        if (name == null) name = wallet.getFlatWallet().getExchange().getName();
+//        FetchService.Factory factory = new FetchService.Factory(name);
     }
 }

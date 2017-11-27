@@ -1,4 +1,4 @@
-package com.walletkeep.walletkeep.db.repository;
+package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
@@ -41,7 +41,6 @@ public class PortfolioRepository {
     }
 
 
-
     public LiveData<Portfolio> getPortfolio(int portfolioId) {
         return mDatabase.portfolioDao().getById(portfolioId);
     }
@@ -51,14 +50,10 @@ public class PortfolioRepository {
     }
 
     public void addPortfolio(Portfolio portfolio) {
-        List<Portfolio> portfolioList = new ArrayList<>();
-        portfolioList.add(portfolio);
-        AsyncTask.execute(() -> mDatabase.portfolioDao().insertAll(portfolioList));
+        AsyncTask.execute(() -> mDatabase.portfolioDao().insert(portfolio));
     }
 
     public void addPortfolios(List<Portfolio> portfolios) {
         AsyncTask.execute(() -> mDatabase.portfolioDao().insertAll(portfolios));
     }
-
-
 }

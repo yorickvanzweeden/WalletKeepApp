@@ -29,4 +29,20 @@ public class Exchange {
     public void setName(String name) {
         this.name = name;
     }
+
+    public enum Exchanges {
+        COINBASE("Coinbase"),
+        GDAX("GDAX");
+
+        private final String text;
+
+        private Exchanges(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
 }

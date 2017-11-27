@@ -13,9 +13,8 @@ import java.util.List;
 public class DataGenerator {
     public static List<Exchange> generateExchanges() {
         List<Exchange> exchanges = new ArrayList<>(3);
-        String[] exchangeNames = {"Coinbase","GDax","Kraken"};
-        for (int i = 0; i < exchangeNames.length; i++) {
-            Exchange exchange = new Exchange(exchangeNames[i]);
+        for (int i = 0; i < Exchange.Exchanges.values().length; i++) {
+            Exchange exchange = new Exchange(Exchange.Exchanges.values()[i].toString());
             exchanges.add(exchange);
         }
         return exchanges;
