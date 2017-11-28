@@ -5,16 +5,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 import java.util.List;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {
     // Data of the recycler view
     private List<WalletWithRelations> wallets;
+
+    private WalletViewModel viewModel;
 
     // Access to the view
     private Context context;
@@ -26,11 +30,13 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         public TextView mTextView;
+        public Button fetchButton;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
             mTextView = v.findViewById(R.id.wallet_listitem_exchange);
+            fetchButton = v.findViewById(R.id.button_fetch);
         }
     }
 
@@ -38,7 +44,10 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public WalletAdapter(Context context) { this.context = context; }
+    public WalletAdapter(Context context, WalletViewModel viewModel) {
+        this.context = context;
+        this.viewModel = viewModel;
+    }
 
     /**
      * Update data of the list
@@ -72,7 +81,12 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     @Override
     public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
         //TODO: Fill list item with data[position]
+        holder.fetchButton.setOnClickListener(view -> viewModel.fetch(wallets.get(position)));
 
+        try {
+            String amount = Float.toString(wallets.get(position).coins.get(0).getAmount());
+            holder.mTextView.setText(amount);
+        } catch (Exception e) {}
     }
 
     /**

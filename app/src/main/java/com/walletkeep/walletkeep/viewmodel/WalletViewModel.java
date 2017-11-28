@@ -47,6 +47,9 @@ public class WalletViewModel extends ViewModel {
      */
     public void addWallet(Wallet wallet){ this.walletRepository.addWallet(wallet); }
 
+    public void fetch(WalletWithRelations wallet){ this.walletRepository.fetchWalletData(wallet);}
+
+
     /**
      * Returns view model with repository
      */
