@@ -2,29 +2,17 @@ package com.walletkeep.walletkeep.db.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
 
 import com.walletkeep.walletkeep.db.entity.Currency;
 
 import java.util.List;
 
 @Dao
-public interface CurrencyDao {
+public abstract class CurrencyDao implements BaseDao<Currency>{
     @Query("SELECT * FROM currency")
-    LiveData<List<Currency>> getAll();
+    public abstract LiveData<List<Currency>> getAll();
 
     @Query("SELECT * FROM currency WHERE ticker LIKE :ticker LIMIT 1")
-    LiveData<Currency> getByTicker(String ticker);
-
-    @Insert
-    void insertAll(List<Currency> currencies);
-
-    @Update
-    void update(Currency currency);
-
-    @Delete
-    void delete(Currency currency);
+    public abstract LiveData<Currency> getByTicker(String ticker);
 }

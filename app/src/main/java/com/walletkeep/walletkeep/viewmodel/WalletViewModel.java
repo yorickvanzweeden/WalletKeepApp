@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
-import com.walletkeep.walletkeep.db.repository.WalletRepository;
+import com.walletkeep.walletkeep.repository.WalletRepository;
 
 import java.util.List;
 

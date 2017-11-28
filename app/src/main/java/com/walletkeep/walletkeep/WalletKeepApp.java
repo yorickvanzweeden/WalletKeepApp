@@ -3,8 +3,8 @@ package com.walletkeep.walletkeep;
 import android.app.Application;
 
 import com.walletkeep.walletkeep.db.AppDatabase;
-import com.walletkeep.walletkeep.db.repository.PortfolioRepository;
-import com.walletkeep.walletkeep.db.repository.WalletRepository;
+import com.walletkeep.walletkeep.repository.PortfolioRepository;
+import com.walletkeep.walletkeep.repository.WalletRepository;
 
 public class WalletKeepApp extends Application {
 
