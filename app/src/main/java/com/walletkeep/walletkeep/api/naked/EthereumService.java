@@ -4,20 +4,18 @@ import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.entity.Coin;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 
-import java.util.List;
-
-import retrofit2.Call;
+import java.util.ArrayList;
 
 
 public class EthereumService extends ApiService {
 
-    @Override
-    protected Call<Coin> createCall(ExchangeCredentials exchangeCredentials) {
-        return null;
+
+    public EthereumService(ArrayList<Coin> coins, CoinResponseListener listener, int walletId) {
+        super(coins, listener, walletId);
     }
 
     @Override
-    protected List<Coin> parseResponse(Call<Coin> call, List<Coin> oldCoins) {
-        return null;
+    public void fetch(ExchangeCredentials exchangeCredentials) {
+
     }
 }
