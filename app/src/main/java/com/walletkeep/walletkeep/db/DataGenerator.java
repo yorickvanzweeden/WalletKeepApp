@@ -22,8 +22,8 @@ public class DataGenerator {
 
     public static List<Currency> generateCurrencies() {
         List<Currency> currencies = new ArrayList<>(3);
-        String[] currencyNames = {"Bitcoin","Ethereum","Litecoin"};
-        String[] currencyTickers = {"BTC","ETH","LTC"};
+        String[] currencyNames = {"Bitcoin","Ethereum","Litecoin", "Euro"};
+        String[] currencyTickers = {"BTC","ETH","LTC", "EUR"};
         for (int i = 0; i < currencyNames.length; i++) {
             Currency currency = new Currency(currencyNames[i], currencyTickers[i]);
             currencies.add(currency);

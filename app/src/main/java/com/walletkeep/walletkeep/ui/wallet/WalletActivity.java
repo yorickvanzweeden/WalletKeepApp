@@ -47,7 +47,7 @@ public class WalletActivity extends AppCompatActivity {
         viewModel.init(portfolioId);
 
         // Create and set adapter
-        WalletAdapter mAdapter = new WalletAdapter(this);
+        WalletAdapter mAdapter = new WalletAdapter(this, viewModel);
         mRecyclerView.setAdapter(mAdapter);
 
         // Update recycler view if wallets are changed

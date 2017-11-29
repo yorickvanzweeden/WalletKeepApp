@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.repository;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Coin;
 import com.walletkeep.walletkeep.db.entity.Wallet;
@@ -56,8 +57,29 @@ public class WalletRepository {
     }
 
     public void fetchWalletData(WalletWithRelations wallet){
-//        String name = wallet.getFlatWallet().getAddress();
-//        if (name == null) name = wallet.getFlatWallet().getExchange().getName();
-//        FetchService.Factory factory = new FetchService.Factory(name);
+        // Observe callback and save to db if needed
+        ApiService.CoinResponseListener listener = new ApiService.CoinResponseListener() {
+            @Override
+            public void onCoinsUpdated(ArrayList<Coin> coins) {
+                for (Coin coin : wallet.coins) {
+                    AsyncTask.execute(() -> mDatabase.coinDao().delete(coin));
+                }
+                for (Coin coin : coins) {
+                    AsyncTask.execute(() -> mDatabase.coinDao().insert(coin));
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                //TODO: Do something with message
+            }
+        };
+
+        // Create ApiService
+        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
+        ApiService apiService = apiServiceFactory.create();
+
+        // Fetch data
+        apiService.fetch();
     }
 }
