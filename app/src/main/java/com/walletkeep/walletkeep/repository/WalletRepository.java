@@ -9,6 +9,7 @@ import android.util.Log;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
@@ -75,6 +76,6 @@ public class WalletRepository {
         ApiService apiService = apiServiceFactory.create();
 
         // Fetch data
-        apiService.fetch(wallet.getCredentials());
+        apiService.fetch();
     }
 }

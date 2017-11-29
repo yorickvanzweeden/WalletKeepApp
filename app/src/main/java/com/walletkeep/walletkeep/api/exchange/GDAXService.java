@@ -7,10 +7,8 @@ import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Coin;
-import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,19 +19,14 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public class GDAXService extends ApiService {
-
-    public GDAXService(ArrayList<Coin> coins, CoinResponseListener listener, int walletId) {
-        super(coins, listener, walletId);
-    }
-
     @Override
-    public void fetch(ExchangeCredentials ec) {
+    public void fetch() {
         // Get signature
-        String timestamp = Long.toString((new Date()).getTime() / 1000 + 5);
+        long timestamp = System.currentTimeMillis() / 1000 + 3;
         String data =  timestamp + "GET/accounts";
         String signature = "";
         try{
-            signature = generateHmacSHA256Signature(data, ec.getSecret());
+            signature = generateHmacSHA256Signature(data, this.ec.getSecret());
         } catch (Exception e) {}
 
         // Create request
@@ -43,6 +36,14 @@ public class GDAXService extends ApiService {
         );
 
         // Perform request
+        performRequest(gdaxResponseCall);
+    }
+
+    /**
+     * Perform request and handle callback
+     * @param gdaxResponseCall Call to perform
+     */
+    private void performRequest(Call gdaxResponseCall){
         gdaxResponseCall.enqueue(new Callback<List<GDAXResponse>>() {
             @Override
             public void onResponse(Call<List<GDAXResponse>> call, Response<List<GDAXResponse>> response) {
@@ -66,7 +67,7 @@ public class GDAXService extends ApiService {
         @GET("/accounts")
         Call<List<GDAXResponse>> getBalance(
                 @Header("CB-ACCESS-SIGN") String signature,
-                @Header("CB-ACCESS-TIMESTAMP") String timestamp,
+                @Header("CB-ACCESS-TIMESTAMP") long timestamp,
                 @Header("CB-ACCESS-KEY") String key,
                 @Header("CB-ACCESS-PASSPHRASE") String passphrase
         );
