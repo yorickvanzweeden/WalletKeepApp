@@ -1,15 +1,11 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Coin;
-import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
@@ -62,13 +58,21 @@ public class WalletRepository {
 
     public void fetchWalletData(WalletWithRelations wallet){
         // Observe callback and save to db if needed
-        ApiService.CoinResponseListener listener = coins -> {
-                for(Coin coin:wallet.coins) {
+        ApiService.CoinResponseListener listener = new ApiService.CoinResponseListener() {
+            @Override
+            public void onCoinsUpdated(ArrayList<Coin> coins) {
+                for (Coin coin : wallet.coins) {
                     AsyncTask.execute(() -> mDatabase.coinDao().delete(coin));
                 }
-                for(Coin coin:coins) {
+                for (Coin coin : coins) {
                     AsyncTask.execute(() -> mDatabase.coinDao().insert(coin));
                 }
+            }
+
+            @Override
+            public void onError(String message) {
+                //TODO: Do something with message
+            }
         };
 
         // Create ApiService

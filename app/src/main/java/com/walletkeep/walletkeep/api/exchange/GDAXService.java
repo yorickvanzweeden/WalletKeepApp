@@ -1,7 +1,5 @@
 package com.walletkeep.walletkeep.api.exchange;
 
-import android.util.Log;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -24,10 +22,11 @@ public class GDAXService extends ApiService {
         // Get signature
         long timestamp = System.currentTimeMillis() / 1000 + 3;
         String data =  timestamp + "GET/accounts";
-        String signature = "";
-        try{
-            signature = generateHmacSHA256Signature(data, this.ec.getSecret());
-        } catch (Exception e) {}
+        String signature;
+
+        // In case of invalid secret
+        try{ signature = generateHmacSHA256Signature(data, this.ec.getSecret()); }
+        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
 
         // Create request
         GDAXApi api = RetrofitClient.getClient("https://api.gdax.com").create(GDAXApi.class);
@@ -47,17 +46,23 @@ public class GDAXService extends ApiService {
         gdaxResponseCall.enqueue(new Callback<List<GDAXResponse>>() {
             @Override
             public void onResponse(Call<List<GDAXResponse>> call, Response<List<GDAXResponse>> response) {
-                Log.d("SUCCESS", response.toString());
-                ArrayList<Coin> coins = new ArrayList<>();
-                for (GDAXResponse gdaxResponse:response.body()){
-                    coins.add(gdaxResponse.getCoin(1));
+                // Success
+                if (response.code() == 200) {
+                    ArrayList<Coin> coins = new ArrayList<>();
+                    for (GDAXResponse gdaxResponse:response.body()){
+                        coins.add(gdaxResponse.getCoin(1));
+                    }
+                    updateCoins(coins);
+                } else {
+                    // If failure, return the server error (or the error for returning that)
+                    try{ returnError(response.errorBody().string()); }
+                    catch (Exception e) { returnError(e.getMessage()); }
                 }
-                updateCoins(coins);
             }
 
             @Override
             public void onFailure(Call<List<GDAXResponse>> call, Throwable t) {
-                Log.d("ERROR", t.toString());
+                returnError(t.getMessage());
             }
         });
     }

@@ -59,30 +59,32 @@ public abstract class ApiService {
     }
 
     /**
+     * Returns error to listener
+     * @param errorMessage Message of the error given
+     */
+    protected void returnError(String errorMessage) {
+        listener.onError(errorMessage);
+    }
+
+    /**
      * Generated HMAC SHA-256 signature
      * @param data Data to encrypt
      * @param secret Secret to encrypt with
      * @return Signature
      */
-    protected static String generateHmacSHA256Signature(String data, String secret) {
-        String signature;
+    protected String generateHmacSHA256Signature(String data, String secret) throws IllegalArgumentException {
         try {
             byte[] decoded_key = Base64.decode(secret, Base64.DEFAULT);
             SecretKeySpec secretKey = new SecretKeySpec(decoded_key, "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(secretKey);
             byte[] hmacData = mac.doFinal(data.getBytes("UTF-8"));
-            signature = Base64.encodeToString(hmacData, Base64.NO_WRAP);
+            return Base64.encodeToString(hmacData, Base64.NO_WRAP);
 
         } catch (Exception e) {
-            // UTF-8 is always supported by any Java platform
-            // HmacSHA256 is default supported
-            // The key could be invalid, but this will be reflected in the error from exchanges too
-
-            // Just in case, don't make it crash
-            signature = "";
+            // Signature is invalid --> Secret is invalid
+            throw new IllegalArgumentException("Signature could not be created. Your secret is probably invalid.");
         }
-        return signature;
     }
 
 
@@ -91,6 +93,7 @@ public abstract class ApiService {
      */
     public interface CoinResponseListener {
         void onCoinsUpdated(ArrayList<Coin> coins);
+        void onError(String message);
     }
 
     /**
