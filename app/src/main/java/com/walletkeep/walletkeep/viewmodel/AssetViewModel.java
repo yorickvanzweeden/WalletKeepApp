@@ -8,13 +8,14 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.WalletKeepApp;
+import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 
 import java.util.List;
 
 public class AssetViewModel extends ViewModel {
-    private LiveData<List<Asset>> aggregatedAssets;
+    private LiveData<List<AggregatedAsset>> aggregatedAssets;
     private AssetRepository assetRepository;
 
     /**
@@ -38,7 +39,7 @@ public class AssetViewModel extends ViewModel {
      * Loads all the asset (async)
      * @return Livedata list of assets
      */
-    public LiveData<List<Asset>> getAggregatedAssets() {
+    public LiveData<List<AggregatedAsset>> getAggregatedAssets() {
         return aggregatedAssets;
     }
     

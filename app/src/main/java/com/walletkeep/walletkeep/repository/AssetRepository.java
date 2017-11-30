@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.walletkeep.walletkeep.db.AppDatabase;
+import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 
@@ -40,7 +41,7 @@ public class AssetRepository {
         return sInstance;
     }
 
-    public LiveData<List<Asset>> getAggregatedAssets(int portfolioId) {
+    public LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId) {
         return mDatabase.assetDao().getAggregatedAssets(portfolioId);
     }
 
