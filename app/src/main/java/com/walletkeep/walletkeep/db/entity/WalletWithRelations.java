@@ -34,6 +34,7 @@ public class WalletWithRelations {
     public String getAddress() {
         return this.wallet.getAddress();
     }
+    public String getAddressCurrency() { return this.wallet.getAddressCurrency(); }
 
     public ExchangeCredentials getCredentials() {
         return this.exchangeCredentials.size() == 0 ? null : this.exchangeCredentials.get(0);

@@ -17,6 +17,11 @@ import android.arch.persistence.room.PrimaryKey;
                 entity = Exchange.class,
                 parentColumns = "id",
                 childColumns = "exchange_id"
+        ),
+        @ForeignKey(
+                entity = Currency.class,
+                parentColumns = "ticker",
+                childColumns = "address_currency"
         )
 })
 public class Wallet {
@@ -25,6 +30,9 @@ public class Wallet {
 
     @ColumnInfo(name = "address")
     private String address;
+
+    @ColumnInfo(name = "address_currency")
+    private String addressCurrency;
 
     @ColumnInfo(name = "portfolio_id")
     private int portfolioId;
@@ -48,6 +56,10 @@ public class Wallet {
 
     public void setAddress(String address) { this.address = address; }
 
+    public String getAddressCurrency() { return addressCurrency; }
+
+    public void setAddressCurrency(String addressCurrency) { this.addressCurrency = addressCurrency; }
+    
     public int getPortfolioId() { return portfolioId; }
 
     public void setPortfolioId(int portfolioId) { this.portfolioId = portfolioId; }

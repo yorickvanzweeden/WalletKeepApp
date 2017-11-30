@@ -125,7 +125,7 @@ public abstract class ApiService {
             if (this.wr.getType() == WalletWithRelations.Type.Exchange) {
                 apiService = createExchangeApiService(wr.getExchange());
             } else {
-                apiService = createNakedApiService(wr.getAddress());
+                apiService = createNakedApiService(wr.getAddressCurrency());
             }
 
             // Set internal parameters
@@ -146,11 +146,11 @@ public abstract class ApiService {
 
         /**
          * Picks right ApiService for address
-         * @param address Address
+         * @param currency Currency
          * @param <T> ApiService
          * @return Exchange ApiService
          */
-        private <T extends ApiService> T createNakedApiService(String address){
+        private <T extends ApiService> T createNakedApiService(String currency){
             return (T) new EthereumService();
         }
     }

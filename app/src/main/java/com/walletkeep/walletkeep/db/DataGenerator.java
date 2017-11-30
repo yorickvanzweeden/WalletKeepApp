@@ -55,6 +55,7 @@ public class DataGenerator {
         for (int i = 0; i < 2; i++) {
             Wallet wallet = new Wallet(1);
             wallet.setAddress("0x12312412");
+            wallet.setAddressCurrency("ETH");
             wallets.add(wallet);
         }
         return wallets;
