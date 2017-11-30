@@ -36,3 +36,6 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Ignore personal credentials for testing
+app/src/androidTest/java/com/walletkeep/walletkeep/api/MyApiCredentials.java
