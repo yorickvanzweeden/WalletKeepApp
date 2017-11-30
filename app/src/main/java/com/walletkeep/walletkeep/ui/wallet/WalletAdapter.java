@@ -51,7 +51,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
 
     /**
      * Update data of the list
-     * @param wallets Wallets containing coins, exchange credentials
+     * @param wallets Wallets containing assets, exchange credentials
      */
     public void updateWallets(List<WalletWithRelations> wallets){
         this.wallets = wallets;
@@ -84,7 +84,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.fetchButton.setOnClickListener(view -> viewModel.fetch(wallets.get(position)));
 
         try {
-            String amount = Float.toString(wallets.get(position).coins.get(0).getAmount());
+            String amount = Float.toString(wallets.get(position).assets.get(0).getAmount());
             holder.mTextView.setText(amount);
         } catch (Exception e) {}
     }

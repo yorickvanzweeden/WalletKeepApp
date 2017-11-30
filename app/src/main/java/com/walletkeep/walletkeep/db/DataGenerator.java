@@ -1,12 +1,14 @@
 package com.walletkeep.walletkeep.db;
 
-import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
+import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -53,19 +55,30 @@ public class DataGenerator {
         for (int i = 0; i < 2; i++) {
             Wallet wallet = new Wallet(1);
             wallet.setAddress("0x12312412");
+            wallet.setAddressCurrency("ETH");
             wallets.add(wallet);
         }
         return wallets;
     }
 
-    public static List<Coin> generateCoins() {
-        List<Coin> coins = new ArrayList<>(2);
+    public static List<Asset> generateAssets() {
+        List<Asset> assets = new ArrayList<>(2);
         for (int i = 0; i < 2; i++) {
             int nr = i + 1;
-            Coin coin = new Coin(nr, "ETH",11.11f);
-            coins.add(coin);
+            Asset asset = new Asset(nr, "ETH",11.11f);
+            assets.add(asset);
         }
-        return coins;
+        return assets;
+    }
+
+    public static List<CurrencyPrice> generateCurrencyPrices() {
+        List<CurrencyPrice> currencyPrices = new ArrayList<>(2);
+        for (int i = 0; i < 2; i++) {
+            int nr = i + 1;
+            CurrencyPrice currencyPrice = new CurrencyPrice("ETH", "1", new Date(), 12);
+            currencyPrices.add(currencyPrice);
+        }
+        return currencyPrices;
     }
 
 

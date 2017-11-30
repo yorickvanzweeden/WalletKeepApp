@@ -16,8 +16,8 @@ public class WalletWithRelations {
     @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = ExchangeCredentials.class)
     public List<ExchangeCredentials> exchangeCredentials;
 
-    @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = Coin.class)
-    public List<Coin> coins;
+    @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = Asset.class)
+    public List<Asset> assets;
 
 
     // Direct calls
@@ -34,6 +34,7 @@ public class WalletWithRelations {
     public String getAddress() {
         return this.wallet.getAddress();
     }
+    public String getAddressCurrency() { return this.wallet.getAddressCurrency(); }
 
     public ExchangeCredentials getCredentials() {
         return this.exchangeCredentials.size() == 0 ? null : this.exchangeCredentials.get(0);
