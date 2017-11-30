@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
+import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
@@ -48,8 +49,8 @@ public class WalletRepository {
         return mDatabase.walletDao().getAll(portfolioId);
     }
 
-    public LiveData<List<Asset>> getPortfolioAssets(int portfolioId){
-        return mDatabase.assetDao().getByPortfolioId(portfolioId);
+    public LiveData<List<AggregatedAsset>> getPortfolioAssets(int portfolioId){
+        return mDatabase.assetDao().getAggregatedAssets(portfolioId);
     }
 
     public void addWallet(Wallet wallet) {
