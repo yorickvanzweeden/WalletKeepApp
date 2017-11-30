@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.api;
 
-import android.support.annotation.VisibleForTesting;
 import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
 
 public abstract class ApiService {
     private ArrayList<Asset> assets;
@@ -67,7 +65,6 @@ public abstract class ApiService {
         listener.onError(errorMessage);
     }
 
-    @VisibleForTesting
     /**
      * Generated HMAC SHA-256 signature
      * @param data Data to encrypt
@@ -82,7 +79,6 @@ public abstract class ApiService {
             mac.init(secretKey);
             byte[] hmacData = mac.doFinal(data.getBytes("UTF-8"));
             return Base64.encodeToString(hmacData, Base64.NO_WRAP);
-
         } catch (Exception e) {
             // Signature is invalid --> Secret is invalid
             throw new IllegalArgumentException("Signature could not be created. Your secret is probably invalid.");
