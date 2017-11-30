@@ -2,11 +2,7 @@ package com.walletkeep.walletkeep.api;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
-import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
-import org.junit.Test;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ApiServiceTest {
@@ -68,12 +64,13 @@ public abstract class ApiServiceTest {
         credentialsNegativeNonce.setNonce(-1);
     }
 
+    public interface I {
+        void onResponseAssertion(List<Asset> assets);
+        void onFailAssertion(String message);
+    }
+
     private ExchangeCredentials getNewCorrectCredentials(){
         return new ExchangeCredentials(correct.getKey(), correct.getSecret(), correct.getPassphrase());
     }
-    protected WalletWithRelations createWalletWithCredentials(ExchangeCredentials exchangeCredentials){
-        WalletWithRelations wr = new WalletWithRelations();
-        wr.exchangeCredentials = new ArrayList<ExchangeCredentials>() {{ add(exchangeCredentials); }};
-        return wr;
-    }
 }
+

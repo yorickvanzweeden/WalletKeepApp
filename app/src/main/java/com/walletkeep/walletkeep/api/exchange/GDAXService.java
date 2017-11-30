@@ -27,6 +27,7 @@ public class GDAXService extends ApiService {
         // In case of invalid secret
         try{ signature = generateHmacSHA256Signature(data, this.ec.getSecret()); }
         catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
+        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
 
         // Create request
         GDAXApi api = RetrofitClient.getClient("https://api.gdax.com").create(GDAXApi.class);

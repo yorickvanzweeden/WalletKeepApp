@@ -43,7 +43,7 @@ public abstract class ApiService {
      * @param assets Coins from callback
      */
     protected void updateAssets(ArrayList<Asset> assets) {
-        if (!this.assets.equals(assets)){
+        if ((this.assets == null & assets != null) || !this.assets.equals(assets)){
             // Update with walletId
             for(Asset asset : assets){
                 asset.setWalletId(walletId);
