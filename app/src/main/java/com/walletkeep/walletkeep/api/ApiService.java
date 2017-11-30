@@ -1,5 +1,6 @@
 package com.walletkeep.walletkeep.api;
 
+import android.support.annotation.VisibleForTesting;
 import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
@@ -66,6 +67,7 @@ public abstract class ApiService {
         listener.onError(errorMessage);
     }
 
+    @VisibleForTesting
     /**
      * Generated HMAC SHA-256 signature
      * @param data Data to encrypt
