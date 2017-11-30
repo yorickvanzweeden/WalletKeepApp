@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Query;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
+import com.walletkeep.walletkeep.db.entity.Portfolio;
 
 import java.util.List;
 
@@ -19,8 +20,10 @@ public abstract class AssetDao implements BaseDao<Asset> {
     @Query("SELECT * FROM asset WHERE wallet_id LIKE :walletId")
     public abstract LiveData<List<Asset>> getByWalletId(int walletId);
 
-    @Query("SELECT asset.id, asset.wallet_id, asset.currency_ticker, asset.amount " +
-            "FROM asset JOIN wallet ON asset.wallet_id = wallet.id " +
-            "WHERE wallet.portfolio_id LIKE :portfolioId")
-    public abstract LiveData<List<Asset>> getByPortfolioId(int portfolioId);
+    @Query("SELECT asset.currency_ticker, SUM(asset.amount) FROM portfolio " +
+            "JOIN wallet ON portfolio.id = wallet.portfolio_id " +
+            "JOIN asset ON wallet.id = asset.wallet_id " +
+            "WHERE portfolio.id LIKE :portfolioId " +
+            "GROUP BY asset.currency_ticker")
+    public abstract LiveData<List<Asset>> getAggregatedAssets(int portfolioId);
 }

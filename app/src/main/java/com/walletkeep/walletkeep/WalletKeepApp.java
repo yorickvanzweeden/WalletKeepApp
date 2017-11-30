@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep;
 import android.app.Application;
 
 import com.walletkeep.walletkeep.db.AppDatabase;
+import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.repository.PortfolioRepository;
 import com.walletkeep.walletkeep.repository.WalletRepository;
 
@@ -25,5 +26,8 @@ public class WalletKeepApp extends Application {
     }
     public WalletRepository getWalletRepository() {
         return WalletRepository.getInstance(getDatabase());
+    }
+    public AssetRepository getAssetRepository() {
+        return AssetRepository.getInstance(getDatabase());
     }
 }
