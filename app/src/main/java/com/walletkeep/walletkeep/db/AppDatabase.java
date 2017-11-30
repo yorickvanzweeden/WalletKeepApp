@@ -13,12 +13,14 @@ import android.support.annotation.VisibleForTesting;
 import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.db.dao.AssetDao;
 import com.walletkeep.walletkeep.db.dao.CurrencyDao;
+import com.walletkeep.walletkeep.db.dao.CurrencyPriceDao;
 import com.walletkeep.walletkeep.db.dao.ExchangeCredentialsDao;
 import com.walletkeep.walletkeep.db.dao.ExchangeDao;
 import com.walletkeep.walletkeep.db.dao.PortfolioDao;
 import com.walletkeep.walletkeep.db.dao.WalletDao;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
+import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
@@ -29,6 +31,7 @@ import java.util.List;
 @Database(entities = {
         Asset.class,
         Currency.class,
+        CurrencyPrice.class,
         Exchange.class,
         ExchangeCredentials.class,
         Portfolio.class,
@@ -39,6 +42,7 @@ public abstract class AppDatabase extends RoomDatabase {
     // Entity dao's
     public abstract AssetDao assetDao();
     public abstract CurrencyDao currencyDao();
+    public abstract CurrencyPriceDao currencyPriceDao();
     public abstract ExchangeCredentialsDao exchangeCredentialsDao();
     public abstract ExchangeDao exchangeDao();
     public abstract PortfolioDao portfolioDao();
@@ -92,6 +96,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             List<Portfolio> portfolios = DataGenerator.generatePortfolios();
                             List<Wallet> wallets = DataGenerator.generateWallets();
                             List<Asset> assets = DataGenerator.generateAssets();
+                            List<CurrencyPrice> currencyPrices = DataGenerator.generateCurrencyPrices();
 
                             database.runInTransaction(() -> {
                                 database.currencyDao().insertAll(currencies);
@@ -99,6 +104,8 @@ public abstract class AppDatabase extends RoomDatabase {
                                 database.portfolioDao().insertAll(portfolios);
                                 database.walletDao().insertAll(wallets);
                                 database.assetDao().insertAll(assets);
+                                database.currencyPriceDao().insertAll(currencyPrices);
+
                             });
 
                             // notify that the database was created and it's ready to be used

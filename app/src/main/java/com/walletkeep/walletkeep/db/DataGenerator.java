@@ -2,11 +2,13 @@ package com.walletkeep.walletkeep.db;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
+import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -66,6 +68,16 @@ public class DataGenerator {
             assets.add(asset);
         }
         return assets;
+    }
+
+    public static List<CurrencyPrice> generateCurrencyPrices() {
+        List<CurrencyPrice> currencyPrices = new ArrayList<>(2);
+        for (int i = 0; i < 2; i++) {
+            int nr = i + 1;
+            CurrencyPrice currencyPrice = new CurrencyPrice("ETH", "1", new Date(), 12);
+            currencyPrices.add(currencyPrice);
+        }
+        return currencyPrices;
     }
 
 
