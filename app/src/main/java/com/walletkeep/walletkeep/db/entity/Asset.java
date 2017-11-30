@@ -7,8 +7,6 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.util.Objects;
-
 @Entity(indices = {@Index("wallet_id"), @Index("currency_ticker")},
         foreignKeys = {
         @ForeignKey(
@@ -22,7 +20,7 @@ import java.util.Objects;
                 childColumns = "currency_ticker"
         )
 })
-public class Coin {
+public class Asset {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -36,7 +34,7 @@ public class Coin {
     private float amount;
 
     // Constructors
-    public Coin(int walletId, String currencyTicker, float amount){
+    public Asset(int walletId, String currencyTicker, float amount){
         this.walletId = walletId;
         this.currencyTicker = currencyTicker;
         this.amount = amount;
@@ -62,9 +60,9 @@ public class Coin {
     public void setAmount(float amount) { this.amount = amount; }
 
     /**
-     * Checks for equality on coins for amount and currency(!)
-     * @param aThat Other coin
-     * @return True if the coins match
+     * Checks for equality on assets for amount and currency(!)
+     * @param aThat Other asset
+     * @return True if the assets match
      */
     @Ignore
     @Override
@@ -73,10 +71,10 @@ public class Coin {
         if ( this == aThat ) return true;
 
         // check if same type
-        if ( !(aThat instanceof Coin) ) return false;
+        if ( !(aThat instanceof Asset) ) return false;
 
         //cast to native object is now safe
-        Coin that = (Coin)aThat;
+        Asset that = (Asset)aThat;
 
         //now a proper field-by-field evaluation can be made
         return Float.floatToIntBits(this.amount) == Float.floatToIntBits(that.amount) &&

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
-import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
@@ -48,8 +48,8 @@ public class WalletRepository {
         return mDatabase.walletDao().getAll(portfolioId);
     }
 
-    public LiveData<List<Coin>> getPortfolioCoins(int portfolioId){
-        return mDatabase.coinDao().getByPortfolioId(portfolioId);
+    public LiveData<List<Asset>> getPortfolioAssets(int portfolioId){
+        return mDatabase.assetDao().getByPortfolioId(portfolioId);
     }
 
     public void addWallet(Wallet wallet) {
@@ -58,14 +58,14 @@ public class WalletRepository {
 
     public void fetchWalletData(WalletWithRelations wallet){
         // Observe callback and save to db if needed
-        ApiService.CoinResponseListener listener = new ApiService.CoinResponseListener() {
+        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
             @Override
-            public void onCoinsUpdated(ArrayList<Coin> coins) {
-                for (Coin coin : wallet.coins) {
-                    AsyncTask.execute(() -> mDatabase.coinDao().delete(coin));
+            public void onAssetsUpdated(ArrayList<Asset> assets) {
+                for (Asset asset : wallet.assets) {
+                    AsyncTask.execute(() -> mDatabase.assetDao().delete(asset));
                 }
-                for (Coin coin : coins) {
-                    AsyncTask.execute(() -> mDatabase.coinDao().insert(coin));
+                for (Asset asset : assets) {
+                    AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
                 }
             }
 

@@ -4,7 +4,7 @@ import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.naked.EthereumService;
-import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
@@ -16,22 +16,22 @@ import javax.crypto.spec.SecretKeySpec;
 
 
 public abstract class ApiService {
-    private ArrayList<Coin> coins;
+    private ArrayList<Asset> assets;
     protected ExchangeCredentials ec;
-    private CoinResponseListener listener;
+    private AssetResponseListener listener;
     private int walletId;
 
     /**
      * Constructor: Sets internal parameters
-     * @param coins Old coin values
+     * @param assets Old asset values
      * @param listener Listener to give callback to
-     * @param walletId WalletId to use for the new coins
+     * @param walletId WalletId to use for the new assets
      */
-    private void setParameters(ArrayList<Coin> coins,
+    private void setParameters(ArrayList<Asset> assets,
                                ExchangeCredentials exchangeCredentials,
-                               CoinResponseListener listener,
+                               AssetResponseListener listener,
                                int walletId) {
-        this.coins = coins;
+        this.assets = assets;
         this.ec = exchangeCredentials;
         this.listener = listener;
         this.walletId = walletId;
@@ -40,21 +40,21 @@ public abstract class ApiService {
     public abstract void fetch();
 
     /**
-     * Update coins from the callback of a specific ApiService if coins are updated
-     * @param coins Coins from callback
+     * Update assets from the callback of a specific ApiService if assets are updated
+     * @param assets Coins from callback
      */
-    protected void updateCoins(ArrayList<Coin> coins) {
-        if (!this.coins.equals(coins)){
+    protected void updateAssets(ArrayList<Asset> assets) {
+        if (!this.assets.equals(assets)){
             // Update with walletId
-            for(Coin coin: coins){
-                coin.setWalletId(walletId);
+            for(Asset asset : assets){
+                asset.setWalletId(walletId);
             }
 
             // Call listener
-            listener.onCoinsUpdated(coins);
+            listener.onAssetsUpdated(assets);
 
             // Update internal list
-            this.coins = coins;
+            this.assets = assets;
         }
     }
 
@@ -91,8 +91,8 @@ public abstract class ApiService {
     /**
      * Interface for returning data to the repository
      */
-    public interface CoinResponseListener {
-        void onCoinsUpdated(ArrayList<Coin> coins);
+    public interface AssetResponseListener {
+        void onAssetsUpdated(ArrayList<Asset> assets);
         void onError(String message);
     }
 
@@ -101,14 +101,14 @@ public abstract class ApiService {
      */
     public static class Factory {
         private final WalletWithRelations wr;
-        private final CoinResponseListener crl;
+        private final AssetResponseListener crl;
 
         /**
          * Constructor: Provides initializes
-         * @param wr Provides exchange/address, credentials and coins
+         * @param wr Provides exchange/address, credentials and assets
          * @param listener
          */
-        public Factory(WalletWithRelations wr, CoinResponseListener listener) {
+        public Factory(WalletWithRelations wr, AssetResponseListener listener) {
             this.wr = wr;
             this.crl = listener;
         }
@@ -129,7 +129,7 @@ public abstract class ApiService {
             }
 
             // Set internal parameters
-            apiService.setParameters((ArrayList<Coin>)wr.coins, wr.getCredentials(), crl, wr.wallet.getId());
+            apiService.setParameters((ArrayList<Asset>)wr.assets, wr.getCredentials(), crl, wr.wallet.getId());
 
             return (T) apiService;
         }

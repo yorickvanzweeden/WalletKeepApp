@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.RetrofitClient;
-import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.Asset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +48,11 @@ public class GDAXService extends ApiService {
             public void onResponse(Call<List<GDAXResponse>> call, Response<List<GDAXResponse>> response) {
                 // Success
                 if (response.code() == 200) {
-                    ArrayList<Coin> coins = new ArrayList<>();
+                    ArrayList<Asset> assets = new ArrayList<>();
                     for (GDAXResponse gdaxResponse:response.body()){
-                        coins.add(gdaxResponse.getCoin(1));
+                        assets.add(gdaxResponse.getAsset(1));
                     }
-                    updateCoins(coins);
+                    updateAssets(assets);
                 } else {
                     // If failure, return the server error (or the error for returning that)
                     try{ returnError(response.errorBody().string()); }
@@ -131,8 +131,8 @@ public class GDAXService extends ApiService {
             this.available = available;
         }
 
-        public Coin getCoin(int walletId){
-            return new Coin(walletId, currency, Float.parseFloat(balance));
+        public Asset getAsset(int walletId){
+            return new Asset(walletId, currency, Float.parseFloat(balance));
         }
 
     }

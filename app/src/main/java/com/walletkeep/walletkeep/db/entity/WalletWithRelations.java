@@ -16,8 +16,8 @@ public class WalletWithRelations {
     @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = ExchangeCredentials.class)
     public List<ExchangeCredentials> exchangeCredentials;
 
-    @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = Coin.class)
-    public List<Coin> coins;
+    @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = Asset.class)
+    public List<Asset> assets;
 
 
     // Direct calls

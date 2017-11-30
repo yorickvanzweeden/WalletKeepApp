@@ -11,13 +11,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.walletkeep.walletkeep.AppExecutors;
-import com.walletkeep.walletkeep.db.dao.CoinDao;
+import com.walletkeep.walletkeep.db.dao.AssetDao;
 import com.walletkeep.walletkeep.db.dao.CurrencyDao;
 import com.walletkeep.walletkeep.db.dao.ExchangeCredentialsDao;
 import com.walletkeep.walletkeep.db.dao.ExchangeDao;
 import com.walletkeep.walletkeep.db.dao.PortfolioDao;
 import com.walletkeep.walletkeep.db.dao.WalletDao;
-import com.walletkeep.walletkeep.db.entity.Coin;
+import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
@@ -27,7 +27,7 @@ import com.walletkeep.walletkeep.db.entity.Wallet;
 import java.util.List;
 
 @Database(entities = {
-        Coin.class,
+        Asset.class,
         Currency.class,
         Exchange.class,
         ExchangeCredentials.class,
@@ -37,7 +37,7 @@ import java.util.List;
 public abstract class AppDatabase extends RoomDatabase {
 
     // Entity dao's
-    public abstract CoinDao coinDao();
+    public abstract AssetDao assetDao();
     public abstract CurrencyDao currencyDao();
     public abstract ExchangeCredentialsDao exchangeCredentialsDao();
     public abstract ExchangeDao exchangeDao();
@@ -91,14 +91,14 @@ public abstract class AppDatabase extends RoomDatabase {
                             List<Exchange> exchanges = DataGenerator.generateExchanges();
                             List<Portfolio> portfolios = DataGenerator.generatePortfolios();
                             List<Wallet> wallets = DataGenerator.generateWallets();
-                            List<Coin> coins = DataGenerator.generateCoins();
+                            List<Asset> assets = DataGenerator.generateAssets();
 
                             database.runInTransaction(() -> {
                                 database.currencyDao().insertAll(currencies);
                                 database.exchangeDao().insertAll(exchanges);
                                 database.portfolioDao().insertAll(portfolios);
                                 database.walletDao().insertAll(wallets);
-                                database.coinDao().insertAll(coins);
+                                database.assetDao().insertAll(assets);
                             });
 
                             // notify that the database was created and it's ready to be used
