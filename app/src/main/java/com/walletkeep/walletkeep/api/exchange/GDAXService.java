@@ -51,7 +51,8 @@ public class GDAXService extends ApiService {
                 if (response.code() == 200) {
                     ArrayList<Asset> assets = new ArrayList<>();
                     for (GDAXResponse gdaxResponse:response.body()){
-                        assets.add(gdaxResponse.getAsset(1));
+                        Asset asset = gdaxResponse.getAsset(walletId);
+                        if (asset.getAmount() != 0) assets.add(asset);
                     }
                     updateAssets(assets);
                 } else {

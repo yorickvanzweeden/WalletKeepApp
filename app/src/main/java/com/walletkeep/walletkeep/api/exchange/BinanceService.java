@@ -53,7 +53,7 @@ public class BinanceService extends ApiService {
                 if (response.code() == 200) {
                     ArrayList<Asset> assets = new ArrayList<>();
                     for (Balance balance:response.body().getBalances()){
-                        Asset asset = balance.getAsset(1);
+                        Asset asset = balance.getAsset(walletId);
                         if (asset.getAmount() != 0) assets.add(asset);
                     }
                     updateAssets(assets);

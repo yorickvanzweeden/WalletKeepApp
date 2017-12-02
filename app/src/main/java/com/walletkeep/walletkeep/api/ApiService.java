@@ -20,7 +20,7 @@ public abstract class ApiService {
     private ArrayList<Asset> assets;
     protected ExchangeCredentials ec;
     private AssetResponseListener listener;
-    private int walletId;
+    protected int walletId;
 
     /**
      * Constructor: Sets internal parameters
@@ -46,10 +46,6 @@ public abstract class ApiService {
      */
     protected void updateAssets(ArrayList<Asset> assets) {
         if ((this.assets == null & assets != null) || !this.assets.equals(assets)){
-            // Update with walletId
-            for(Asset asset : assets){
-                asset.setWalletId(walletId);
-            }
 
             // Call listener
             listener.onAssetsUpdated(assets);
