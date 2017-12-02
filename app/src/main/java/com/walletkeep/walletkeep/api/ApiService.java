@@ -2,12 +2,14 @@ package com.walletkeep.walletkeep.api;
 
 import android.util.Base64;
 
+import com.walletkeep.walletkeep.api.exchange.BinanceService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.naked.EthereumService;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.util.Converters;
 
 import java.util.ArrayList;
 
@@ -71,14 +73,14 @@ public abstract class ApiService {
      * @param secret Secret to encrypt with
      * @return Signature
      */
-    protected String generateHmacSHA256Signature(String data, String secret) throws IllegalArgumentException {
+    protected String generateHmacSHA256Signature(String data, String secret, Boolean encoded) throws IllegalArgumentException {
         try {
-            byte[] decoded_key = Base64.decode(secret, Base64.DEFAULT);
+            byte[] decoded_key = encoded ? Base64.decode(secret, Base64.DEFAULT) : secret.getBytes("UTF-8");
             SecretKeySpec secretKey = new SecretKeySpec(decoded_key, "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(secretKey);
-            byte[] hmacData = mac.doFinal(data.getBytes("UTF-8"));
-            return Base64.encodeToString(hmacData, Base64.NO_WRAP);
+            byte[] hMacData = mac.doFinal(data.getBytes("UTF-8"));
+            return encoded ? Base64.encodeToString(hMacData, Base64.NO_WRAP) : Converters.bytesToHex(hMacData);
         } catch (Exception e) {
             // Signature is invalid --> Secret is invalid
             throw new IllegalArgumentException("Signature could not be created. Your secret is probably invalid.");
@@ -139,7 +141,14 @@ public abstract class ApiService {
          * @return Exchange ApiService
          */
         private <T extends ApiService> T createExchangeApiService(Exchange exchange){
-            return (T) new GDAXService();
+            switch (exchange.getName()){
+                case "GDAX":
+                    return (T) new GDAXService();
+                case "Binance":
+                    return (T) new BinanceService();
+                default:
+                    return null;
+            }
         }
 
         /**

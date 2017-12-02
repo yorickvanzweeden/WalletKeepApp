@@ -25,7 +25,7 @@ public class GDAXService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try{ signature = generateHmacSHA256Signature(data, this.ec.getSecret()); }
+        try{ signature = generateHmacSHA256Signature(data, this.ec.getSecret(), true); }
         catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
         catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
 
