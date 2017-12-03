@@ -19,6 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 public abstract class ApiService {
     private ArrayList<Asset> assets;
     protected ExchangeCredentials ec;
+    protected String address;
     private AssetResponseListener listener;
     protected int walletId;
 
@@ -30,10 +31,12 @@ public abstract class ApiService {
      */
     private void setParameters(ArrayList<Asset> assets,
                                ExchangeCredentials exchangeCredentials,
+                               String address,
                                AssetResponseListener listener,
                                int walletId) {
         this.assets = assets;
         this.ec = exchangeCredentials;
+        this.address = address;
         this.listener = listener;
         this.walletId = walletId;
     }
@@ -125,7 +128,7 @@ public abstract class ApiService {
             }
 
             // Set internal parameters
-            apiService.setParameters((ArrayList<Asset>)wr.assets, wr.getCredentials(), crl, wr.wallet.getId());
+            apiService.setParameters((ArrayList<Asset>)wr.assets, wr.getCredentials(), wr.getAddress(), crl, wr.wallet.getId());
 
             return (T) apiService;
         }
