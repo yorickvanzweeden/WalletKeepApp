@@ -10,8 +10,6 @@ import com.walletkeep.walletkeep.util.Converters;
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
@@ -29,35 +27,7 @@ public class EthereumService extends ApiService {
         performRequest(blockcypherResponseCall);
     }
 
-    /**
-     * Perform request and handle callback
-     * @param blockcypherResponseCall Call to perform
-     */
-    private void performRequest(Call blockcypherResponseCall){
-        blockcypherResponseCall.enqueue(new Callback<EthereumService.BlockcypherResponse>() {
-            @Override
-            public void onResponse(Call<EthereumService.BlockcypherResponse> call, Response<EthereumService.BlockcypherResponse> response) {
-                // Success
-                if (response.code() == 200) {
-                    ArrayList<com.walletkeep.walletkeep.db.entity.Asset> assets = new ArrayList<>();
-                    Asset asset = response.body().getAsset(walletId);
-                    if (asset.getAmount() != 0) assets.add(asset);
-                    updateAssets(assets);
-                } else {
-                    // If failure, return the server error (or the error for returning that)
-                    try{ returnError(response.errorBody().string()); }
-                    catch (Exception e) { returnError(e.getMessage()); }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<EthereumService.BlockcypherResponse> call, Throwable t) {
-                returnError(t.getMessage());
-            }
-        });
-    }
-
-    protected interface EthereumApi {
+    private interface EthereumApi {
         @Headers("Content-Type: application/json")
         @GET("addrs/{address}/balance")
         Call<EthereumService.BlockcypherResponse> getBalance(
@@ -65,7 +35,7 @@ public class EthereumService extends ApiService {
         );
     }
 
-    public class BlockcypherResponse {
+    private class BlockcypherResponse implements IResponse {
 
         @SerializedName("address")
         @Expose
@@ -169,6 +139,13 @@ public class EthereumService extends ApiService {
 
         public Asset getAsset(int walletId) {
             return new Asset(walletId, "ETH", Converters.amountToFloat(getBalance(), 18));
+        }
+
+        @Override
+        public ArrayList<Asset> getAssets(int walletId) {
+            return new ArrayList<Asset>() {{
+                add(new Asset(walletId, "ETH", Converters.amountToFloat(getBalance(), 18)));
+            }};
         }
     }
 }

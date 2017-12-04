@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -25,7 +23,7 @@ public class GDAXService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try{ signature = generateHmacSHA256Signature(data, this.ec.getSecret(), true); }
+        try{ signature = generateSignature(data, this.ec.getSecret(), true); }
         catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
         catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
 
@@ -39,36 +37,6 @@ public class GDAXService extends ApiService {
         performRequest(gdaxResponseCall);
     }
 
-    /**
-     * Perform request and handle callback
-     * @param gdaxResponseCall Call to perform
-     */
-    private void performRequest(Call gdaxResponseCall){
-        gdaxResponseCall.enqueue(new Callback<List<GDAXResponse>>() {
-            @Override
-            public void onResponse(Call<List<GDAXResponse>> call, Response<List<GDAXResponse>> response) {
-                // Success
-                if (response.code() == 200) {
-                    ArrayList<Asset> assets = new ArrayList<>();
-                    for (GDAXResponse gdaxResponse:response.body()){
-                        Asset asset = gdaxResponse.getAsset(walletId);
-                        if (asset.getAmount() != 0) assets.add(asset);
-                    }
-                    updateAssets(assets);
-                } else {
-                    // If failure, return the server error (or the error for returning that)
-                    try{ returnError(response.errorBody().string()); }
-                    catch (Exception e) { returnError(e.getMessage()); }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<GDAXResponse>> call, Throwable t) {
-                returnError(t.getMessage());
-            }
-        });
-    }
-
     protected interface GDAXApi {
         @Headers("Content-Type: application/json")
         @GET("/accounts")
@@ -80,7 +48,7 @@ public class GDAXService extends ApiService {
         );
     }
 
-    protected class GDAXResponse {
+    protected class GDAXResponse implements IResponse{
 
         @SerializedName("id")
         @Expose
@@ -137,5 +105,11 @@ public class GDAXService extends ApiService {
             return new Asset(walletId, currency, Float.parseFloat(balance));
         }
 
+        @Override
+        public ArrayList<Asset> getAssets(int walletId) {
+            return new ArrayList<Asset>() {{
+                add(getAsset(walletId));
+            }};
+        }
     }
 }
