@@ -26,9 +26,9 @@
             android:label="IntroSlider" />
         <activity
             android:name=".ui.portfolio.PortfolioActivity"
+            android:exported="true"
             android:label="@string/title_activity_portfolio"
             android:parentActivityName=".ui.MainActivity"
-            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -37,6 +37,15 @@
         <activity
             android:name=".ui.wallet.WalletActivity"
             android:label="@string/title_activity_wallet"
+            android:parentActivityName=".ui.portfolio.PortfolioActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity" />
+        </activity>
+        <activity
+            android:name=".ui.asset.AssetActivity"
+            android:label="@string/title_activity_asset"
             android:parentActivityName=".ui.portfolio.PortfolioActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

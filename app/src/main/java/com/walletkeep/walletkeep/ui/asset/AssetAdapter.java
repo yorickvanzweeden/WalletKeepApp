@@ -1,7 +1,6 @@
-package com.walletkeep.walletkeep.ui.portfolio;
+package com.walletkeep.walletkeep.ui.asset;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,12 +10,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.ui.asset.AssetActivity;
-import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
+import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 
-public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.ViewHolder> {
+import java.util.List;
+
+public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder> {
     // Data of the recycler view
-    private String[] mDataset;
+    private List<AggregatedAsset> assets;
 
     // Access to the view
     private Context context;
@@ -28,15 +28,13 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         public CardView mCardView;
-        public Button walletButton;
-        public Button assetButton;
+        public Button wallet;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
             mCardView = v.findViewById(R.id.card_view);
-            walletButton = v.findViewById(R.id.button_wallet);
-            assetButton = v.findViewById(R.id.button_assets);
+            wallet = v.findViewById(R.id.button_wallet);
         }
     }
 
@@ -44,17 +42,17 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public PortfolioAdapter(Context context, String[] myDataset) {
-        mDataset = myDataset;
+    public AssetAdapter(Context context, List<AggregatedAsset> assets) {
+        this.assets = assets;
         this.context = context;
     }
 
     /**
      * Update data of the list
-     * @param myDataset List of portfolios
+     * @param assets List of aggregated assets
      */
-    public void updatePortfolios(String[] myDataset){
-        this.mDataset = myDataset;
+    public void updateAggregatedAssets(List<AggregatedAsset> assets){
+        this.assets = assets;
         notifyDataSetChanged();
     }
 
@@ -65,32 +63,23 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * @return ViewHolder
      */
     @Override
-    public PortfolioAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
+    public com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                                 int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_portfolio_listitem, parent, false);
+                .inflate(R.layout.content_asset_listitem, parent, false);
 
-        return new ViewHolder(v);
+        return new com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder(v);
     }
-    
+
     /**
      * Specifies the UI elements and actions per list item
      * @param holder View holder (list item) to use
      * @param position The index of the data item
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ((TextView)holder.mCardView.getChildAt(0)).setText(mDataset[position]);
-        holder.walletButton.setOnClickListener(view -> {
-            Intent intent = new Intent(context, WalletActivity.class);
-            intent.putExtra("portfolio_id", position);
-            context.startActivity(intent);
-        });
-        holder.assetButton.setOnClickListener(view -> {
-            Intent intent = new Intent(context, AssetActivity.class);
-            intent.putExtra("portfolio_id", position);
-            context.startActivity(intent);
-        });
+    public void onBindViewHolder(com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder holder, int position) {
+        AggregatedAsset asset = assets.get(position);
+        ((TextView)holder.mCardView.getChildAt(0)).setText(asset.currencyTicker + " " + asset.amount);
     }
 
     /**
@@ -99,6 +88,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        if (assets == null) return 0;
+        return assets.size();
     }
 }

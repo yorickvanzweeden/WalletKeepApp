@@ -7,9 +7,7 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="133dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="80dp"
         card_view:cardCornerRadius="4dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
@@ -22,20 +20,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_wallet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/button_wallets" />
-
-        <Button
-            android:id="@+id/button_assets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Assets" />
-
     </android.support.v7.widget.CardView>
+
 
 </LinearLayout>

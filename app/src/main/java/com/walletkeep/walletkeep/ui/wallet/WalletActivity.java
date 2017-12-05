@@ -70,8 +70,8 @@ public class WalletActivity extends AppCompatActivity {
     }
 
     /**
-     * Show dialog (todo) and add wallet
-     * @param portfolioId Portfolio to which the wallet belongs
+     * Show dialog (todo) and add walletButton
+     * @param portfolioId Portfolio to which the walletButton belongs
      */
     private void addWallet(int portfolioId){
         Wallet p = new Wallet(portfolioId);

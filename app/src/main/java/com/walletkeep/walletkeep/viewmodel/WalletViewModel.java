@@ -34,7 +34,7 @@ public class WalletViewModel extends ViewModel {
     }
 
     /**
-     * Loads all the wallet (async)
+     * Loads all the walletButton (async)
      * @return Livedata list of wallets
      */
     public LiveData<List<WalletWithRelations>> loadWallets() {
@@ -42,7 +42,7 @@ public class WalletViewModel extends ViewModel {
     }
 
     /**
-     * Adds wallet (async)
+     * Adds walletButton (async)
      * @param wallet Wallet to add
      */
     public void addWallet(Wallet wallet){ this.walletRepository.addWallet(wallet); }

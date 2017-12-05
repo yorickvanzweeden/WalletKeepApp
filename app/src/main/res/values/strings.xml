@@ -37,5 +37,6 @@
 
     <!--My wallets-->
     <string name="title_activity_wallet">My wallets</string>
+    <string name="title_activity_asset">My assets</string>
 
 </resources>
