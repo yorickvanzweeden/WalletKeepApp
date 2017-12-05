@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -30,6 +31,17 @@ public class ExchangeCredentials {
     private int nonce;
 
     // Alternative constructor to empty constructor
+    public ExchangeCredentials(String key){
+        this.key = key;
+    }
+
+    @Ignore
+    public ExchangeCredentials(String key, String secret){
+        this.key = key;
+        this.secret = secret;
+    }
+
+    @Ignore
     public ExchangeCredentials(String key, String secret, String passphrase){
         this.key = key;
         this.secret = secret;
