@@ -31,7 +31,7 @@ public class Exchange {
     }
 
     public enum Exchanges {
-        COINBASE("Coinbase"),
+        BINANCE("Binance"),
         GDAX("GDAX");
 
         private final String text;

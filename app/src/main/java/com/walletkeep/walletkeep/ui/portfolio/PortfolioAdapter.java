@@ -11,12 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.ui.asset.AssetActivity;
 import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
 
+import java.util.List;
+
 public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.ViewHolder> {
     // Data of the recycler view
-    private String[] mDataset;
+    private List<Portfolio> portfolios;
 
     // Access to the view
     private Context context;
@@ -44,17 +47,17 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public PortfolioAdapter(Context context, String[] myDataset) {
-        mDataset = myDataset;
+    public PortfolioAdapter(Context context, List<Portfolio> portfolios) {
+        this.portfolios = portfolios;
         this.context = context;
     }
 
     /**
      * Update data of the list
-     * @param myDataset List of portfolios
+     * @param portfolios List of portfolios
      */
-    public void updatePortfolios(String[] myDataset){
-        this.mDataset = myDataset;
+    public void updatePortfolios(List<Portfolio> portfolios){
+        this.portfolios = portfolios;
         notifyDataSetChanged();
     }
 
@@ -80,15 +83,15 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ((TextView)holder.mCardView.getChildAt(0)).setText(mDataset[position]);
+        ((TextView)holder.mCardView.getChildAt(0)).setText(portfolios.get(position).getName());
         holder.walletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, WalletActivity.class);
-            intent.putExtra("portfolio_id", position);
+            intent.putExtra("portfolio_id", portfolios.get(position).getId());
             context.startActivity(intent);
         });
         holder.assetButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, AssetActivity.class);
-            intent.putExtra("portfolio_id", position);
+            intent.putExtra("portfolio_id", portfolios.get(position).getId());
             context.startActivity(intent);
         });
     }
@@ -99,6 +102,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        if (portfolios == null) return 0;
+        return portfolios.size();
     }
 }

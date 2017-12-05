@@ -28,7 +28,7 @@ public class WalletWithRelations {
     }
 
     public Type getType() {
-        return this.exchanges.size() == 0 ? Type.Naked : Type.Exchange;
+        return this.exchanges == null || this.exchanges.size() == 0 ? Type.Naked : Type.Exchange;
     }
 
     public String getAddress() {

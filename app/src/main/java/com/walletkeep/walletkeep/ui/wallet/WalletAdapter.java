@@ -1,6 +1,7 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +32,14 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         // UI elements to use of the list item layout
         public TextView mTextView;
         public Button fetchButton;
+        public Button editWalletButton;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
             mTextView = v.findViewById(R.id.wallet_listitem_exchange);
             fetchButton = v.findViewById(R.id.button_fetch);
+            editWalletButton = v.findViewById(R.id.button_edit_wallet);
         }
     }
 
@@ -82,10 +85,16 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
         //TODO: Fill list item with data[position]
         holder.fetchButton.setOnClickListener(view -> viewModel.fetch(wallets.get(position)));
+        holder.editWalletButton.setOnClickListener(view -> {
+            Intent intent = new Intent(context, EditWalletActivity.class);
+            intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
+            intent.putExtra("portfolio_id", wallets.get(position).wallet.getPortfolioId());
+            context.startActivity(intent);
+        });
 
         try {
-            String amount = Float.toString(wallets.get(position).assets.get(0).getAmount());
-            holder.mTextView.setText(amount);
+            String address = wallets.get(position).getAddress();
+            holder.mTextView.setText(address);
         } catch (Exception e) {}
     }
 

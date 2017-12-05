@@ -7,6 +7,7 @@ import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
+import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.util.RateLimiter;
@@ -61,6 +62,14 @@ public class WalletRepository {
 
     public void addWallet(Wallet wallet) {
         AsyncTask.execute(() -> mDatabase.walletDao().insert(wallet));
+    }
+
+    public void updateWallet(Wallet wallet) {
+        AsyncTask.execute(() -> mDatabase.walletDao().update(wallet));
+    }
+
+    public void addCredentials(ExchangeCredentials credentials) {
+        AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().insert(credentials));
     }
 
     public void fetchWalletData(WalletWithRelations wallet){

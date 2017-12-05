@@ -52,6 +52,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity" />
         </activity>
+        <activity android:name=".ui.wallet.EditWalletActivity"></activity>
     </application>
 
 </manifest>

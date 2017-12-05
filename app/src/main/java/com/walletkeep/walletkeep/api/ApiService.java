@@ -221,9 +221,9 @@ public abstract class ApiService {
          */
         private <T extends ApiService> T createNakedApiService(String currency){
             switch (currency){
-                case "ETH":
-                    return (T) new BlockcypherService();
                 case "ETH2":
+                    return (T) new BlockcypherService();
+                case "ETH":
                     return (T) new EtherscanService();
                 default:
                     return null;

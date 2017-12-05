@@ -93,18 +93,18 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase database = AppDatabase.getInstance(appContext, executors);
                             List<Currency> currencies = DataGenerator.generateCurrencies();
                             List<Exchange> exchanges = DataGenerator.generateExchanges();
-                            List<Portfolio> portfolios = DataGenerator.generatePortfolios();
-                            List<Wallet> wallets = DataGenerator.generateWallets();
-                            List<Asset> assets = DataGenerator.generateAssets();
-                            List<CurrencyPrice> currencyPrices = DataGenerator.generateCurrencyPrices();
+//                            List<Portfolio> portfolios = DataGenerator.generatePortfolios();
+//                            List<Wallet> wallets = DataGenerator.generateWallets();
+//                            List<Asset> assets = DataGenerator.generateAssets();
+//                            List<CurrencyPrice> currencyPrices = DataGenerator.generateCurrencyPrices();
 
                             database.runInTransaction(() -> {
                                 database.currencyDao().insertAll(currencies);
                                 database.exchangeDao().insertAll(exchanges);
-                                database.portfolioDao().insertAll(portfolios);
-                                database.walletDao().insertAll(wallets);
-                                database.assetDao().insertAll(assets);
-                                database.currencyPriceDao().insertAll(currencyPrices);
+//                                database.portfolioDao().insertAll(portfolios);
+//                                database.walletDao().insertAll(wallets);
+//                                database.assetDao().insertAll(assets);
+//                                database.currencyPriceDao().insertAll(currencyPrices);
 
                             });
 

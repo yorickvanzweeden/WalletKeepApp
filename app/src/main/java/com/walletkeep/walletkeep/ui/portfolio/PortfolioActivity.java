@@ -67,7 +67,7 @@ public class PortfolioActivity extends AppCompatActivity
 
         // Update recycler view if portfolios are changed
         viewModel.loadPortfolios().observe(this, portfolios ->
-                mAdapter.updatePortfolios(viewModel.provideDataset()));
+                mAdapter.updatePortfolios(portfolios));
     }
 
     private void buildPortfolioDialog(){
