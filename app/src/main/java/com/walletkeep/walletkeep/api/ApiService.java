@@ -4,7 +4,8 @@ import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.BinanceService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
-import com.walletkeep.walletkeep.api.naked.EthereumService;
+import com.walletkeep.walletkeep.api.naked.BlockcypherService;
+import com.walletkeep.walletkeep.api.naked.EtherscanService;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
@@ -219,7 +220,14 @@ public abstract class ApiService {
          * @return Exchange ApiService
          */
         private <T extends ApiService> T createNakedApiService(String currency){
-            return (T) new EthereumService();
+            switch (currency){
+                case "ETH":
+                    return (T) new BlockcypherService();
+                case "ETH2":
+                    return (T) new EtherscanService();
+                default:
+                    return null;
+            }
         }
     }
 }

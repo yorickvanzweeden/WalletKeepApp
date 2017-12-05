@@ -15,13 +15,13 @@ import retrofit2.http.Headers;
 import retrofit2.http.Path;
 
 
-public class EthereumService extends ApiService {
+public class BlockcypherService extends ApiService {
 
     @Override
     public void fetch() {
          // Create request
         EthereumApi api = RetrofitClient.getClient("https://api.blockcypher.com/v1/eth/main/").create(EthereumApi.class);
-        Call<EthereumService.BlockcypherResponse> blockcypherResponseCall = api.getBalance( address );
+        Call<BlockcypherService.BlockcypherResponse> blockcypherResponseCall = api.getBalance( address );
 
         // Perform request
         performRequest(blockcypherResponseCall);
@@ -30,7 +30,7 @@ public class EthereumService extends ApiService {
     private interface EthereumApi {
         @Headers("Content-Type: application/json")
         @GET("addrs/{address}/balance")
-        Call<EthereumService.BlockcypherResponse> getBalance(
+        Call<BlockcypherService.BlockcypherResponse> getBalance(
                 @Path("address") String address
         );
     }
