@@ -18,8 +18,6 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class GDAXApiTests extends ApiServiceTest {
 
-    static Boolean threadsRunning;
-
     public GDAXApiTests(){
         init(MyApiCredentials.getGDAXCredentials());
     }
@@ -27,34 +25,6 @@ public class GDAXApiTests extends ApiServiceTest {
     @Override
     public void init(ExchangeCredentials exchangeCredentials) {
         super.init(exchangeCredentials);
-    }
-
-    private void runEntireFlow(WalletWithRelations wallet, I i) {
-        threadsRunning = true;
-
-        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
-            @Override
-            public void onAssetsUpdated(ArrayList<Asset> assets) {
-                i.onResponseAssertion(assets);
-                threadsRunning = false;
-            }
-
-            @Override
-            public void onError(String message) {
-                i.onFailAssertion(message);
-                threadsRunning = false;
-            }
-        };
-
-        // Create ApiService
-        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
-        ApiService apiService = apiServiceFactory.create();
-
-        // Fetch data
-        apiService.fetch();
-
-        // Busy-wait till threads are done
-        while(threadsRunning) {}
     }
 
     private WalletWithRelations getDefaultWallet(ExchangeCredentials exchangeCredentials){

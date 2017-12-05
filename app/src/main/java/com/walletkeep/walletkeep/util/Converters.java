@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.util;
 
+import static java.lang.Math.max;
+
 public class Converters {
     /**
      * Converts byte array to hex string
@@ -16,5 +18,18 @@ public class Converters {
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    /**
+     * Convert a balance String to a float
+     * @param balance String to convert
+     * @param decimalPlace The place at which to place decimal dot
+     * @return Balance as float
+     */
+    public static Float amountToFloat(String balance, int decimalPlace) {
+        int split = max(balance.length() - decimalPlace, 0);
+        String firstPart = balance.substring(0, split);
+        String lastPart = balance.substring(split, balance.length());
+        return Float.parseFloat(firstPart + "." + lastPart);
     }
 }

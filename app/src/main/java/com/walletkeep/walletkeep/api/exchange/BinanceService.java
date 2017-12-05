@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -27,7 +25,7 @@ public class BinanceService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try{ signature = generateHmacSHA256Signature(data, ec.getSecret(), false); }
+        try{ signature = generateSignature(data, ec.getSecret(), false); }
         catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
         catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
 
@@ -41,37 +39,7 @@ public class BinanceService extends ApiService {
         performRequest(binanceResponseCall);
     }
 
-    /**
-     * Perform request and handle callback
-     * @param binanceResponseCall Call to perform
-     */
-    private void performRequest(Call binanceResponseCall){
-        binanceResponseCall.enqueue(new Callback<BinanceService.BinanceResponse>() {
-            @Override
-            public void onResponse(Call<BinanceService.BinanceResponse> call, Response<BinanceService.BinanceResponse> response) {
-                // Success
-                if (response.code() == 200) {
-                    ArrayList<Asset> assets = new ArrayList<>();
-                    for (Balance balance:response.body().getBalances()){
-                        Asset asset = balance.getAsset(walletId);
-                        if (asset.getAmount() != 0) assets.add(asset);
-                    }
-                    updateAssets(assets);
-                } else {
-                    // If failure, return the server error (or the error for returning that)
-                    try{ returnError(response.errorBody().string()); }
-                    catch (Exception e) { returnError(e.getMessage()); }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BinanceService.BinanceResponse> call, Throwable t) {
-                returnError(t.getMessage());
-            }
-        });
-    }
-
-    protected interface BinanceApi {
+    private interface BinanceApi {
         @Headers("Content-Type: application/json")
         @GET("/api/v3/account")
         Call<BinanceResponse> getBalance(
@@ -82,7 +50,7 @@ public class BinanceService extends ApiService {
         );
     }
 
-    public class BinanceResponse {
+    private class BinanceResponse implements IResponse {
 
         @SerializedName("makerCommission")
         @Expose
@@ -172,9 +140,18 @@ public class BinanceService extends ApiService {
         public void setBalances(List<Balance> balances) {
             this.balances = balances;
         }
+
+        @Override
+        public ArrayList<Asset> getAssets(int walletId) {
+            return new ArrayList<Asset>() {{
+               for(Balance balance:balances) {
+                   add(balance.getAsset(walletId));
+               }
+            }};
+        }
     }
 
-    protected class Balance {
+    private class Balance {
         @SerializedName("asset")
         @Expose
         private String asset;

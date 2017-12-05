@@ -4,7 +4,8 @@ import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.BinanceService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
-import com.walletkeep.walletkeep.api.naked.EthereumService;
+import com.walletkeep.walletkeep.api.naked.BlockcypherService;
+import com.walletkeep.walletkeep.api.naked.EtherscanService;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
@@ -16,11 +17,18 @@ import java.util.ArrayList;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public abstract class ApiService {
     private ArrayList<Asset> assets;
-    protected ExchangeCredentials ec;
     private AssetResponseListener listener;
+
+    protected ExchangeCredentials ec;
+    protected String address;
     protected int walletId;
+
 
     /**
      * Constructor: Sets internal parameters
@@ -30,21 +38,24 @@ public abstract class ApiService {
      */
     private void setParameters(ArrayList<Asset> assets,
                                ExchangeCredentials exchangeCredentials,
+                               String address,
                                AssetResponseListener listener,
                                int walletId) {
         this.assets = assets;
         this.ec = exchangeCredentials;
+        this.address = address;
         this.listener = listener;
         this.walletId = walletId;
     }
 
     public abstract void fetch();
 
+
     /**
      * Update assets from the callback of a specific ApiService if assets are updated
      * @param assets Coins from callback
      */
-    protected void updateAssets(ArrayList<Asset> assets) {
+    protected void returnAssets(ArrayList<Asset> assets) {
         if ((this.assets == null & assets != null) || !this.assets.equals(assets)){
 
             // Call listener
@@ -63,13 +74,14 @@ public abstract class ApiService {
         listener.onError(errorMessage);
     }
 
+
     /**
      * Generated HMAC SHA-256 signature
      * @param data Data to encrypt
      * @param secret Secret to encrypt with
      * @return Signature
      */
-    protected String generateHmacSHA256Signature(String data, String secret, Boolean encoded) throws IllegalArgumentException {
+    protected String generateSignature(String data, String secret, Boolean encoded) throws IllegalArgumentException {
         try {
             byte[] decoded_key = encoded ? Base64.decode(secret, Base64.DEFAULT) : secret.getBytes("UTF-8");
             SecretKeySpec secretKey = new SecretKeySpec(decoded_key, "HmacSHA256");
@@ -83,6 +95,53 @@ public abstract class ApiService {
         }
     }
 
+    /**
+     * Perform request and handle callback
+     * @param responseCall Call to perform
+     */
+    protected void performRequest(Call responseCall){
+        responseCall.enqueue(new Callback<IResponse>() {
+            @Override
+            public void onResponse(Call<IResponse> call, Response<IResponse> response) {
+                // Success
+                if (response.code() == 200) {
+                    handleSuccessResponse(response);
+                } else {
+                    // If failure, return the server error (or the error for returning that)
+                    try{ returnError(response.errorBody().string()); }
+                    catch (Exception e) { returnError(e.getMessage()); }
+                }
+            }
+
+            public void handleSuccessResponse(Object responseObject) {
+                ArrayList<com.walletkeep.walletkeep.db.entity.Asset> assets = new ArrayList<>();
+
+                // Response may be a list or a single item
+                try{
+                    Response<IResponse> response = (Response<IResponse>) responseObject;
+                    for(Asset asset: response.body().getAssets(walletId)) {
+                        if (asset.getAmount() != 0) assets.add(asset);
+                    }
+
+                } catch (Exception e){
+                    Response<ArrayList<IResponse>> responseList = (Response<ArrayList<IResponse>>) responseObject;
+                    for(IResponse response: responseList.body()) {
+                        for(Asset asset: response.getAssets(walletId)) {
+                            if (asset.getAmount() != 0) assets.add(asset);
+                        }
+                    }
+                }
+
+                returnAssets(assets);
+            }
+
+            @Override
+            public void onFailure(Call<IResponse> call, Throwable t) {
+                returnError(t.getMessage());
+            }
+        });
+    }
+
 
     /**
      * Interface for returning data to the repository
@@ -90,6 +149,13 @@ public abstract class ApiService {
     public interface AssetResponseListener {
         void onAssetsUpdated(ArrayList<Asset> assets);
         void onError(String message);
+    }
+
+    /**
+     * Abstract response that enforces the implementation of getAssets method
+     */
+    public interface IResponse {
+        ArrayList<Asset> getAssets(int walletId);
     }
 
     /**
@@ -125,7 +191,7 @@ public abstract class ApiService {
             }
 
             // Set internal parameters
-            apiService.setParameters((ArrayList<Asset>)wr.assets, wr.getCredentials(), crl, wr.wallet.getId());
+            apiService.setParameters((ArrayList<Asset>)wr.assets, wr.getCredentials(), wr.getAddress(), crl, wr.wallet.getId());
 
             return (T) apiService;
         }
@@ -154,7 +220,14 @@ public abstract class ApiService {
          * @return Exchange ApiService
          */
         private <T extends ApiService> T createNakedApiService(String currency){
-            return (T) new EthereumService();
+            switch (currency){
+                case "ETH":
+                    return (T) new BlockcypherService();
+                case "ETH2":
+                    return (T) new EtherscanService();
+                default:
+                    return null;
+            }
         }
     }
 }

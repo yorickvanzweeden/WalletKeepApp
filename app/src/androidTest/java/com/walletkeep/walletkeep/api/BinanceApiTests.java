@@ -1,7 +1,6 @@
 package com.walletkeep.walletkeep.api;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Base64;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Exchange;
@@ -19,8 +18,6 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class BinanceApiTests extends ApiServiceTest {
 
-    static Boolean threadsRunning;
-
     public BinanceApiTests(){
         init(MyApiCredentials.getBinanceCredentials());
     }
@@ -30,33 +27,6 @@ public class BinanceApiTests extends ApiServiceTest {
         super.init(exchangeCredentials);
     }
 
-    private void runEntireFlow(WalletWithRelations wallet, I i) {
-        threadsRunning = true;
-
-        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
-            @Override
-            public void onAssetsUpdated(ArrayList<Asset> assets) {
-                i.onResponseAssertion(assets);
-                threadsRunning = false;
-            }
-
-            @Override
-            public void onError(String message) {
-                i.onFailAssertion(message);
-                threadsRunning = false;
-            }
-        };
-
-        // Create ApiService
-        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
-        ApiService apiService = apiServiceFactory.create();
-
-        // Fetch data
-        apiService.fetch();
-
-        // Busy-wait till threads are done
-        while(threadsRunning) {}
-    }
     private WalletWithRelations getDefaultWallet(ExchangeCredentials exchangeCredentials){
         WalletWithRelations wallet = new WalletWithRelations();
         wallet.exchangeCredentials = new ArrayList<ExchangeCredentials>(){{add(exchangeCredentials);}};
