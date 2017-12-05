@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.ui.portfolio;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,7 +14,8 @@ import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
-public class PortfolioActivity extends AppCompatActivity {
+public class PortfolioActivity extends AppCompatActivity
+        implements AddPortfolioDialog.AddPortfolioDialogListener {
     private PortfolioViewModel viewModel;
 
     @Override
@@ -34,7 +37,7 @@ public class PortfolioActivity extends AppCompatActivity {
 
         // Setup fab
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> addPortfolio());
+        fab.setOnClickListener(view -> buildPortfolioDialog());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -67,11 +70,19 @@ public class PortfolioActivity extends AppCompatActivity {
                 mAdapter.updatePortfolios(viewModel.provideDataset()));
     }
 
-    /**
-     * Show dialog (todo) and add portfolio
-     */
-    private void addPortfolio(){
-        Portfolio p = new Portfolio("Portfolio");
+    private void buildPortfolioDialog(){
+        FragmentManager manager = getFragmentManager();
+        Fragment frag = manager.findFragmentByTag("fragment_add_portfolio_dialog");
+        if (frag != null) {
+            manager.beginTransaction().remove(frag).commit();
+        }
+        AddPortfolioDialog editNameDialog = new AddPortfolioDialog();
+        editNameDialog.show(manager, "fragment_add_portfolio_dialog");
+    }
+
+    @Override
+    public void onDialogPositiveClick(String portfolioName) {
+        Portfolio p = new Portfolio(portfolioName);
         viewModel.savePortfolio(p);
     }
 }
