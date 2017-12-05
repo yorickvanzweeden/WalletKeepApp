@@ -2,10 +2,14 @@ package com.walletkeep.walletkeep.api;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ApiServiceTest {
+    static Boolean threadsRunning;
+
     // Exchange credentials
     private ExchangeCredentials correct;
     protected ExchangeCredentials credentialsValidCorrect;
@@ -64,7 +68,35 @@ public abstract class ApiServiceTest {
         credentialsNegativeNonce.setNonce(-1);
     }
 
-    public interface I {
+    protected void runEntireFlow(WalletWithRelations wallet, ApiServiceTest.I i) {
+        threadsRunning = true;
+
+        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
+            @Override
+            public void onAssetsUpdated(ArrayList<Asset> assets) {
+                i.onResponseAssertion(assets);
+                threadsRunning = false;
+            }
+
+            @Override
+            public void onError(String message) {
+                i.onFailAssertion(message);
+                threadsRunning = false;
+            }
+        };
+
+        // Create ApiService
+        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
+        ApiService apiService = apiServiceFactory.create();
+
+        // Fetch data
+        apiService.fetch();
+
+        // Busy-wait till threads are done
+        while(threadsRunning) {}
+    }
+
+    protected interface I {
         void onResponseAssertion(List<Asset> assets);
         void onFailAssertion(String message);
     }
