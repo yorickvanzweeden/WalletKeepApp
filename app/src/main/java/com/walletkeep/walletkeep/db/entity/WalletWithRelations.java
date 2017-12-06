@@ -24,7 +24,7 @@ public class WalletWithRelations {
     public enum Type { Naked, Exchange }
 
     public Exchange getExchange(){
-        return this.exchanges.size() == 0 ? null : this.exchanges.get(0);
+        return this.exchanges == null || this.exchanges.size() == 0 ? null : this.exchanges.get(0);
     }
 
     public Type getType() {

@@ -88,14 +88,16 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.editWalletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
-            intent.putExtra("portfolio_id", wallets.get(position).wallet.getPortfolioId());
             context.startActivity(intent);
         });
 
-        try {
-            String address = wallets.get(position).getAddress();
-            holder.mTextView.setText(address);
-        } catch (Exception e) {}
+        switch (wallets.get(position).getType()){
+            case Naked:
+                holder.mTextView.setText(wallets.get(position).getAddress());
+                break;
+            default:
+                holder.mTextView.setText(wallets.get(position).getExchange().getName());
+        }
     }
 
     /**

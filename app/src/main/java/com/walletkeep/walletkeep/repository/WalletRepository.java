@@ -56,6 +56,10 @@ public class WalletRepository {
         return mDatabase.walletDao().getAll(portfolioId);
     }
 
+    public LiveData<WalletWithRelations> getWallet(int walletId) {
+        return mDatabase.walletDao().getById(walletId);
+    }
+
     public LiveData<List<AggregatedAsset>> getPortfolioAssets(int portfolioId){
         return mDatabase.assetDao().getAggregatedAssets(portfolioId);
     }
