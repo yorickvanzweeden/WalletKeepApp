@@ -17,12 +17,14 @@ import java.util.Date;
                 @ForeignKey(
                         entity = Currency.class,
                         parentColumns = "ticker",
-                        childColumns = "currency_ticker"
+                        childColumns = "currency_ticker",
+                        onDelete = ForeignKey.CASCADE
                 ),
                 @ForeignKey(
                         entity = Exchange.class,
                         parentColumns = "id",
-                        childColumns = "exchange_id"
+                        childColumns = "exchange_id",
+                        onDelete = ForeignKey.CASCADE
                 )
         })
 public class CurrencyPrice {
