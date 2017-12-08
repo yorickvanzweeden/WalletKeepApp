@@ -42,6 +42,7 @@ public class UpdateWalletViewModel extends ViewModel{
     }
 
     public void updateWallet(Wallet wallet){ this.walletRepository.updateWallet(wallet); }
+    public void deleteWallet(Wallet wallet){ this.walletRepository.deleteWallet(wallet); }
     public void addCredentials(ExchangeCredentials credentials){ this.walletRepository.addCredentials(credentials); }
 
 

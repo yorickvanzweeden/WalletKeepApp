@@ -6,7 +6,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(indices = {@Index("portfolio_id"), @Index("exchange_id")},
+@Entity(indices = {@Index("portfolio_id"), @Index("exchange_id"), @Index("address_currency")},
         foreignKeys = {
         @ForeignKey(
                 entity = Portfolio.class,

@@ -72,6 +72,10 @@ public class WalletRepository {
         AsyncTask.execute(() -> mDatabase.walletDao().update(wallet));
     }
 
+    public void deleteWallet(Wallet wallet) {
+        AsyncTask.execute(() -> mDatabase.walletDao().delete(wallet));
+    }
+
     public void addCredentials(ExchangeCredentials credentials) {
         AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().insert(credentials));
     }

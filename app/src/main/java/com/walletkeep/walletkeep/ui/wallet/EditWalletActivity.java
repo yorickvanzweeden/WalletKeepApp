@@ -18,6 +18,7 @@ public class EditWalletActivity extends AppCompatActivity {
     private UpdateWalletViewModel viewModel;
     private WalletWithRelations wallet;
     private ArrayAdapter<CharSequence> mAdapter;
+    private Boolean deleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,9 @@ public class EditWalletActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this, factory).get(UpdateWalletViewModel.class);
         viewModel.init(walletId);
 
-        viewModel.loadWallet().observe(this, wallet -> loadWallet(wallet));
+        viewModel.loadWallet().observe(this, wallet -> {
+            if (!deleted) { loadWallet(wallet); }
+        });
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner_editWallet_exchange);
         mAdapter = ArrayAdapter.createFromResource(this,
@@ -40,6 +43,9 @@ public class EditWalletActivity extends AppCompatActivity {
 
         Button saveButton = findViewById(R.id.button_editWallet_save);
         saveButton.setOnClickListener(view -> editWallet(walletId));
+
+        Button deleteButton = findViewById(R.id.button_editWallet_delete);
+        deleteButton.setOnClickListener(view -> deleteWallet());
     }
 
     private void editWallet(int walletId) {
@@ -88,5 +94,11 @@ public class EditWalletActivity extends AppCompatActivity {
                     mAdapter.getPosition(ec.getName())
             );
         }
+    }
+
+    private void deleteWallet() {
+        deleted = true;
+        viewModel.deleteWallet(this.wallet.wallet);
+        finish();
     }
 }

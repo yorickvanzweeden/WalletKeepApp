@@ -12,7 +12,8 @@ import android.arch.persistence.room.PrimaryKey;
         @ForeignKey(
                 entity = Wallet.class,
                 parentColumns = "id",
-                childColumns = "wallet_id"
+                childColumns = "wallet_id",
+                onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Currency.class,
