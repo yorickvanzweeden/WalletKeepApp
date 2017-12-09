@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
@@ -52,23 +51,16 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
             ((EditText)view.findViewById(R.id.editText_editWallet_secret)).setText(wallet.getCredentials().getSecret());
             ((EditText)view.findViewById(R.id.editText_editWallet_passphrase)).setText(wallet.getCredentials().getPassphrase());
         }
-        Exchange ec = wallet.getExchange();
-        if (ec != null) {
-            ((Spinner)getActivity().findViewById(R.id.spinner_editWallet_exchange)).setSelection(
-                    mAdapter.getPosition(ec.getName())
-            );
-        }
+        ((Spinner)getActivity().findViewById(R.id.spinner_editWallet_exchange)).setSelection(
+                mAdapter.getPosition(wallet.getExchangeName())
+        );
     }
 
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet){
         // Set exchange
         String exchange = ((Spinner)view.findViewById(R.id.spinner_editWallet_exchange)).getSelectedItem().toString();
-
-        if (exchange == "Binance")
-            wallet.wallet.setExchangeId("1");
-        else
-            wallet.wallet.setExchangeId("2");
+        wallet.wallet.setExchangeName(exchange);
 
         // Set credentials
         String key = ((EditText)view.findViewById(R.id.editText_editWallet_key)).getText().toString();

@@ -9,10 +9,6 @@ public class WalletWithRelations {
     @Embedded
     public Wallet wallet;
 
-    @SuppressWarnings("ROOM_RELATION_TYPE_MISMATCH" )
-    @Relation(parentColumn = "exchange_id", entityColumn = "id", entity = Exchange.class)
-    public List<Exchange> exchanges;
-
     @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = ExchangeCredentials.class)
     public List<ExchangeCredentials> exchangeCredentials;
 
@@ -23,14 +19,10 @@ public class WalletWithRelations {
     // Direct calls
     public enum Type { Naked, Exchange }
 
-    public Exchange getExchange(){
-        return this.exchanges == null || this.exchanges.size() == 0 ? null : this.exchanges.get(0);
-    }
-
     public Type getType() {
-        return this.exchanges == null || this.exchanges.size() == 0 ? Type.Naked : Type.Exchange;
+        return this.wallet.getExchangeName() == null ? Type.Naked : Type.Exchange;
     }
-
+    public String getExchangeName() { return this.wallet.getExchangeName(); }
     public String getAddress() {
         return this.wallet.getAddress();
     }

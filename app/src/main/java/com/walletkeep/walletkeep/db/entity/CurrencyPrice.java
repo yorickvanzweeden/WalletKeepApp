@@ -12,7 +12,7 @@ import com.walletkeep.walletkeep.db.DateConverter;
 
 import java.util.Date;
 
-@Entity(indices = {@Index("currency_ticker"), @Index("exchange_id")},
+@Entity(indices = {@Index("currency_ticker"), @Index("exchange_name")},
         foreignKeys = {
                 @ForeignKey(
                         entity = Currency.class,
@@ -22,8 +22,8 @@ import java.util.Date;
                 ),
                 @ForeignKey(
                         entity = Exchange.class,
-                        parentColumns = "id",
-                        childColumns = "exchange_id",
+                        parentColumns = "name",
+                        childColumns = "exchange_name",
                         onDelete = ForeignKey.CASCADE
                 )
         })
@@ -34,8 +34,8 @@ public class CurrencyPrice {
     @ColumnInfo(name = "currency_ticker")
     private String currencyTicker;
 
-    @ColumnInfo(name = "exchange_id")
-    private String exchangeId;
+    @ColumnInfo(name = "exchange_name")
+    private String exchangeName;
 
     @ColumnInfo(name = "timestamp")
     @TypeConverters({DateConverter.class})
@@ -44,9 +44,9 @@ public class CurrencyPrice {
     @ColumnInfo(name = "price")
     private float price;
 
-    public CurrencyPrice(String currencyTicker, String exchangeId, Date timestamp, float price) {
+    public CurrencyPrice(String currencyTicker, String exchangeName, Date timestamp, float price) {
         this.currencyTicker = currencyTicker;
-        this.exchangeId = exchangeId;
+        this.exchangeName = exchangeName;
         this.timestamp = timestamp;
         this.price = price;
     }
@@ -64,9 +64,9 @@ public class CurrencyPrice {
 
     public void setCurrencyTicker(String currencyTicker) { this.currencyTicker = currencyTicker; }
 
-    public String getExchangeId() { return exchangeId; }
+    public String getExchangeName() { return exchangeName; }
 
-    public void setExchangeId(String exchangeId) { this.exchangeId = exchangeId; }
+    public void setExchangeName(String exchangeName) { this.exchangeName = exchangeName; }
 
     public Date getTimestamp() { return timestamp; }
 

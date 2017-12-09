@@ -56,7 +56,7 @@ public class DataGenerator {
         for (int i = 0; i < 2; i++) {
             int nr = i + 1;
             Wallet wallet = new Wallet(1);
-            wallet.setExchangeId(Integer.toString(nr));
+            wallet.setExchangeName(Integer.toString(nr));
             wallets.add(wallet);
         }
         for (int i = 0; i < 2; i++) {

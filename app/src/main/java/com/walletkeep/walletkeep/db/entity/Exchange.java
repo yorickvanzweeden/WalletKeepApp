@@ -3,12 +3,11 @@ package com.walletkeep.walletkeep.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity
 public class Exchange {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey @NonNull
     @ColumnInfo(name = "name")
     private String name;
 
@@ -18,12 +17,6 @@ public class Exchange {
     }
 
     // Getters and setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) { this.id = id; }
-
     public String getName() { return name; }
 
     public void setName(String name) {
@@ -36,7 +29,7 @@ public class Exchange {
 
         private final String text;
 
-        private Exchanges(final String text) {
+        Exchanges(final String text) {
             this.text = text;
         }
 

@@ -13,6 +13,6 @@ public abstract class ExchangeDao implements BaseDao<Exchange> {
     @Query("SELECT * FROM exchange")
     public abstract LiveData<List<Exchange>> getAll();
 
-    @Query("SELECT * FROM exchange WHERE id LIKE :id LIMIT 1")
-    public abstract LiveData<Exchange> getById(int id);
+    @Query("SELECT * FROM exchange WHERE name LIKE :name LIMIT 1")
+    public abstract LiveData<Exchange> getByName(String name);
 }

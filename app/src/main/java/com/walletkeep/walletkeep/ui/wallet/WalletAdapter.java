@@ -97,7 +97,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
                 holder.mTextView.setText(wallets.get(position).getAddress());
                 break;
             default:
-                holder.mTextView.setText(wallets.get(position).getExchange().getName());
+                holder.mTextView.setText(wallets.get(position).getExchangeName());
         }
     }
 
