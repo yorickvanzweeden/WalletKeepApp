@@ -64,8 +64,8 @@ public class WalletRepository {
         return mDatabase.assetDao().getAggregatedAssets(portfolioId);
     }
 
-    public void addWallet(Wallet wallet) {
-        AsyncTask.execute(() -> mDatabase.walletDao().insert(wallet));
+    public void addWalletWithRelations(WalletWithRelations wallet) {
+        AsyncTask.execute(() -> mDatabase.walletDao().insertWalletWithRelations(wallet));
     }
 
     public void updateWallet(Wallet wallet) {
@@ -78,6 +78,10 @@ public class WalletRepository {
 
     public void addCredentials(ExchangeCredentials credentials) {
         AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().insert(credentials));
+    }
+
+    public void updateCredentials(ExchangeCredentials credentials) {
+        AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().update(credentials));
     }
 
     public void fetchWalletData(WalletWithRelations wallet){

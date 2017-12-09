@@ -1,15 +1,15 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class WalletActivity extends AppCompatActivity {
@@ -64,8 +64,11 @@ public class WalletActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Setup fab
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> addWallet(portfolioId));
+        FloatingActionButton fab = findViewById(R.id.fab_add_exchange_wallet);
+        fab.setOnClickListener(view -> addWallet(portfolioId, true));
+        FloatingActionButton fab2 = findViewById(R.id.fab_add_naked_wallet);
+        fab2.setOnClickListener(view -> addWallet(portfolioId, false));
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -73,8 +76,10 @@ public class WalletActivity extends AppCompatActivity {
      * Show dialog (todo) and add walletButton
      * @param portfolioId Portfolio to which the walletButton belongs
      */
-    private void addWallet(int portfolioId){
-        Wallet p = new Wallet(portfolioId);
-        viewModel.addWallet(p);
+    private void addWallet(int portfolioId, boolean addExchange){
+        Intent intent = new Intent(this, EditWalletActivity.class);
+        intent.putExtra("portfolio_id", portfolioId);
+        intent.putExtra("add_exchange", addExchange);
+        this.startActivity(intent);
     }
 }

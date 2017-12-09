@@ -88,6 +88,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.editWalletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
+            intent.putExtra("add_exchange", wallets.get(position).getType() == WalletWithRelations.Type.Exchange);
             context.startActivity(intent);
         });
 

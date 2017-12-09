@@ -41,9 +41,22 @@ public class UpdateWalletViewModel extends ViewModel{
         return wallet;
     }
 
-    public void updateWallet(Wallet wallet){ this.walletRepository.updateWallet(wallet); }
+    /**
+     * Adds walletButton (async)
+     * @param wallet Wallet to add
+     */
+    public void addWallet(WalletWithRelations wallet){
+        this.walletRepository.addWalletWithRelations(wallet);
+    }
+    public void updateWallet(WalletWithRelations wallet){
+        this.walletRepository.updateWallet(wallet.wallet);
+        if (wallet.getCredentials() != null){
+            this.walletRepository.updateCredentials(wallet.getCredentials());
+        }
+    }
     public void deleteWallet(Wallet wallet){ this.walletRepository.deleteWallet(wallet); }
     public void addCredentials(ExchangeCredentials credentials){ this.walletRepository.addCredentials(credentials); }
+    public void updateCredentials(ExchangeCredentials credentials){ this.walletRepository.updateCredentials(credentials); }
 
 
     /**

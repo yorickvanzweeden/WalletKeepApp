@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.WalletKeepApp;
-import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.WalletRepository;
 
@@ -40,12 +39,6 @@ public class WalletViewModel extends ViewModel {
     public LiveData<List<WalletWithRelations>> loadWallets() {
         return wallets;
     }
-
-    /**
-     * Adds walletButton (async)
-     * @param wallet Wallet to add
-     */
-    public void addWallet(Wallet wallet){ this.walletRepository.addWallet(wallet); }
 
     public void fetch(WalletWithRelations wallet){ this.walletRepository.fetchWalletData(wallet);}
 

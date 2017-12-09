@@ -37,7 +37,7 @@ public class WalletWithRelations {
     public String getAddressCurrency() { return this.wallet.getAddressCurrency(); }
 
     public ExchangeCredentials getCredentials() {
-        return this.exchangeCredentials.size() == 0 ? null : this.exchangeCredentials.get(0);
+        return this.exchangeCredentials == null || this.exchangeCredentials.size() == 0 ? null : this.exchangeCredentials.get(0);
     }
 
     public int getPortfolioId() {

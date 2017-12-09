@@ -2,103 +2,99 @@ package com.walletkeep.walletkeep.ui.wallet;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.db.entity.Exchange;
-import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
+import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 
 public class EditWalletActivity extends AppCompatActivity {
     private UpdateWalletViewModel viewModel;
     private WalletWithRelations wallet;
-    private ArrayAdapter<CharSequence> mAdapter;
-    private Boolean deleted = false;
+    private Boolean addExchange;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_wallet);
+
+        // Get intent data
         int walletId = getIntent().getExtras().getInt("wallet_id");
+        int portfolioId = getIntent().getExtras().getInt("portfolio_id");
+        addExchange = getIntent().getExtras().getBoolean("add_exchange");
+
+        // Setup fragment
+        setupFragment(savedInstanceState, addExchange);
 
         // Initialise view model
         UpdateWalletViewModel.Factory factory = new UpdateWalletViewModel.Factory(getApplication());
         viewModel = ViewModelProviders.of(this, factory).get(UpdateWalletViewModel.class);
         viewModel.init(walletId);
 
+        // Observe wallet
         viewModel.loadWallet().observe(this, wallet -> {
-            if (!deleted) { loadWallet(wallet); }
+            this.wallet = wallet;
+            this.updateForm();
         });
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_editWallet_exchange);
-        mAdapter = ArrayAdapter.createFromResource(this,
-                R.array.exchange_array, android.R.layout.simple_spinner_item);
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(mAdapter);
-
+        // Setup save button
         Button saveButton = findViewById(R.id.button_editWallet_save);
-        saveButton.setOnClickListener(view -> editWallet(walletId));
+        saveButton.setOnClickListener(view -> saveWallet(portfolioId));
 
+        // Setup delete button
         Button deleteButton = findViewById(R.id.button_editWallet_delete);
         deleteButton.setOnClickListener(view -> deleteWallet());
     }
 
-    private void editWallet(int walletId) {
-        String key = ((EditText)findViewById(R.id.editText_editWallet_key)).getText().toString();
-        String secret = ((EditText)findViewById(R.id.editText_editWallet_secret)).getText().toString();
-        String passphrase = ((EditText)findViewById(R.id.editText_editWallet_passphrase)).getText().toString();
-        String address = ((EditText)findViewById(R.id.editText_editWallet_address)).getText().toString();
-        String exchange = ((Spinner)findViewById(R.id.spinner_editWallet_exchange)).getSelectedItem().toString();
-
-        if (exchange != null && exchange.length() > 1) {
-            switch (exchange) {
-                case "Binance":
-                    this.wallet.wallet.setExchangeId("1");
-                    break;
-                default:
-                    this.wallet.wallet.setExchangeId("2");
-            }
-        } else {
-            this.wallet.wallet.setAddress(address);
-            this.wallet.wallet.setAddressCurrency("ETH");
+    private void setupFragment(Bundle savedInstanceState, boolean addExchange){
+        if (findViewById(R.id.fragment_container) == null || savedInstanceState != null) {
+            return;
         }
-        this.wallet.wallet.setId(walletId);
-        viewModel.updateWallet(this.wallet.wallet);
 
-        if (exchange != null && exchange.length() > 1) {
-            ExchangeCredentials exchangeCredentials = new ExchangeCredentials(key, secret, passphrase);
-            exchangeCredentials.setWallet_id(this.wallet.wallet.getId());
-            viewModel.addCredentials(exchangeCredentials);
-        }
-        finish();
+        if (addExchange) fragment = new EditExchangeWalletFragment();
+        else fragment = new EditNakedWalletFragment();
+
+        fragment.setArguments(getIntent().getExtras()); //TODO: Is this line necessary?
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragment).commit();
     }
 
-    private void loadWallet(WalletWithRelations wallet) {
-        this.wallet = wallet;
+    private void updateForm(){
+        if (wallet == null) return;
+        ((IWalletFragment) fragment).updateForm(wallet);
+    }
 
-        ExchangeCredentials credentials = wallet.getCredentials();
-        if (credentials != null) {
-            ((EditText)findViewById(R.id.editText_editWallet_key)).setText(wallet.getCredentials().getKey());
-            ((EditText)findViewById(R.id.editText_editWallet_secret)).setText(wallet.getCredentials().getSecret());
-            ((EditText)findViewById(R.id.editText_editWallet_passphrase)).setText(wallet.getCredentials().getPassphrase());
+    private void saveWallet(int portfolioId){
+        Boolean shouldInsert = false;
+
+        // Create wallet if not existent
+        if (wallet == null) {
+            wallet = new WalletWithRelations();
+            wallet.wallet = new Wallet(portfolioId);
+            shouldInsert = true;
         }
-        ((EditText)findViewById(R.id.editText_editWallet_address)).setText(wallet.getAddress());
-        Exchange ec = wallet.getExchange();
-        if (ec != null) {
-            ((Spinner)findViewById(R.id.spinner_editWallet_exchange)).setSelection(
-                    mAdapter.getPosition(ec.getName())
-            );
-        }
+
+        // Update wallet with form data
+        wallet = ((IWalletFragment) fragment).updateWallet(wallet);
+
+        // Save wallet to database
+        if(shouldInsert) { viewModel.addWallet(wallet);
+        } else { viewModel.updateWallet(wallet); }
+
+        finish();
     }
 
     private void deleteWallet() {
-        deleted = true;
-        viewModel.deleteWallet(this.wallet.wallet);
+        if(wallet != null) viewModel.deleteWallet(wallet.wallet);
         finish();
+    }
+
+    public interface IWalletFragment{
+        void updateForm(WalletWithRelations wallet);
+        WalletWithRelations updateWallet(WalletWithRelations wallet);
     }
 }
