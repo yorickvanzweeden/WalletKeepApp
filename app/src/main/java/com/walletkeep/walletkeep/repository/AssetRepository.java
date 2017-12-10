@@ -3,12 +3,15 @@ package com.walletkeep.walletkeep.repository;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
-import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.Portfolio;
+import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
+import com.walletkeep.walletkeep.util.RateLimiter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AssetRepository {
     // Repository instance
@@ -16,6 +19,10 @@ public class AssetRepository {
 
     // Database instance
     private final AppDatabase mDatabase;
+
+    // Rate limiter prevent too many requests
+    private RateLimiter<String> apiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
+
 
     /**
      * Constructor: Initializes repository with database
@@ -45,4 +52,28 @@ public class AssetRepository {
         return mDatabase.assetDao().getAggregatedAssets(portfolioId);
     }
 
+    public void fetchCurrencyPrices(){
+        // Don't execute API calls if rate limit is applied
+        if (!apiRateLimit.shouldFetch(Integer.toString(1))) { return; }
+
+        // Observe callback and save to db if needed
+        CoinmarketgapService.PricesResponseListener listener = new CoinmarketgapService.PricesResponseListener() {
+
+            @Override
+            public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
+                AsyncTask.execute(() -> mDatabase.currencyPriceDao().insertAll(prices));
+            }
+
+            @Override
+            public void onError(String message) {
+                //TODO: Do something with message
+            }
+        };
+
+        // Create ApiService
+        CoinmarketgapService service = new CoinmarketgapService(listener);
+
+        // Fetch data
+        service.fetch();
+    }
 }

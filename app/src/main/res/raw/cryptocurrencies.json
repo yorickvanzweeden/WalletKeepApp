@@ -825,6 +825,7 @@
   {"ticker" : "ION", "name" : "Ionomy"},
   {"ticker" : "IOP", "name" : "Internet of People"},
   {"ticker" : "IOTA", "name" : "IOTA"},
+  {"ticker" : "MIOTA", "name" : "IOTA"},
   {"ticker" : "IOU", "name" : "IOU1"},
   {"ticker" : "IPC", "name" : "ImperialCoin"},
   {"ticker" : "ISL", "name" : "IslaCoin"},

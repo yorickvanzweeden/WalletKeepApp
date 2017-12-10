@@ -84,7 +84,7 @@ public class DataGenerator {
         List<CurrencyPrice> currencyPrices = new ArrayList<>(2);
         for (int i = 0; i < 2; i++) {
             int nr = i + 1;
-            CurrencyPrice currencyPrice = new CurrencyPrice("ETH", "1", new Date(), 12);
+            CurrencyPrice currencyPrice = new CurrencyPrice("ETH", 1f,2f,3f, new Date());
             currencyPrices.add(currencyPrice);
         }
         return currencyPrices;

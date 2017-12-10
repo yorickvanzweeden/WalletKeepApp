@@ -4,6 +4,7 @@ package com.walletkeep.walletkeep.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
@@ -12,18 +13,12 @@ import com.walletkeep.walletkeep.db.DateConverter;
 
 import java.util.Date;
 
-@Entity(indices = {@Index("currency_ticker"), @Index("exchange_name")},
+@Entity(indices = {@Index("currency_ticker")},
         foreignKeys = {
                 @ForeignKey(
                         entity = Currency.class,
                         parentColumns = "ticker",
                         childColumns = "currency_ticker",
-                        onDelete = ForeignKey.CASCADE
-                ),
-                @ForeignKey(
-                        entity = Exchange.class,
-                        parentColumns = "name",
-                        childColumns = "exchange_name",
                         onDelete = ForeignKey.CASCADE
                 )
         })
@@ -34,21 +29,30 @@ public class CurrencyPrice {
     @ColumnInfo(name = "currency_ticker")
     private String currencyTicker;
 
-    @ColumnInfo(name = "exchange_name")
-    private String exchangeName;
+    @ColumnInfo(name = "price_usd")
+    private float priceUsd;
 
-    @ColumnInfo(name = "timestamp")
+    @ColumnInfo(name = "price_eur")
+    private float priceEur;
+
+    @ColumnInfo(name = "price_btc")
+    private float priceBtc;
+
+    @ColumnInfo(name = "last_updated")
     @TypeConverters({DateConverter.class})
-    private Date timestamp;
+    private Date lastUpdated;
 
-    @ColumnInfo(name = "price")
-    private float price;
-
-    public CurrencyPrice(String currencyTicker, String exchangeName, Date timestamp, float price) {
+    public CurrencyPrice(String currencyTicker) {
         this.currencyTicker = currencyTicker;
-        this.exchangeName = exchangeName;
-        this.timestamp = timestamp;
-        this.price = price;
+    }
+
+    @Ignore
+    public CurrencyPrice(String currencyTicker, float priceUsd, float priceEur, float priceBtc, Date lastUpdated) {
+        this.currencyTicker = currencyTicker;
+        this.priceUsd = priceUsd;
+        this.priceEur = priceEur;
+        this.priceBtc = priceBtc;
+        this.lastUpdated = lastUpdated;
     }
 
     // Getters and setters
@@ -64,15 +68,19 @@ public class CurrencyPrice {
 
     public void setCurrencyTicker(String currencyTicker) { this.currencyTicker = currencyTicker; }
 
-    public String getExchangeName() { return exchangeName; }
+    public float getPriceUsd() { return priceUsd; }
 
-    public void setExchangeName(String exchangeName) { this.exchangeName = exchangeName; }
+    public void setPriceUsd(float priceUsd) { this.priceUsd = priceUsd; }
 
-    public Date getTimestamp() { return timestamp; }
+    public float getPriceEur() { return priceEur; }
 
-    public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
+    public void setPriceEur(float priceEur) { this.priceEur = priceEur; }
 
-    public float getPrice() { return price; }
+    public float getPriceBtc() { return priceBtc; }
 
-    public void setPrice(float price) { this.price = price; }
+    public void setPriceBtc(float priceBtc) { this.priceBtc = priceBtc; }
+
+    public Date getLastUpdated() { return lastUpdated; }
+
+    public void setLastUpdated(Date lastUpdated) { this.lastUpdated = lastUpdated; }
 }
