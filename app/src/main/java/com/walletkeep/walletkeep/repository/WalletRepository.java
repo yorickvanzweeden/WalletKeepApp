@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.db.AppDatabase;
-import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
@@ -52,38 +51,60 @@ public class WalletRepository {
     }
 
 
+    /**
+     * Gets the wallets of a portfolio
+     * @param portfolioId Id of the portfolio
+     * @return List of wallets of a portfolio
+     */
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
         return mDatabase.walletDao().getAll(portfolioId);
     }
 
+    /**
+     * Gets specified wallet by id
+     * @param walletId Id of the wallet
+     * @return Wallet
+     */
     public LiveData<WalletWithRelations> getWallet(int walletId) {
         return mDatabase.walletDao().getById(walletId);
     }
 
-    public LiveData<List<AggregatedAsset>> getPortfolioAssets(int portfolioId){
-        return mDatabase.assetDao().getAggregatedAssets(portfolioId);
-    }
-
+    /**
+     * Add a wallet with relations to the database
+     * @param wallet Wallet with relations
+     */
     public void addWalletWithRelations(WalletWithRelations wallet) {
         AsyncTask.execute(() -> mDatabase.walletDao().insertWalletWithRelations(wallet));
     }
 
+    /**
+     * Updates a wallet in the database
+     * @param wallet Updated wallet
+     */
     public void updateWallet(Wallet wallet) {
         AsyncTask.execute(() -> mDatabase.walletDao().update(wallet));
     }
 
+    /**
+     * Deletes a wallet in the database
+     * @param wallet Wallet to delete
+     */
     public void deleteWallet(Wallet wallet) {
         AsyncTask.execute(() -> mDatabase.walletDao().delete(wallet));
     }
 
-    public void addCredentials(ExchangeCredentials credentials) {
-        AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().insert(credentials));
-    }
-
+    /**
+     * Updates credentials in the database
+     * @param credentials Updated credentials
+     */
     public void updateCredentials(ExchangeCredentials credentials) {
         AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().update(credentials));
     }
 
+    /**
+     * Fetches wallet data from api service
+     * @param wallet Wallet containing credentials
+     */
     public void fetchWalletData(WalletWithRelations wallet){
         // Don't execute API calls if rate limit is applied
         if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }

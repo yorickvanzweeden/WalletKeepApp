@@ -19,6 +19,13 @@ public class IntroSlider extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_welcome);
 
+        setupIntroSlider();
+    }
+
+    /**
+     * Setup IntroSlider
+     */
+    private void setupIntroSlider(){
         // Get references of the Next button and the ViewFlipper
         Button nextButton = findViewById(R.id.buttonnext);
         ViewFlipper simpleViewFlipper = findViewById(R.id.simpleViewFlipper); // get the reference of ViewFlipper
@@ -45,5 +52,4 @@ public class IntroSlider extends AppCompatActivity {
             }
         });
     }
-
 }

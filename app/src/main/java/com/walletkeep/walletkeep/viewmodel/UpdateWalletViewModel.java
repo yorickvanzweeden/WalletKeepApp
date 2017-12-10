@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.WalletKeepApp;
-import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.WalletRepository;
@@ -55,9 +54,6 @@ public class UpdateWalletViewModel extends ViewModel{
         }
     }
     public void deleteWallet(Wallet wallet){ this.walletRepository.deleteWallet(wallet); }
-    public void addCredentials(ExchangeCredentials credentials){ this.walletRepository.addCredentials(credentials); }
-    public void updateCredentials(ExchangeCredentials credentials){ this.walletRepository.updateCredentials(credentials); }
-
 
     /**
      * Returns view model with repository

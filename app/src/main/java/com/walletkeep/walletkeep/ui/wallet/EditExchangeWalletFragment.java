@@ -22,14 +22,31 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
     private ArrayAdapter<CharSequence> mAdapter;
     private View view;
 
+    /**
+     * Constructor:
+     *
+     * Required empty public constructor
+     */
     public EditExchangeWalletFragment() {}
 
+    /**
+     * Inflate view
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_edit_exchange_wallet, container, false);
     }
 
+    /**
+     * Setup spinner
+     * @param view View of the fragment
+     * @param savedInstanceState Previous state of the fragment
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         this.view = getView();
@@ -42,6 +59,10 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
         spinner.setAdapter(mAdapter);
     }
 
+    /**
+     * Update form with saved wallet data
+     * @param wallet Wallet containing the data for the form
+     */
     @Override
     public void updateForm(WalletWithRelations wallet){
         //Update form with Wallet data
@@ -56,6 +77,11 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
         );
     }
 
+    /**
+     * Save form data to a wallet
+     * @param wallet Wallet to save data in
+     * @return Updated wallet
+     */
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet){
         // Set exchange

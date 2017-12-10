@@ -91,21 +91,12 @@ public abstract class AppDatabase extends RoomDatabase {
 
                             // Generate the data for pre-population
                             AppDatabase database = AppDatabase.getInstance(appContext, executors);
-                            List<Currency> currencies = DataGenerator.generateCurrencies();
-                            List<Exchange> exchanges = DataGenerator.generateExchanges();
-//                            List<Portfolio> portfolios = DataGenerator.generatePortfolios();
-//                            List<Wallet> wallets = DataGenerator.generateWallets();
-//                            List<Asset> assets = DataGenerator.generateAssets();
-//                            List<CurrencyPrice> currencyPrices = DataGenerator.generateCurrencyPrices();
+                            List<Currency> currencies = DataGenerator.loadCurrencies();
+                            List<Exchange> exchanges = DataGenerator.loadExchanges();
 
                             database.runInTransaction(() -> {
                                 database.currencyDao().insertAll(currencies);
                                 database.exchangeDao().insertAll(exchanges);
-//                                database.portfolioDao().insertAll(portfolios);
-//                                database.walletDao().insertAll(wallets);
-//                                database.assetDao().insertAll(assets);
-//                                database.currencyPriceDao().insertAll(currencyPrices);
-
                             });
 
                             // notify that the database was created and it's ready to be used

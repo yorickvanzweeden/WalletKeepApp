@@ -26,6 +26,9 @@ public class EtherscanService extends ApiService {
         performRequest(blockcypherResponseCall);
     }
 
+    /**
+     * Retrofit request interfaces
+     */
     private interface EtherscanApi {
         @Headers("Content-Type: application/json")
         @GET("?module=account&action=balance&tag=latest")
@@ -34,6 +37,9 @@ public class EtherscanService extends ApiService {
         );
     }
 
+    /**
+     * POJO used for converting the JSON response to Java
+     */
     private class EtherscanResponse implements IResponse{
         @SerializedName("status")
         @Expose

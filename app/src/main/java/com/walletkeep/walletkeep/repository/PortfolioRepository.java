@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PortfolioRepository {
@@ -15,6 +14,7 @@ public class PortfolioRepository {
 
     // Database instance
     private final AppDatabase mDatabase;
+
 
     /**
      * Constructor: Initializes repository with database
@@ -40,20 +40,19 @@ public class PortfolioRepository {
         return sInstance;
     }
 
-
-    public LiveData<Portfolio> getPortfolio(int portfolioId) {
-        return mDatabase.portfolioDao().getById(portfolioId);
-    }
-
+    /**
+     * Gets a list of portfolios from the database
+     * @return List of portfolios
+     */
     public LiveData<List<Portfolio>> getPortfolios() {
         return mDatabase.portfolioDao().getAll();
     }
 
+    /**
+     * Adds a portfolio (async)
+     * @param portfolio Portfolio to insert in the database
+     */
     public void addPortfolio(Portfolio portfolio) {
         AsyncTask.execute(() -> mDatabase.portfolioDao().insert(portfolio));
-    }
-
-    public void addPortfolios(List<Portfolio> portfolios) {
-        AsyncTask.execute(() -> mDatabase.portfolioDao().insertAll(portfolios));
     }
 }
