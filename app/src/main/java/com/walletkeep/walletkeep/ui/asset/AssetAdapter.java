@@ -86,9 +86,9 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     public void onBindViewHolder(com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder holder, int position) {
         AggregatedAsset asset = assets.get(position);
 
-        holder.mTextViewTicker.setText(asset.currencyTicker);
-        holder.mTextViewAmount.setText(Float.toString(asset.amount));
-        holder.mTextViewPrice.setText(String.format("€%.2f", asset.amount * asset.price_eur));
+        holder.mTextViewTicker.setText(asset.asset.getCurrencyTicker());
+        holder.mTextViewAmount.setText(Float.toString(asset.getAmount()));
+        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice().getPriceEur()));
     }
 
     /**

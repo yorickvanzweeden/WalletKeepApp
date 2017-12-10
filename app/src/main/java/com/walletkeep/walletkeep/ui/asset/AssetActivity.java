@@ -2,14 +2,17 @@ package com.walletkeep.walletkeep.ui.asset;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
+
+import java.util.List;
 
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
@@ -33,8 +36,6 @@ public class AssetActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Setup fab
-        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(view -> buildPortfolioDialog());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -63,9 +64,21 @@ public class AssetActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         // Update recycler view if portfolios are changed
-        viewModel.getAggregatedAssets().observe(this, aggregatedAssets ->
-                mAdapter.updateAggregatedAssets(aggregatedAssets));
+        viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
+            mAdapter.updateAggregatedAssets(aggregatedAssets);
+            updatePortfolioValue(aggregatedAssets);
+        });
     }
 
+    private void updatePortfolioValue(List<AggregatedAsset> aggregatedAssets) {
+        float total = 0;
+
+        for (AggregatedAsset asset: aggregatedAssets) {
+            total += asset.getAmount() * asset.getLatestCurrencyPrice().getPriceEur();
+        }
+
+        TextView portfolioValueTextView = findViewById(R.id.asset_portfolio_value);
+        portfolioValueTextView.setText(String.format("€%.2f", total));
+    }
 
 }

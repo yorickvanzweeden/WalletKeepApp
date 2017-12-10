@@ -20,12 +20,12 @@ public abstract class AssetDao implements BaseDao<Asset> {
     @Query("SELECT * FROM asset WHERE wallet_id LIKE :walletId")
     public abstract LiveData<List<Asset>> getByWalletId(int walletId);
 
-    @Query("SELECT asset.currency_ticker AS 'currency_ticker', SUM(asset.amount) AS 'amount', currencyprice.price_eur AS 'price_eur'" +
-            "FROM portfolio " +
+    @Query("SELECT * FROM portfolio " +
             "JOIN wallet ON portfolio.id = wallet.portfolio_id " +
             "JOIN asset ON wallet.id = asset.wallet_id " +
             "JOIN currencyprice ON asset.currency_ticker = currencyprice.currency_ticker " +
             "WHERE portfolio.id LIKE :portfolioId " +
-            "GROUP BY asset.currency_ticker")
+            "GROUP BY asset.currency_ticker " +
+            "ORDER BY currencyprice.last_updated")
     public abstract LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId);
 }

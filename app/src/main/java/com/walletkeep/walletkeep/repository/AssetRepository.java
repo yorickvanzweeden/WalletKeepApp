@@ -21,7 +21,7 @@ public class AssetRepository {
     private final AppDatabase mDatabase;
 
     // Rate limiter prevent too many requests
-    private RateLimiter<String> apiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
+    private RateLimiter<String> apiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
 
 
     /**
