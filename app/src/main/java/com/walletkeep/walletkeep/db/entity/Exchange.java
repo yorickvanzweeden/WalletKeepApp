@@ -22,20 +22,4 @@ public class Exchange {
     public void setName(String name) {
         this.name = name;
     }
-
-    public enum Exchanges {
-        BINANCE("Binance"),
-        GDAX("GDAX");
-
-        private final String text;
-
-        Exchanges(final String text) {
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
 }
