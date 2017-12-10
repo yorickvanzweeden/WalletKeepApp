@@ -2,13 +2,16 @@ package com.walletkeep.walletkeep.ui.wallet;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
@@ -64,10 +67,31 @@ public class WalletActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Setup fab
+        View overlay = findViewById(R.id.fab_overlay);
+
+        FloatingActionsMenu fabmenu = findViewById(R.id.fab_menu_add_wallet);
+        fabmenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                overlay.setBackgroundColor(Color.argb(200,255,255,255));
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                overlay.setBackgroundColor(Color.TRANSPARENT);
+            }
+        });
+        overlay.setOnClickListener(view -> fabmenu.collapse());
         FloatingActionButton fab = findViewById(R.id.fab_add_exchange_wallet);
-        fab.setOnClickListener(view -> addWallet(portfolioId, true));
+        fab.setOnClickListener(view -> {
+            addWallet(portfolioId, true);
+            fabmenu.collapse();
+        });
         FloatingActionButton fab2 = findViewById(R.id.fab_add_naked_wallet);
-        fab2.setOnClickListener(view -> addWallet(portfolioId, false));
+        fab2.setOnClickListener(view -> {
+            addWallet(portfolioId, false);
+            fabmenu.collapse();
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

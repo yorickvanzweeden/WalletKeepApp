@@ -25,33 +25,39 @@
         android:id="@+id/include2"
         layout="@layout/content_wallet" />
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="4dp"
-        android:tint="#ffffff"
-        app:layout_anchor="@+id/include2"
-        app:layout_anchorGravity="right|bottom"
-        app:srcCompat="@android:drawable/ic_input_add"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_labelsPosition="left">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_naked_wallet"
+    <FrameLayout
+        android:id="@+id/fab_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fab_menu_add_wallet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_title="Naked wallet" />
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="4dp"
+            android:tint="#ffffff"
+            app:layout_anchor="@+id/include2"
+            app:layout_anchorGravity="right|bottom"
+            app:srcCompat="@android:drawable/ic_input_add"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            fab:fab_labelsPosition="left">
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_exchange_wallet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_title="Exchange wallet" />
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_naked_wallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_title="Naked wallet" />
 
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_exchange_wallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_title="Exchange wallet" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
