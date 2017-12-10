@@ -1,7 +1,6 @@
 package com.walletkeep.walletkeep.db;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,8 +24,9 @@ import static com.walletkeep.walletkeep.util.Converters.inputStreamToString;
 
 public class DataGenerator {
     public static List<Exchange> generateExchanges() {
-        List<Exchange> exchanges = new ArrayList<>(3);
-        String[] exchangesArray = Resources.getSystem().getStringArray(R.array.exchange_array);
+        List<Exchange> exchanges = new ArrayList<>();
+        Context c =  WalletKeepApp.getContext();
+        String[] exchangesArray = c.getResources().getStringArray(R.array.exchange_array);
         for (int i = 0; i < exchangesArray.length; i++) {
             Exchange exchange = new Exchange(exchangesArray[i].toString());
             exchanges.add(exchange);
