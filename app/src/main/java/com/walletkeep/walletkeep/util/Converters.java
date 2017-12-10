@@ -3,8 +3,6 @@ package com.walletkeep.walletkeep.util;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static java.lang.Math.max;
-
 public class Converters {
     /**
      * Converts byte array to hex string
@@ -30,7 +28,15 @@ public class Converters {
      * @return Balance as float
      */
     public static Float amountToFloat(String balance, int decimalPlace) {
-        int split = max(balance.length() - decimalPlace, 0);
+        int split = balance.length() - decimalPlace;
+        if (split < 0){
+            String prefix = "";
+            for(int i = split; i < 1; i++) {
+                prefix = prefix.concat("0");
+            }
+            balance = prefix + balance;
+            split = 0;
+        }
         String firstPart = balance.substring(0, split);
         String lastPart = balance.substring(split, balance.length());
         return Float.parseFloat(firstPart + "." + lastPart);

@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
-import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 
 import java.util.List;
@@ -33,6 +32,7 @@ public class AssetViewModel extends ViewModel {
     public void init(int portfolioId) {
         if (this.aggregatedAssets == null)
             this.aggregatedAssets = assetRepository.getAggregatedAssets(portfolioId);
+        this.assetRepository.fetchCurrencyPrices();
     }
 
     /**

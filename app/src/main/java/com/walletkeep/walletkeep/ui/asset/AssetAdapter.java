@@ -28,12 +28,18 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         public CardView mCardView;
+        public TextView mTextViewTicker;
+        public TextView mTextViewAmount;
+        public TextView mTextViewPrice;
         public Button wallet;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
             mCardView = v.findViewById(R.id.card_view);
+            mTextViewTicker = v.findViewById(R.id.asset_ticker);
+            mTextViewAmount = v.findViewById(R.id.asset_amount);
+            mTextViewPrice = v.findViewById(R.id.asset_price);
             wallet = v.findViewById(R.id.button_wallet);
         }
     }
@@ -79,7 +85,10 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     @Override
     public void onBindViewHolder(com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder holder, int position) {
         AggregatedAsset asset = assets.get(position);
-        ((TextView)holder.mCardView.getChildAt(0)).setText(asset.currencyTicker + " " + asset.amount);
+
+        holder.mTextViewTicker.setText(asset.asset.getCurrencyTicker());
+        holder.mTextViewAmount.setText(Float.toString(asset.getAmount()));
+        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice().getPriceEur()));
     }
 
     /**

@@ -67,21 +67,23 @@ public class WalletActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Setup fab
-        View overlay = findViewById(R.id.fab_overlay);
-
         FloatingActionsMenu fabmenu = findViewById(R.id.fab_menu_add_wallet);
+        View overlay = findViewById(R.id.fab_overlay);
+        overlay.setOnClickListener(view -> fabmenu.collapse());
+
         fabmenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
                 overlay.setBackgroundColor(Color.argb(200,255,255,255));
+                overlay.setClickable(true);
             }
-
             @Override
             public void onMenuCollapsed() {
                 overlay.setBackgroundColor(Color.TRANSPARENT);
+                overlay.setClickable(false);
             }
         });
-        overlay.setOnClickListener(view -> fabmenu.collapse());
+
         FloatingActionButton fab = findViewById(R.id.fab_add_exchange_wallet);
         fab.setOnClickListener(view -> {
             addWallet(portfolioId, true);
