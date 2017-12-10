@@ -3,7 +3,6 @@ package com.walletkeep.walletkeep.api;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
@@ -21,7 +20,6 @@ public class EthereumApiTests extends ApiServiceTest {
     private WalletWithRelations getDefaultWallet(ExchangeCredentials exchangeCredentials){
         WalletWithRelations wallet = new WalletWithRelations();
         wallet.exchangeCredentials = new ArrayList<ExchangeCredentials>();
-        wallet.exchanges = new ArrayList<Exchange>();
         wallet.wallet = new Wallet(1);
         wallet.wallet.setAddressCurrency("ETH");
         wallet.wallet.setAddress(MyApiCredentials.getEthereumAddress());

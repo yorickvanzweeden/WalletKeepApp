@@ -3,7 +3,6 @@ package com.walletkeep.walletkeep.api;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
@@ -30,8 +29,8 @@ public class BinanceApiTests extends ApiServiceTest {
     private WalletWithRelations getDefaultWallet(ExchangeCredentials exchangeCredentials){
         WalletWithRelations wallet = new WalletWithRelations();
         wallet.exchangeCredentials = new ArrayList<ExchangeCredentials>(){{add(exchangeCredentials);}};
-        wallet.exchanges = new ArrayList<Exchange>() {{ add(new Exchange("Binance")); }};
         wallet.wallet = new Wallet(1);
+        wallet.wallet.setExchangeName("Binance");
         wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "ETH",  12)) ;}};
         return wallet;
     }
