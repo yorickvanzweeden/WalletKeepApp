@@ -48,10 +48,18 @@ public class AssetRepository {
         return sInstance;
     }
 
+    /**
+     * Gets a list of aggregated assets of a portfolio
+     * @param portfolioId Id of the portfolio
+     * @return List of aggregated assets
+     */
     public LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId) {
         return mDatabase.assetDao().getAggregatedAssets(portfolioId);
     }
 
+    /**
+     * Update database with the latest currency prices from the api service
+     */
     public void fetchCurrencyPrices(){
         // Don't execute API calls if rate limit is applied
         if (!apiRateLimit.shouldFetch(Integer.toString(1))) { return; }

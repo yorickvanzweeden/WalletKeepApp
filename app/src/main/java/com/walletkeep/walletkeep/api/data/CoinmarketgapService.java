@@ -22,9 +22,13 @@ public class CoinmarketgapService {
         this.listener = listener;
     }
 
+    /**
+     * Fetch currency data from Coinmarketgap
+     */
     public void fetch() {
         // Create request
-        CoinmarketgapApi api = RetrofitClient.getClient("https://api.coinmarketcap.com/v1/").create(CoinmarketgapApi.class);
+        CoinmarketgapApi api = RetrofitClient.getClient("https://api.coinmarketcap.com/v1/")
+                .create(CoinmarketgapApi.class);
         Call<List<CoinmarketgapResponse>> responseCall = api.getCurrencyData();
 
         // Perform request
@@ -35,10 +39,11 @@ public class CoinmarketgapService {
      * Perform request and handle callback
      * @param responseCall Call to perform
      */
-    protected void performRequest(Call responseCall){
+    private void performRequest(Call responseCall){
         responseCall.enqueue(new Callback<List<CoinmarketgapResponse>>() {
             @Override
-            public void onResponse(Call<List<CoinmarketgapResponse>> call, Response<List<CoinmarketgapResponse>> response) {
+            public void onResponse(Call<List<CoinmarketgapResponse>> call,
+                                   Response<List<CoinmarketgapResponse>> response) {
                 // Success
                 if (response.code() == 200) {
                     handleSuccessResponse(response.body());
@@ -74,13 +79,19 @@ public class CoinmarketgapService {
         void onError(String message);
     }
 
+    /**
+     * Retrofit request interfaces
+     */
     private interface CoinmarketgapApi {
         @Headers("Content-Type: application/json")
         @GET("ticker/?convert=EUR&limit=300")
         Call<List<CoinmarketgapResponse>> getCurrencyData();
     }
 
-    public class CoinmarketgapResponse {
+    /**
+     * POJO used for converting the JSON response to Java
+     */
+    private class CoinmarketgapResponse {
 
         @SerializedName("id")
         @Expose
@@ -281,6 +292,10 @@ public class CoinmarketgapService {
             this.marketCapEur = marketCapEur;
         }
 
+        /**
+         * Return currency price in USD, EUR and BTC
+         * @return
+         */
         public CurrencyPrice getCurrencyPrice() {
             return new CurrencyPrice(
                     symbol,

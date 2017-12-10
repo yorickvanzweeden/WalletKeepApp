@@ -70,16 +70,21 @@ public class PortfolioActivity extends AppCompatActivity
                 mAdapter.updatePortfolios(portfolios));
     }
 
+    /**
+     * Display portfolio dialog to add a new portfolio
+     */
     private void buildPortfolioDialog(){
         FragmentManager manager = getFragmentManager();
         Fragment frag = manager.findFragmentByTag("fragment_add_portfolio_dialog");
-        if (frag != null) {
-            manager.beginTransaction().remove(frag).commit();
-        }
+        if (frag != null) { manager.beginTransaction().remove(frag).commit(); }
         AddPortfolioDialog editNameDialog = new AddPortfolioDialog();
         editNameDialog.show(manager, "fragment_add_portfolio_dialog");
     }
 
+    /**
+     * Callback from the dialog listener: Add portfolio with given name
+     * @param portfolioName Name of the portfolio
+     */
     @Override
     public void onDialogPositiveClick(String portfolioName) {
         Portfolio p = new Portfolio(portfolioName);

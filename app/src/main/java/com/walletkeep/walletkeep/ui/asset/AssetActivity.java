@@ -35,7 +35,6 @@ public class AssetActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Setup fab
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -63,20 +62,25 @@ public class AssetActivity extends AppCompatActivity {
         AssetAdapter mAdapter = new AssetAdapter(this, viewModel.getAggregatedAssets().getValue());
         mRecyclerView.setAdapter(mAdapter);
 
-        // Update recycler view if portfolios are changed
+        // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
             mAdapter.updateAggregatedAssets(aggregatedAssets);
             updatePortfolioValue(aggregatedAssets);
         });
     }
 
+    /**
+     * Updates portfolio value
+     * @param aggregatedAssets List of aggregates assets
+     */
     private void updatePortfolioValue(List<AggregatedAsset> aggregatedAssets) {
+        // Calculate total
         float total = 0;
-
         for (AggregatedAsset asset: aggregatedAssets) {
             total += asset.getAmount() * asset.getLatestCurrencyPrice().getPriceEur();
         }
 
+        // Set text of TextView
         TextView portfolioValueTextView = findViewById(R.id.asset_portfolio_value);
         portfolioValueTextView.setText(String.format("€%.2f", total));
     }

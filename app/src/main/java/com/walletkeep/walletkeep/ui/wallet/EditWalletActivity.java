@@ -17,6 +17,10 @@ public class EditWalletActivity extends AppCompatActivity {
     private Boolean addExchange;
     private Fragment fragment;
 
+    /**
+     * Setup the activity
+     * @param savedInstanceState Previous state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +39,11 @@ public class EditWalletActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this, factory).get(UpdateWalletViewModel.class);
         viewModel.init(walletId);
 
-        // Observe wallet
+        // Observe wallet --> Update form if changed
         viewModel.loadWallet().observe(this, wallet -> {
             this.wallet = wallet;
-            this.updateForm();
+            if (wallet == null) return;
+            ((IWalletFragment) fragment).updateForm(wallet);
         });
 
         // Setup save button
@@ -50,24 +55,31 @@ public class EditWalletActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(view -> deleteWallet());
     }
 
+    /**
+     * Setup the fragment
+     * @param savedInstanceState
+     * @param addExchange
+     */
     private void setupFragment(Bundle savedInstanceState, boolean addExchange){
+        // Check if fragment exists
         if (findViewById(R.id.fragment_container) == null || savedInstanceState != null) {
             return;
         }
 
+        // Add exchange fragment for exchange wallets, naked fragment for naked wallets
         if (addExchange) fragment = new EditExchangeWalletFragment();
         else fragment = new EditNakedWalletFragment();
 
+        // Place fragment in container
         fragment.setArguments(getIntent().getExtras()); //TODO: Is this line necessary?
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragment).commit();
     }
 
-    private void updateForm(){
-        if (wallet == null) return;
-        ((IWalletFragment) fragment).updateForm(wallet);
-    }
-
+    /**
+     * Save a wallet
+     * @param portfolioId Id of the portfolio the wallet belongs to
+     */
     private void saveWallet(int portfolioId){
         Boolean shouldInsert = false;
 
@@ -85,14 +97,24 @@ public class EditWalletActivity extends AppCompatActivity {
         if(shouldInsert) { viewModel.addWallet(wallet);
         } else { viewModel.updateWallet(wallet); }
 
+        // Kill activity --> Return to previous activity
         finish();
     }
 
+    /**
+     * Delete wallet
+     */
     private void deleteWallet() {
+        // Don't delete if not saved
         if(wallet != null) viewModel.deleteWallet(wallet.wallet);
+
+        // Kill activity --> Return to previous activity
         finish();
     }
 
+    /**
+     * Interface for naked and exchange wallet fragments
+     */
     public interface IWalletFragment{
         void updateForm(WalletWithRelations wallet);
         WalletWithRelations updateWallet(WalletWithRelations wallet);

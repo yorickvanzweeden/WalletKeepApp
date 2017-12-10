@@ -99,7 +99,7 @@ public class WalletActivity extends AppCompatActivity {
     }
 
     /**
-     * Show dialog (todo) and add walletButton
+     * Start add/edit wallet intent
      * @param portfolioId Portfolio to which the walletButton belongs
      */
     private void addWallet(int portfolioId, boolean addExchange){

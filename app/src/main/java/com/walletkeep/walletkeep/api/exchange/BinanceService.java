@@ -19,7 +19,7 @@ public class BinanceService extends ApiService {
     @Override
     public void fetch() {
         // Get signature
-        int recvWindow = 60000;
+        int recvWindow = 60000; // Timeframe for allowing the request
         long timestamp = System.currentTimeMillis();
         String data =  "recvWindow=" + recvWindow + "&timestamp=" + timestamp;
         String signature;
@@ -39,6 +39,9 @@ public class BinanceService extends ApiService {
         performRequest(binanceResponseCall);
     }
 
+    /**
+     * Retrofit request interfaces
+     */
     private interface BinanceApi {
         @Headers("Content-Type: application/json")
         @GET("/api/v3/account")
@@ -50,6 +53,9 @@ public class BinanceService extends ApiService {
         );
     }
 
+    /**
+     * POJO used for converting the JSON response to Java
+     */
     private class BinanceResponse implements IResponse {
 
         @SerializedName("makerCommission")

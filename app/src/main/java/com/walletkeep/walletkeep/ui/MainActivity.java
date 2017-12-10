@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(com.walletkeep.walletkeep.R.layout.activity_main);
 
-        // Check if introslider should be shown
+        // Check if IntroSlider should be shown
         checkFirstRun();
 
         // Call getData() on button click

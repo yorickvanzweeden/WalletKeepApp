@@ -13,17 +13,29 @@ public class AggregatedAsset {
     public List<CurrencyPrice> prices;
 
 
+    /**
+     * Gets ticker of the currency
+     * @return Ticker of the currency
+     */
     public String getTicker(){
         return asset.getCurrencyTicker();
     }
 
+    /**
+     * Gets the amount owned of the currency
+     * @return The amount owned of the currency
+     */
     public float getAmount(){
         return asset.getAmount();
     }
 
+    /**
+     * Gets latest price of the currency
+     * @return Latest price of the currency
+     */
     public CurrencyPrice getLatestCurrencyPrice(){
         if(prices == null || prices.size() == 0) return null;
-
+        //TODO: Does this return the lastest or the first?
         return prices.get(0);
     }
 }

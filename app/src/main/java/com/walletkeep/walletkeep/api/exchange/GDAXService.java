@@ -37,6 +37,9 @@ public class GDAXService extends ApiService {
         performRequest(gdaxResponseCall);
     }
 
+    /**
+     * Retrofit request interfaces
+     */
     protected interface GDAXApi {
         @Headers("Content-Type: application/json")
         @GET("/accounts")
@@ -48,7 +51,10 @@ public class GDAXService extends ApiService {
         );
     }
 
-    protected class GDAXResponse implements IResponse{
+    /**
+     * POJO used for converting the JSON response to Java
+     */
+    private class GDAXResponse implements IResponse{
 
         @SerializedName("id")
         @Expose

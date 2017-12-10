@@ -83,7 +83,6 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
      */
     @Override
     public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
-        //TODO: Fill list item with data[position]
         holder.fetchButton.setOnClickListener(view -> viewModel.fetch(wallets.get(position)));
         holder.editWalletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
@@ -94,7 +93,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
 
         switch (wallets.get(position).getType()){
             case Naked:
-                holder.mTextView.setText(wallets.get(position).getAddress());
+                holder.mTextView.setText(wallets.get(position).getAddressCurrency());
                 break;
             default:
                 holder.mTextView.setText(wallets.get(position).getExchangeName());

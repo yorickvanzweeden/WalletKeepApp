@@ -27,6 +27,9 @@ public class BlockcypherService extends ApiService {
         performRequest(blockcypherResponseCall);
     }
 
+    /**
+     * Retrofit request interfaces
+     */
     private interface EthereumApi {
         @Headers("Content-Type: application/json")
         @GET("addrs/{address}/balance")
@@ -35,6 +38,9 @@ public class BlockcypherService extends ApiService {
         );
     }
 
+    /**
+     * POJO used for converting the JSON response to Java
+     */
     private class BlockcypherResponse implements IResponse {
 
         @SerializedName("address")

@@ -14,20 +14,26 @@ import com.walletkeep.walletkeep.R;
 
 
 public class AddPortfolioDialog extends DialogFragment {
+    AddPortfolioDialogListener mListener;
 
+    /**
+     * Constructor:
+     *
+     * Required empty public constructor
+     */
+    public AddPortfolioDialog() {}
 
-    public AddPortfolioDialog() {
-        // Required empty public constructor
-    }
-
+    /**
+     * Listener to pass the name back to the activity
+     */
     public interface AddPortfolioDialogListener {
         void onDialogPositiveClick(String portfolioName);
     }
 
-    // Use this instance of the interface to deliver action events
-    AddPortfolioDialogListener mListener;
-
-    // Override the Fragment.onAttach() method to instantiate the AddPortfolioDialogListener
+    /**
+     * Instantiate the AddPortfolioDialogListener
+     * @param activity Activity to display dialog over
+     */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -42,18 +48,25 @@ public class AddPortfolioDialog extends DialogFragment {
         }
     }
 
-
+    /**
+     * Setup dialog on creation
+     * @param savedInstanceState Previous state of the dialog
+     * @return Dialog to display
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Set portfolio name");
 
+        // Setup UI elements
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View mView = inflater.inflate(R.layout.fragment_add_portfolio_dialog, null);
         builder.setView(mView);
         EditText mEditText = mView.findViewById(R.id.editPortfolioName);
 
-        builder.setPositiveButton("Save", (dialog, id) -> mListener.onDialogPositiveClick(mEditText.getText().toString()));
+        // Setup button actions
+        builder.setPositiveButton("Save", (dialog, id) ->
+                mListener.onDialogPositiveClick(mEditText.getText().toString()));
         builder.setNegativeButton("Cancel", (dialog, id) -> {});
 
         return builder.create();
