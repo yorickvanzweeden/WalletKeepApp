@@ -6,22 +6,25 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(indices = {@Index("portfolio_id"), @Index("exchange_id")},
+@Entity(indices = {@Index("portfolio_id"), @Index("exchange_name"), @Index("address_currency")},
         foreignKeys = {
         @ForeignKey(
                 entity = Portfolio.class,
                 parentColumns = "id",
-                childColumns = "portfolio_id"
+                childColumns = "portfolio_id",
+                onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Exchange.class,
-                parentColumns = "id",
-                childColumns = "exchange_id"
+                parentColumns = "name",
+                childColumns = "exchange_name",
+                onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Currency.class,
                 parentColumns = "ticker",
-                childColumns = "address_currency"
+                childColumns = "address_currency",
+                onDelete = ForeignKey.CASCADE
         )
 })
 public class Wallet {
@@ -37,8 +40,8 @@ public class Wallet {
     @ColumnInfo(name = "portfolio_id")
     private int portfolioId;
 
-    @ColumnInfo(name = "exchange_id")
-    private String exchangeId;
+    @ColumnInfo(name = "exchange_name")
+    private String exchangeName;
 
     // Constructors for ExchangeWallet and NakedWallet
     public Wallet(int portfolioId){
@@ -64,7 +67,7 @@ public class Wallet {
 
     public void setPortfolioId(int portfolioId) { this.portfolioId = portfolioId; }
 
-    public String getExchangeId() { return exchangeId; }
+    public String getExchangeName() { return exchangeName; }
 
-    public void setExchangeId(String exchangeId) { this.exchangeId = exchangeId; }
+    public void setExchangeName(String exchangeName) { this.exchangeName = exchangeName; }
 }

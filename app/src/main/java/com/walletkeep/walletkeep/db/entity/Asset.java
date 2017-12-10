@@ -12,12 +12,14 @@ import android.arch.persistence.room.PrimaryKey;
         @ForeignKey(
                 entity = Wallet.class,
                 parentColumns = "id",
-                childColumns = "wallet_id"
+                childColumns = "wallet_id",
+                onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Currency.class,
                 parentColumns = "ticker",
-                childColumns = "currency_ticker"
+                childColumns = "currency_ticker",
+                onDelete = ForeignKey.CASCADE
         )
 })
 public class Asset {

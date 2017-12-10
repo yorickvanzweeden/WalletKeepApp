@@ -8,9 +8,11 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(indices = {@Index("wallet_id")},
-        foreignKeys = @ForeignKey(entity = Wallet.class,
-        parentColumns = "id",
-        childColumns = "wallet_id"))
+        foreignKeys = @ForeignKey(
+                entity = Wallet.class,
+                parentColumns = "id",
+                childColumns = "wallet_id",
+                onDelete = ForeignKey.CASCADE))
 public class ExchangeCredentials {
     @PrimaryKey(autoGenerate = true)
     private int id;

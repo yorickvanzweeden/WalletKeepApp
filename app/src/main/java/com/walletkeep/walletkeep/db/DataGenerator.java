@@ -1,5 +1,11 @@
 package com.walletkeep.walletkeep.db;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
@@ -7,32 +13,35 @@ import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.walletkeep.walletkeep.util.Converters.inputStreamToString;
+
 
 public class DataGenerator {
     public static List<Exchange> generateExchanges() {
-        List<Exchange> exchanges = new ArrayList<>(3);
-        for (int i = 0; i < Exchange.Exchanges.values().length; i++) {
-            Exchange exchange = new Exchange(Exchange.Exchanges.values()[i].toString());
+        List<Exchange> exchanges = new ArrayList<>();
+        Context c =  WalletKeepApp.getContext();
+        String[] exchangesArray = c.getResources().getStringArray(R.array.exchange_array);
+        for (int i = 0; i < exchangesArray.length; i++) {
+            Exchange exchange = new Exchange(exchangesArray[i].toString());
             exchanges.add(exchange);
         }
         return exchanges;
     }
 
     public static List<Currency> generateCurrencies() {
-        List<Currency> currencies = new ArrayList<>(3);
-        String[] currencyNames = {"Bitcoin","Ethereum","Litecoin", "Euro"};
-        String[] currencyTickers = {"BTC","ETH","LTC", "EUR"};
-        for (int i = 0; i < currencyNames.length; i++) {
-            Currency currency = new Currency(currencyNames[i], currencyTickers[i]);
-            currencies.add(currency);
-        }
+        Context c =  WalletKeepApp.getContext();
+        InputStream inputStream = c.getResources().openRawResource(R.raw.cryptocurrencies);
+        String json = inputStreamToString(inputStream);
+        Type listType = new TypeToken<ArrayList<Currency>>(){}.getType();
+        List<com.walletkeep.walletkeep.db.entity.Currency> currencies = new Gson().fromJson(json, listType);
         return currencies;
     }
-
 
     public static List<Portfolio> generatePortfolios() {
         List<Portfolio> portfolios = new ArrayList<>(2);
@@ -49,7 +58,7 @@ public class DataGenerator {
         for (int i = 0; i < 2; i++) {
             int nr = i + 1;
             Wallet wallet = new Wallet(1);
-            wallet.setExchangeId(Integer.toString(nr));
+            wallet.setExchangeName(Integer.toString(nr));
             wallets.add(wallet);
         }
         for (int i = 0; i < 2; i++) {

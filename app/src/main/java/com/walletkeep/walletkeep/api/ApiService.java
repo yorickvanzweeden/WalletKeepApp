@@ -7,7 +7,6 @@ import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
 import com.walletkeep.walletkeep.api.naked.EtherscanService;
 import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.util.Converters;
@@ -185,7 +184,7 @@ public abstract class ApiService {
 
             // Pick right ApiService
             if (this.wr.getType() == WalletWithRelations.Type.Exchange) {
-                apiService = createExchangeApiService(wr.getExchange());
+                apiService = createExchangeApiService(wr.getExchangeName());
             } else {
                 apiService = createNakedApiService(wr.getAddressCurrency());
             }
@@ -198,12 +197,12 @@ public abstract class ApiService {
 
         /**
          * Picks right ApiService for exchange
-         * @param exchange Exchange
+         * @param exchangeName Exchange
          * @param <T> ApiService
          * @return Exchange ApiService
          */
-        private <T extends ApiService> T createExchangeApiService(Exchange exchange){
-            switch (exchange.getName()){
+        private <T extends ApiService> T createExchangeApiService(String exchangeName){
+            switch (exchangeName){
                 case "GDAX":
                     return (T) new GDAXService();
                 case "Binance":
@@ -221,9 +220,9 @@ public abstract class ApiService {
          */
         private <T extends ApiService> T createNakedApiService(String currency){
             switch (currency){
-                case "ETH":
-                    return (T) new BlockcypherService();
                 case "ETH2":
+                    return (T) new BlockcypherService();
+                case "ETH":
                     return (T) new EtherscanService();
                 default:
                     return null;

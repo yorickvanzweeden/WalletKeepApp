@@ -1,5 +1,8 @@
 package com.walletkeep.walletkeep.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import static java.lang.Math.max;
 
 public class Converters {
@@ -31,5 +34,21 @@ public class Converters {
         String firstPart = balance.substring(0, split);
         String lastPart = balance.substring(split, balance.length());
         return Float.parseFloat(firstPart + "." + lastPart);
+    }
+
+    /**
+     * Convert an inputStream to string
+     * @param inputStream Inputstream to convert
+     * @return Inputstream as string
+     */
+    public static String inputStreamToString(InputStream inputStream) {
+        try {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes, 0, bytes.length);
+            String json = new String(bytes);
+            return json;
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

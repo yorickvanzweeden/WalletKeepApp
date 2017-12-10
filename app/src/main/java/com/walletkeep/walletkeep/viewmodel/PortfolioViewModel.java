@@ -53,19 +53,11 @@ public class PortfolioViewModel extends ViewModel {
      * Provides dataset for Recyclerview
      * @return List of strings
      */
-    public String[] provideDataset(){
+    public List<Portfolio> provideDataset(){
         if (this.portfolios == null || this.portfolios.getValue() == null){
-            String[] dataset = {"No portfolios found"};
-            return dataset;
+            return null;
         }
-
-        List<Portfolio> portfolios = this.portfolios.getValue();
-        String[] dataset = new String[portfolios.size()];
-        for (int i = 0; i < portfolios.size(); i++) {
-            Portfolio p = portfolios.get(i);
-            dataset[i] = p.getName();
-        }
-        return dataset;
+        return this.portfolios.getValue();
     }
 
     /**
