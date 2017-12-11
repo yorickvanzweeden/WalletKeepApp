@@ -70,6 +70,7 @@ public class WalletActivity extends AppCompatActivity {
         FloatingActionsMenu fabmenu = findViewById(R.id.fab_menu_add_wallet);
         View overlay = findViewById(R.id.fab_overlay);
         overlay.setOnClickListener(view -> fabmenu.collapse());
+        overlay.setClickable(false);
 
         fabmenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
