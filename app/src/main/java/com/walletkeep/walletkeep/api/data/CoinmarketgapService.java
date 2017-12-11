@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.DateConverter;
+import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 
 import java.util.ArrayList;
@@ -56,11 +57,14 @@ public class CoinmarketgapService {
 
             public void handleSuccessResponse(List<CoinmarketgapResponse> responses) {
                 ArrayList<CurrencyPrice> prices = new ArrayList<>();
+                ArrayList<Currency> currencies = new ArrayList<>();
 
                 for(CoinmarketgapResponse response: responses) {
                     prices.add(response.getCurrencyPrice());
+                    currencies.add(response.getCurrency());
                 }
 
+                listener.onCurrenciesUpdated(currencies);
                 listener.onPricesUpdated(prices);
             }
 
@@ -75,6 +79,7 @@ public class CoinmarketgapService {
      * Interface for returning data to the repository
      */
     public interface PricesResponseListener {
+        void onCurrenciesUpdated(ArrayList<Currency> currencies);
         void onPricesUpdated(ArrayList<CurrencyPrice> prices);
         void onError(String message);
     }
@@ -293,8 +298,8 @@ public class CoinmarketgapService {
         }
 
         /**
-         * Return currency price in USD, EUR and BTC
-         * @return
+         * Gets currency price in USD, EUR and BTC
+         * @return currency price
          */
         public CurrencyPrice getCurrencyPrice() {
             return new CurrencyPrice(
@@ -304,6 +309,14 @@ public class CoinmarketgapService {
                     Float.parseFloat(priceBtc),
                     DateConverter.fromTimestamp(Long.parseLong(lastUpdated))
             );
+        }
+
+        /**
+         * Gets currency
+         * @return currency
+         */
+        public Currency getCurrency() {
+            return new Currency(name, symbol);
         }
     }
 }
