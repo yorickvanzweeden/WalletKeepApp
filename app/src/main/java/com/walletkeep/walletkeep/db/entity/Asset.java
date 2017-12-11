@@ -6,6 +6,11 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+
+import com.walletkeep.walletkeep.db.DateConverter;
+
+import java.util.Date;
 
 @Entity(indices = {@Index("wallet_id"), @Index("currency_ticker")},
         foreignKeys = {
@@ -35,6 +40,10 @@ public class Asset {
     @ColumnInfo(name = "amount")
     private float amount;
 
+    @ColumnInfo(name = "timestamp")
+    @TypeConverters({DateConverter.class})
+    private Date timestamp;
+
     // Constructors
     public Asset(int walletId, String currencyTicker, float amount){
         this.walletId = walletId;
@@ -60,6 +69,10 @@ public class Asset {
     public float getAmount() { return amount; }
 
     public void setAmount(float amount) { this.amount = amount; }
+
+    public Date getTimestamp() { return timestamp; }
+
+    public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
 
     /**
      * Checks for equality on assets for amount and currency(!)

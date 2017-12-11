@@ -1,24 +1,16 @@
 package com.walletkeep.walletkeep.db.entity;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Relation;
-
-import java.util.List;
-
 public class AggregatedAsset {
-    @Embedded
-    public Asset asset;
-
-    @Relation(parentColumn = "currency_ticker", entityColumn = "currency_ticker", entity = CurrencyPrice.class)
-    public List<CurrencyPrice> prices;
-
+    public String currencyTicker;
+    public float amount;
+    public float price_eur;
 
     /**
      * Gets ticker of the currency
      * @return Ticker of the currency
      */
     public String getTicker(){
-        return asset.getCurrencyTicker();
+        return currencyTicker;
     }
 
     /**
@@ -26,16 +18,14 @@ public class AggregatedAsset {
      * @return The amount owned of the currency
      */
     public float getAmount(){
-        return asset.getAmount();
+        return amount;
     }
 
     /**
-     * Gets latest price of the currency
-     * @return Latest price of the currency
+     * Gets latest price_eur of the currency
+     * @return Latest price_eur of the currency
      */
-    public CurrencyPrice getLatestCurrencyPrice(){
-        if(prices == null || prices.size() == 0) return null;
-        //TODO: Does this return the lastest or the first?
-        return prices.get(0);
+    public float getLatestCurrencyPrice(){
+        return price_eur;
     }
 }

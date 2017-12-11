@@ -12,6 +12,7 @@ import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.util.Converters;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -56,6 +57,12 @@ public abstract class ApiService {
      */
     protected void returnAssets(ArrayList<Asset> assets) {
         if ((this.assets == null & assets != null) || !this.assets.equals(assets)){
+
+            // Set timestamp
+            Date timestamp = new Date();
+            for (Asset asset: assets) {
+                asset.setTimestamp(timestamp);
+            }
 
             // Call listener
             listener.onAssetsUpdated(assets);
