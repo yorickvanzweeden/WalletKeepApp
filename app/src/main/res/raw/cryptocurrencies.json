@@ -544,6 +544,7 @@
   {"ticker" : "ECASH", "name" : "Ethereum Cash"},
   {"ticker" : "ECC", "name" : "E-CurrencyCoin"},
   {"ticker" : "ECHT", "name" : "e-Chat"},
+  {"ticker" : "ECN", "name" : "E-Coin"},
   {"ticker" : "ECO", "name" : "ECOcoin"},
   {"ticker" : "ECOB", "name" : "EcoBit"},
   {"ticker" : "EDC", "name" : "EducoinV"},
