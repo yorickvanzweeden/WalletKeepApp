@@ -2,6 +2,7 @@ package com.walletkeep.walletkeep.api.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.DateConverter;
 import com.walletkeep.walletkeep.db.entity.Currency;
@@ -303,7 +304,7 @@ public class CoinmarketgapService {
          */
         public CurrencyPrice getCurrencyPrice() {
             return new CurrencyPrice(
-                    symbol,
+                    CurrencyTickerCorrection.correct(symbol),
                     Float.parseFloat(priceUsd),
                     Float.parseFloat(priceEur),
                     Float.parseFloat(priceBtc),
@@ -316,7 +317,7 @@ public class CoinmarketgapService {
          * @return currency
          */
         public Currency getCurrency() {
-            return new Currency(name, symbol);
+            return new Currency(name, CurrencyTickerCorrection.correct(symbol));
         }
     }
 }
