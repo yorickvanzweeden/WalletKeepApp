@@ -22,9 +22,14 @@ public class AssetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asset);
         int portfolioId = getIntent().getExtras().getInt("portfolio_id");
+        String portfolioName = getIntent().getExtras().getString("portfolio_name", " My Portfolio");
 
         setupOverlay();
         setupRecyclerView(portfolioId);
+
+
+        TextView portfolioNameTextView = findViewById(R.id.portfolio_name);
+        portfolioNameTextView.setText(portfolioName);
     }
 
     /**
@@ -32,8 +37,8 @@ public class AssetActivity extends AppCompatActivity {
      */
     private void setupOverlay(){
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id.asset_portfolio_value);
+        //setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

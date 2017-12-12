@@ -92,6 +92,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         holder.assetButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, AssetActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
+            intent.putExtra(" portfolio_name", portfolios.get(position).getName());
             context.startActivity(intent);
         });
     }
