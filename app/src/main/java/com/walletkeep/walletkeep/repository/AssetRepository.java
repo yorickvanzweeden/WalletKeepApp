@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
@@ -66,6 +67,11 @@ public class AssetRepository {
 
         // Observe callback and save to db if needed
         CoinmarketgapService.PricesResponseListener listener = new CoinmarketgapService.PricesResponseListener() {
+
+            @Override
+            public void onCurrenciesUpdated(ArrayList<Currency> currencies) {
+                AsyncTask.execute(() -> mDatabase.currencyDao().insertAll(currencies));
+            }
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {

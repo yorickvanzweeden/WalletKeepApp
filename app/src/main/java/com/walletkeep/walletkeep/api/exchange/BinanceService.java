@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.api.exchange;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
+import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
@@ -193,7 +194,7 @@ public class BinanceService extends ApiService {
         }
 
         public Asset getAsset(int walletId){
-            return new Asset(walletId, asset, Float.parseFloat(free));
+            return new Asset(walletId, CurrencyTickerCorrection.correct(asset), Float.parseFloat(free));
         }
     }
 }

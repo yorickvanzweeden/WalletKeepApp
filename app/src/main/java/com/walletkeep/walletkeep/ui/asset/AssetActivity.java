@@ -77,7 +77,7 @@ public class AssetActivity extends AppCompatActivity {
         // Calculate total
         float total = 0;
         for (AggregatedAsset asset: aggregatedAssets) {
-            total += asset.getAmount() * asset.getLatestCurrencyPrice().getPriceEur();
+            total += asset.getAmount() * asset.getLatestCurrencyPrice();
         }
 
         // Set text of TextView
