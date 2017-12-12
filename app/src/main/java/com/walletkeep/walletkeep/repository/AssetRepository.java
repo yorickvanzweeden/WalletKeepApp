@@ -3,11 +3,14 @@ package com.walletkeep.walletkeep.repository;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.ArrayList;
@@ -59,6 +62,15 @@ public class AssetRepository {
     }
 
     /**
+     * Gets a list of aggregated assets of a portfolio
+     * @param portfolioId Id of the portfolio
+     * @return List of aggregated assets
+     */
+    public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
+        return mDatabase.walletDao().getAll(portfolioId);
+    }
+
+    /**
      * Update database with the latest currency prices from the api service
      */
     public void fetchCurrencyPrices(){
@@ -89,5 +101,46 @@ public class AssetRepository {
 
         // Fetch data
         service.fetch();
+    }
+
+    /**
+     * Fetches wallet data from api service
+     * @param wallets Wallets containing credentials
+     */
+    public void fetchWallets(List<WalletWithRelations> wallets){
+        for (WalletWithRelations wallet: wallets) {
+            fetchWallet(wallet);
+        }
+    }
+
+    /**
+     * Fetches wallet data from api service
+     * @param wallet Wallets containing credentials
+     */
+    private void fetchWallet(WalletWithRelations wallet) {
+        // Don't execute API calls if rate limit is applied
+        if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }
+
+        // Observe callback and save to db if needed
+        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
+            @Override
+            public void onAssetsUpdated(ArrayList<Asset> assets) {
+                for (Asset asset : assets) {
+                    AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                //TODO: Do something with message
+            }
+        };
+
+        // Create ApiService
+        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
+        ApiService apiService = apiServiceFactory.create();
+
+        // Fetch data
+        apiService.fetch();
     }
 }

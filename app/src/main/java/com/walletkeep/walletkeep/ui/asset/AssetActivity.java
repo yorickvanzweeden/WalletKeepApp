@@ -2,6 +2,7 @@ package com.walletkeep.walletkeep.ui.asset;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.util.List;
 
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
+    private List<WalletWithRelations> wallets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class AssetActivity extends AppCompatActivity {
 
         setupOverlay();
         setupRecyclerView(portfolioId);
+        setupSwipeRefreshLayout();
     }
 
     /**
@@ -34,8 +38,19 @@ public class AssetActivity extends AppCompatActivity {
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setupSwipeRefreshLayout(){
+        // Observe wallets
+        viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
+
+        // Refresh --> Update wallets
+        SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(() -> {
+            viewModel.fetch(wallets);
+            swipeContainer.setRefreshing(false);
+        });
     }
 
     /**
