@@ -9,12 +9,14 @@ import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 
 import java.util.List;
 
 public class AssetViewModel extends ViewModel {
     private LiveData<List<AggregatedAsset>> aggregatedAssets;
+    private LiveData<List<WalletWithRelations>> wallets;
     private AssetRepository assetRepository;
 
     /**
@@ -30,8 +32,15 @@ public class AssetViewModel extends ViewModel {
      * @param portfolioId Id of the portfolio containing the assets
      */
     public void init(int portfolioId) {
+        // Update assets
         if (this.aggregatedAssets == null)
             this.aggregatedAssets = assetRepository.getAggregatedAssets(portfolioId);
+
+        // Update wallets
+        if (this.wallets == null)
+            this.wallets = assetRepository.getWallets(portfolioId);
+
+        // Update currency prices
         this.assetRepository.fetchCurrencyPrices();
     }
 
@@ -42,7 +51,21 @@ public class AssetViewModel extends ViewModel {
     public LiveData<List<AggregatedAsset>> getAggregatedAssets() {
         return aggregatedAssets;
     }
-    
+
+    public LiveData<List<WalletWithRelations>> getWallets() {
+        return wallets;
+    }
+
+
+    /**
+     * Update all wallets
+     */
+    public void fetch(List<WalletWithRelations> wallets){
+        if (wallets != null) {
+            this.assetRepository.fetchWallets(wallets);
+        }
+    }
+
 
     /**
      * Returns view model with repository

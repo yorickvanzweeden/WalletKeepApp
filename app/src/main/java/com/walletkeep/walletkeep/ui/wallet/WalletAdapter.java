@@ -31,14 +31,12 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         public TextView mTextView;
-        public Button fetchButton;
         public Button editWalletButton;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
             mTextView = v.findViewById(R.id.wallet_listitem_exchange);
-            fetchButton = v.findViewById(R.id.button_fetch);
             editWalletButton = v.findViewById(R.id.button_edit_wallet);
         }
     }
@@ -83,7 +81,6 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
      */
     @Override
     public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
-        holder.fetchButton.setOnClickListener(view -> viewModel.fetch(wallets.get(position)));
         holder.editWalletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
