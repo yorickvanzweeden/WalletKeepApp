@@ -8,10 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.util.List;
@@ -45,10 +47,15 @@ public class AssetActivity extends AppCompatActivity {
         // Observe wallets
         viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
+        // Add error listener
+        AssetRepository.ErrorListener errorListener = message -> {
+            Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        };
+
         // Refresh --> Update wallets
         SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
-            viewModel.fetch(wallets);
+            viewModel.fetch(wallets, errorListener);
             swipeContainer.setRefreshing(false);
         });
     }

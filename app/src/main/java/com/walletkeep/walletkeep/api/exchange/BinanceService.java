@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
+import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
@@ -37,7 +38,7 @@ public class BinanceService extends ApiService {
         );
 
         // Perform request
-        performRequest(binanceResponseCall);
+        performRequest(binanceResponseCall, new ErrorParser("message"));
     }
 
     /**

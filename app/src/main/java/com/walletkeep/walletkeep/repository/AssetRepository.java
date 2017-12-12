@@ -25,7 +25,8 @@ public class AssetRepository {
     private final AppDatabase mDatabase;
 
     // Rate limiter prevent too many requests
-    private RateLimiter<String> apiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
+    private RateLimiter<String> priceApiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
+    private RateLimiter<String> apiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
 
 
     /**
@@ -75,7 +76,7 @@ public class AssetRepository {
      */
     public void fetchCurrencyPrices(){
         // Don't execute API calls if rate limit is applied
-        if (!apiRateLimit.shouldFetch(Integer.toString(1))) { return; }
+        if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
         // Observe callback and save to db if needed
         CoinmarketgapService.PricesResponseListener listener = new CoinmarketgapService.PricesResponseListener() {
@@ -107,9 +108,9 @@ public class AssetRepository {
      * Fetches wallet data from api service
      * @param wallets Wallets containing credentials
      */
-    public void fetchWallets(List<WalletWithRelations> wallets){
+    public void fetchWallets(List<WalletWithRelations> wallets, ErrorListener errorListener){
         for (WalletWithRelations wallet: wallets) {
-            fetchWallet(wallet);
+            fetchWallet(wallet, errorListener);
         }
     }
 
@@ -117,7 +118,7 @@ public class AssetRepository {
      * Fetches wallet data from api service
      * @param wallet Wallets containing credentials
      */
-    private void fetchWallet(WalletWithRelations wallet) {
+    private void fetchWallet(WalletWithRelations wallet, ErrorListener errorListener) {
         // Don't execute API calls if rate limit is applied
         if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }
 
@@ -132,7 +133,13 @@ public class AssetRepository {
 
             @Override
             public void onError(String message) {
-                //TODO: Do something with message
+                String origin;
+                if (wallet.getExchangeName() != null) {
+                    origin = wallet.getExchangeName();
+                } else {
+                    origin = wallet.getExchangeName();
+                }
+                errorListener.onError(origin + ": " + message);
             }
         };
 
@@ -142,5 +149,9 @@ public class AssetRepository {
 
         // Fetch data
         apiService.fetch();
+    }
+
+    public interface ErrorListener {
+        void onError(String message);
     }
 }
