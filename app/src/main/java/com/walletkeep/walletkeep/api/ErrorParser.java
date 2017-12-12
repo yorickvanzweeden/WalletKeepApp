@@ -4,8 +4,17 @@ import com.google.gson.JsonParser;
 
 public class ErrorParser {
     private String key;
+    private StringModifier stringModifier;
+
+
     public ErrorParser(String key) {
         this.key = key;
+        this.stringModifier = null;
+    }
+
+    public ErrorParser(String key, StringModifier stringModifier) {
+        this.key = key;
+        this.stringModifier = stringModifier;
     }
 
     public String parse(Throwable t) {
@@ -14,10 +23,15 @@ public class ErrorParser {
 
     public String parse(String m){
         if (key == null) return m;
+        if (stringModifier != null) m = stringModifier.modify(m);
         return new JsonParser().parse(m).getAsJsonObject().get(key).getAsString();
     }
 
-    public static ErrorParser getStandard(){
+    public static ErrorParser getStandard() {
         return new ErrorParser(null);
+    }
+
+    public interface StringModifier {
+        String modify(String s);
     }
 }

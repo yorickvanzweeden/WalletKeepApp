@@ -38,7 +38,7 @@ public class BinanceService extends ApiService {
         );
 
         // Perform request
-        performRequest(binanceResponseCall, new ErrorParser("message"));
+        performRequest(binanceResponseCall, new ErrorParser("msg"));
     }
 
     /**
