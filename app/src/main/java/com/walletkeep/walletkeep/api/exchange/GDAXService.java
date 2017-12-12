@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.api.exchange;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
+import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
@@ -108,7 +109,7 @@ public class GDAXService extends ApiService {
         }
 
         public Asset getAsset(int walletId){
-            return new Asset(walletId, currency, Float.parseFloat(balance));
+            return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
 
         @Override

@@ -113,9 +113,6 @@ public class WalletRepository {
         ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
-                for (Asset asset : wallet.assets) {
-                    AsyncTask.execute(() -> mDatabase.assetDao().delete(asset));
-                }
                 for (Asset asset : assets) {
                     AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
                 }
