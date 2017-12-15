@@ -60,12 +60,11 @@ public class AssetViewModel extends ViewModel {
     /**
      * Update all wallets
      */
-    public void fetch(List<WalletWithRelations> wallets){
+    public void fetch(List<WalletWithRelations> wallets, AssetRepository.ErrorListener errorListener){
         if (wallets != null) {
-            this.assetRepository.fetchWallets(wallets);
+            this.assetRepository.fetchWallets(wallets, errorListener);
         }
     }
-
 
     /**
      * Returns view model with repository

@@ -105,7 +105,10 @@ public abstract class ApiService {
      * Perform request and handle callback
      * @param responseCall Call to perform
      */
-    protected void performRequest(Call responseCall){
+    protected void performRequest(Call responseCall) {
+        performRequest(responseCall, ErrorParser.getStandard());
+    }
+    protected void performRequest(Call responseCall, ErrorParser errorParser){
         responseCall.enqueue(new Callback<IResponse>() {
             @Override
             public void onResponse(Call<IResponse> call, Response<IResponse> response) {
@@ -114,7 +117,7 @@ public abstract class ApiService {
                     handleSuccessResponse(response);
                 } else {
                     // If failure, return the server error (or the error for returning that)
-                    try{ returnError(response.errorBody().string()); }
+                    try{ returnError(errorParser.parse(response.errorBody().string())); }
                     catch (Exception e) { returnError(e.getMessage()); }
                 }
             }
@@ -143,7 +146,7 @@ public abstract class ApiService {
 
             @Override
             public void onFailure(Call<IResponse> call, Throwable t) {
-                returnError(t.getMessage());
+                returnError(errorParser.parse(t));
             }
         });
     }

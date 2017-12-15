@@ -7,10 +7,8 @@ import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
-import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class WalletRepository {
     // Repository instance
@@ -18,10 +16,6 @@ public class WalletRepository {
 
     // Database instance
     private final AppDatabase mDatabase;
-
-    // Rate limiter prevent too many requests
-    private RateLimiter<String> apiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
-
 
     /**
      * Constructor: Initializes repository with database
