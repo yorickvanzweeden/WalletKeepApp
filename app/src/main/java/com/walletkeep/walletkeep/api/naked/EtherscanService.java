@@ -40,7 +40,7 @@ public class EtherscanService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class EtherscanResponse implements IResponse{
+    private class EtherscanResponse extends IResponse{
         @SerializedName("status")
         @Expose
         private String status;

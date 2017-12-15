@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
+import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
@@ -35,7 +36,7 @@ public class GDAXService extends ApiService {
         );
 
         // Perform request
-        performRequest(gdaxResponseCall);
+        performRequest(gdaxResponseCall, new ErrorParser("message"));
     }
 
     /**
@@ -55,7 +56,7 @@ public class GDAXService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class GDAXResponse implements IResponse{
+    private class GDAXResponse extends IResponse{
 
         @SerializedName("id")
         @Expose

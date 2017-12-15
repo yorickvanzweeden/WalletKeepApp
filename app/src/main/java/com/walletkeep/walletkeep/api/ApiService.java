@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.api;
 import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.BinanceService;
+import com.walletkeep.walletkeep.api.exchange.BittrexService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
 import com.walletkeep.walletkeep.api.naked.EtherscanService;
@@ -87,11 +88,14 @@ public abstract class ApiService {
      * @param secret Secret to encrypt with
      * @return Signature
      */
-    protected String generateSignature(String data, String secret, Boolean encoded) throws IllegalArgumentException {
+    protected String generateSignature(String data, String secret, Boolean encoded) {
+        return generateSignature(data, secret, encoded, "HmacSHA256");
+    }
+    protected String generateSignature(String data, String secret, Boolean encoded, String algorithm) throws IllegalArgumentException {
         try {
             byte[] decoded_key = encoded ? Base64.decode(secret, Base64.DEFAULT) : secret.getBytes("UTF-8");
-            SecretKeySpec secretKey = new SecretKeySpec(decoded_key, "HmacSHA256");
-            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKey = new SecretKeySpec(decoded_key, algorithm);
+            Mac mac = Mac.getInstance(algorithm);
             mac.init(secretKey);
             byte[] hMacData = mac.doFinal(data.getBytes("UTF-8"));
             return encoded ? Base64.encodeToString(hMacData, Base64.NO_WRAP) : Converters.bytesToHex(hMacData);
@@ -105,16 +109,23 @@ public abstract class ApiService {
      * Perform request and handle callback
      * @param responseCall Call to perform
      */
-    protected void performRequest(Call responseCall){
+    protected void performRequest(Call responseCall) {
+        performRequest(responseCall, ErrorParser.getStandard());
+    }
+    protected void performRequest(Call responseCall, ErrorParser errorParser){
         responseCall.enqueue(new Callback<IResponse>() {
             @Override
             public void onResponse(Call<IResponse> call, Response<IResponse> response) {
                 // Success
                 if (response.code() == 200) {
-                    handleSuccessResponse(response);
+                    try{ handleSuccessResponse(response); }
+                    // In case a service returns 200 no matter what
+                    catch (Exception e) {
+                        returnError(response.body().handleError());
+                    }
                 } else {
                     // If failure, return the server error (or the error for returning that)
-                    try{ returnError(response.errorBody().string()); }
+                    try{ returnError(errorParser.parse(response.errorBody().string())); }
                     catch (Exception e) { returnError(e.getMessage()); }
                 }
             }
@@ -143,7 +154,7 @@ public abstract class ApiService {
 
             @Override
             public void onFailure(Call<IResponse> call, Throwable t) {
-                returnError(t.getMessage());
+                returnError(errorParser.parse(t));
             }
         });
     }
@@ -160,8 +171,11 @@ public abstract class ApiService {
     /**
      * Abstract response that enforces the implementation of getAssets method
      */
-    public interface IResponse {
-        ArrayList<Asset> getAssets(int walletId);
+    public abstract class IResponse {
+        public abstract ArrayList<Asset> getAssets(int walletId);
+        public String handleError() {
+             return "Unknown error on fetching assets.";
+        }
     }
 
     /**
@@ -214,6 +228,8 @@ public abstract class ApiService {
                     return (T) new GDAXService();
                 case "Binance":
                     return (T) new BinanceService();
+                case "Bittrex":
+                    return (T) new BittrexService();
                 default:
                     return null;
             }

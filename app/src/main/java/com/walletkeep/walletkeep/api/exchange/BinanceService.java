@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
+import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
@@ -21,7 +22,7 @@ public class BinanceService extends ApiService {
     public void fetch() {
         // Get signature
         int recvWindow = 60000; // Timeframe for allowing the request
-        long timestamp = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis() - 4000;
         String data =  "recvWindow=" + recvWindow + "&timestamp=" + timestamp;
         String signature;
 
@@ -37,7 +38,7 @@ public class BinanceService extends ApiService {
         );
 
         // Perform request
-        performRequest(binanceResponseCall);
+        performRequest(binanceResponseCall, new ErrorParser("msg"));
     }
 
     /**
@@ -57,7 +58,7 @@ public class BinanceService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class BinanceResponse implements IResponse {
+    private class BinanceResponse extends IResponse {
 
         @SerializedName("makerCommission")
         @Expose

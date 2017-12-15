@@ -2,20 +2,24 @@ package com.walletkeep.walletkeep.ui.asset;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.util.List;
 
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
+    private List<WalletWithRelations> wallets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,23 +28,27 @@ public class AssetActivity extends AppCompatActivity {
         int portfolioId = getIntent().getExtras().getInt("portfolio_id");
         String portfolioName = getIntent().getExtras().getString("portfolio_name", " My Portfolio");
 
-        setupOverlay();
         setupRecyclerView(portfolioId);
-
-
+        setupSwipeRefreshLayout();
         TextView portfolioNameTextView = findViewById(R.id.portfolio_name);
         portfolioNameTextView.setText(portfolioName);
     }
 
-    /**
-     * Setup overlay items such as the toolbar and the fab
-     */
-    private void setupOverlay(){
-        // Setup toolbar
-        //Toolbar toolbar = findViewById(R.id.asset_portfolio_value);
-        //setSupportActionBar(toolbar);
+    private void setupSwipeRefreshLayout(){
+        // Observe wallets
+        viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Add error listener
+        AssetRepository.ErrorListener errorListener = message -> {
+            Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        };
+
+        // Refresh --> Update wallets
+        SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(() -> {
+            viewModel.fetch(wallets, errorListener);
+            swipeContainer.setRefreshing(false);
+        });
     }
 
     /**
