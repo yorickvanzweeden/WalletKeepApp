@@ -56,7 +56,7 @@ public class GDAXService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class GDAXResponse implements IResponse{
+    private class GDAXResponse extends IResponse{
 
         @SerializedName("id")
         @Expose

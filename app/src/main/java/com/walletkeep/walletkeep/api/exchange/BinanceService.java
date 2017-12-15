@@ -58,7 +58,7 @@ public class BinanceService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class BinanceResponse implements IResponse {
+    private class BinanceResponse extends IResponse {
 
         @SerializedName("makerCommission")
         @Expose

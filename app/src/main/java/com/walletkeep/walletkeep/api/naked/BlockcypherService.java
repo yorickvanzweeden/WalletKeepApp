@@ -41,7 +41,7 @@ public class BlockcypherService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class BlockcypherResponse implements IResponse {
+    private class BlockcypherResponse extends IResponse {
 
         @SerializedName("address")
         @Expose
