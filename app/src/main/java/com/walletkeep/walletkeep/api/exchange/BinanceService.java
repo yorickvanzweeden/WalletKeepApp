@@ -22,7 +22,7 @@ public class BinanceService extends ApiService {
     public void fetch() {
         // Get signature
         int recvWindow = 60000; // Timeframe for allowing the request
-        long timestamp = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis() - 4000;
         String data =  "recvWindow=" + recvWindow + "&timestamp=" + timestamp;
         String signature;
 
