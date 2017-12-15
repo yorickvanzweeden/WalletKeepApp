@@ -3,5 +3,6 @@
     <string-array name="exchange_array">
         <item>Binance</item>
         <item>GDAX</item>
+        <item>Bittrex</item>
     </string-array>
 </resources>
