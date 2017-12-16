@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.api;
 import android.util.Base64;
 
 import com.walletkeep.walletkeep.api.exchange.BinanceService;
+import com.walletkeep.walletkeep.api.exchange.BitfinexService;
 import com.walletkeep.walletkeep.api.exchange.BittrexService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
@@ -224,12 +225,14 @@ public abstract class ApiService {
          */
         private <T extends ApiService> T createExchangeApiService(String exchangeName){
             switch (exchangeName){
-                case "GDAX":
-                    return (T) new GDAXService();
                 case "Binance":
                     return (T) new BinanceService();
+                case "Bitfinex":
+                    return (T) new BitfinexService();
                 case "Bittrex":
                     return (T) new BittrexService();
+                case "GDAX":
+                    return (T) new GDAXService();
                 default:
                     return null;
             }
