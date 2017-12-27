@@ -116,7 +116,9 @@ public class KrakenService extends ApiService {
                     Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) y;
                     assets.add(new Asset(
                             walletId,
-                            CurrencyTickerCorrection.correct((String)entry.getKey()),
+                            CurrencyTickerCorrection.correct(
+                                    ((String)entry.getKey()).substring(1)
+                            ),
                             Float.parseFloat((String)entry.getValue())
                     ));
                 }
