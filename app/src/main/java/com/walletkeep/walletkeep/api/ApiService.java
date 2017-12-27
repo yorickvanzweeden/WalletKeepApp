@@ -7,6 +7,7 @@ import com.walletkeep.walletkeep.api.exchange.BitfinexService;
 import com.walletkeep.walletkeep.api.exchange.BittrexService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.exchange.KrakenService;
+import com.walletkeep.walletkeep.api.exchange.KucoinService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
 import com.walletkeep.walletkeep.api.naked.EtherscanService;
 import com.walletkeep.walletkeep.db.entity.Asset;
@@ -236,6 +237,8 @@ public abstract class ApiService {
                     return (T) new GDAXService();
                 case "Kraken":
                     return (T) new KrakenService();
+                case "Kucoin":
+                    return (T) new KucoinService();
                 default:
                     return null;
             }
