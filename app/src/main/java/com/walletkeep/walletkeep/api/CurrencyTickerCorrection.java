@@ -60,6 +60,7 @@ public class CurrencyTickerCorrection {
      */
     public static String correct(String ticker) {
         getInstance();
+        ticker = ticker.toUpperCase(); // Set to uppercase anyway
         String newTicker = correctString(ticker);
         return newTicker == null ? ticker : newTicker;
     }
@@ -105,10 +106,12 @@ public class CurrencyTickerCorrection {
      * @param currency Currency to correct (if needed)
      */
     private static void correctCurrency(Currency currency) {
-        String ticker = currency.getTicker();
+        String ticker = currency.getTicker().toUpperCase();
 
         if(hashMap.containsKey(ticker)) {
             currency.setTicker(hashMap.get(ticker));
+        } else {
+            currency.setTicker(ticker); // Set to uppercase either way
         }
     }
 
