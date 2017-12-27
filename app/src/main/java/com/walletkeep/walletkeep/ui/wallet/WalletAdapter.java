@@ -92,10 +92,10 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         } else
             switch (wallets.get(position).getType()){
                 case Naked:
-                    holder.mTextView.setText("Unnamed " + wallets.get(position).getAddressCurrency());
+                    holder.mTextView.setText(wallets.get(position).getAddressCurrency() + " Wallet");
                     break;
                 default:
-                    holder.mTextView.setText("Unnamed " + wallets.get(position).getExchangeName());
+                    holder.mTextView.setText(wallets.get(position).getExchangeName() + " Wallet");
             }
     }
 
