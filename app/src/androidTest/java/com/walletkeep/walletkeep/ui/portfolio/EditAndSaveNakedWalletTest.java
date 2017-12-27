@@ -236,7 +236,7 @@ public class EditAndSaveNakedWalletTest {
         }
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.wallet_listitem_exchange), withText("aa"),
+                allOf(withId(R.id.wallet_listitem_name), withText("aa"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.card_view),

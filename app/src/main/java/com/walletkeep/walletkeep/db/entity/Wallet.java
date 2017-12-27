@@ -31,6 +31,9 @@ public class Wallet {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "name")
+    private String name;
+
     @ColumnInfo(name = "address")
     private String address;
 
@@ -55,6 +58,10 @@ public class Wallet {
 
     public void setId(int id) { this.id = id; }
 
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
     public String getAddress() { return address; }
 
     public void setAddress(String address) { this.address = address; }
@@ -62,7 +69,7 @@ public class Wallet {
     public String getAddressCurrency() { return addressCurrency; }
 
     public void setAddressCurrency(String addressCurrency) { this.addressCurrency = addressCurrency; }
-    
+
     public int getPortfolioId() { return portfolioId; }
 
     public void setPortfolioId(int portfolioId) { this.portfolioId = portfolioId; }

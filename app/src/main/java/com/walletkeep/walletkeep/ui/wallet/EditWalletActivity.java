@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.Wallet;
@@ -44,6 +45,10 @@ public class EditWalletActivity extends AppCompatActivity {
             this.wallet = wallet;
             if (wallet == null) return;
             ((IWalletFragment) fragment).updateForm(wallet);
+
+            // Set name
+            String name = wallet.wallet.getName();
+            ((EditText)findViewById(R.id.editText_editWallet_name)).setText(name);
         });
 
         // Setup save button
@@ -92,6 +97,8 @@ public class EditWalletActivity extends AppCompatActivity {
 
         // Update wallet with form data
         wallet = ((IWalletFragment) fragment).updateWallet(wallet);
+        String name = ((EditText)findViewById(R.id.editText_editWallet_name)).getText().toString();
+        wallet.wallet.setName(name);
 
         // Save wallet to database
         if(shouldInsert) { viewModel.addWallet(wallet);
