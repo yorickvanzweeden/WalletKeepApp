@@ -21,10 +21,10 @@ public class BlockcypherService extends ApiService {
     public void fetch() {
          // Create request
         EthereumApi api = RetrofitClient.getClient("https://api.blockcypher.com/v1/eth/main/").create(EthereumApi.class);
-        Call<BlockcypherService.BlockcypherResponse> blockcypherResponseCall = api.getBalance( address );
+        Call<BlockcypherService.BlockcypherResponse> responseCall = api.getBalance( address );
 
         // Perform request
-        performRequest(blockcypherResponseCall);
+        performRequest(responseCall);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +28,19 @@ public class BinanceService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try{ signature = generateSignature(data, ec.getSecret(), false); }
+        try{ signature = generateSignature(data.getBytes("UTF-8"), ec.getSecret(), false); }
         catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
         catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
+        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
 
         // Create request
         BinanceApi api = RetrofitClient.getClient("https://api.binance.com").create(BinanceApi.class);
-        Call<BinanceResponse> binanceResponseCall = api.getBalance(
+        Call<BinanceResponse> responseCall = api.getBalance(
                 ec.getKey(), recvWindow, timestamp, signature
         );
 
         // Perform request
-        performRequest(binanceResponseCall, new ErrorParser("msg"));
+        performRequest(responseCall, new ErrorParser("msg"));
     }
 
     /**

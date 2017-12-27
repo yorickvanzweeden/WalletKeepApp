@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.api.exchange.BinanceService;
 import com.walletkeep.walletkeep.api.exchange.BitfinexService;
 import com.walletkeep.walletkeep.api.exchange.BittrexService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
+import com.walletkeep.walletkeep.api.exchange.KrakenService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
 import com.walletkeep.walletkeep.api.naked.EtherscanService;
 import com.walletkeep.walletkeep.db.entity.Asset;
@@ -89,16 +90,16 @@ public abstract class ApiService {
      * @param secret Secret to encrypt with
      * @return Signature
      */
-    protected String generateSignature(String data, String secret, Boolean encoded) {
+    protected String generateSignature(byte[] data, String secret, Boolean encoded) {
         return generateSignature(data, secret, encoded, "HmacSHA256");
     }
-    protected String generateSignature(String data, String secret, Boolean encoded, String algorithm) throws IllegalArgumentException {
+    protected String generateSignature(byte[] data, String secret, Boolean encoded, String algorithm) throws IllegalArgumentException {
         try {
             byte[] decoded_key = encoded ? Base64.decode(secret, Base64.DEFAULT) : secret.getBytes("UTF-8");
             SecretKeySpec secretKey = new SecretKeySpec(decoded_key, algorithm);
             Mac mac = Mac.getInstance(algorithm);
             mac.init(secretKey);
-            byte[] hMacData = mac.doFinal(data.getBytes("UTF-8"));
+            byte[] hMacData = mac.doFinal(data);
             return encoded ? Base64.encodeToString(hMacData, Base64.NO_WRAP) : Converters.bytesToHex(hMacData);
         } catch (Exception e) {
             // Signature is invalid --> Secret is invalid
@@ -233,6 +234,8 @@ public abstract class ApiService {
                     return (T) new BittrexService();
                 case "GDAX":
                     return (T) new GDAXService();
+                case "Kraken":
+                    return (T) new KrakenService();
                 default:
                     return null;
             }

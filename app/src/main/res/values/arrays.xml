@@ -4,6 +4,7 @@
         <item>Binance</item>
         <item>Bitfinex</item>
         <item>Bittrex</item>
+        <item>Kraken</item>
         <item>GDAX</item>
     </string-array>
 </resources>

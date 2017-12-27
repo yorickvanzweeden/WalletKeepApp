@@ -7,6 +7,7 @@ import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,15 +33,10 @@ public class BittrexService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try {
-            signature = generateSignature(data, ec.getSecret(), false, "HmacSHA512");
-        } catch (IllegalArgumentException e) {
-            this.returnError(e.getMessage());
-            return;
-        } catch (NullPointerException e) {
-            this.returnError("No credentials have been provided.");
-            return;
-        }
+        try { signature = generateSignature(data.getBytes("UTF-8"), ec.getSecret(), false, "HmacSHA512"); }
+        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
+        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
+        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
 
         // Create request
         BittrexApi api = RetrofitClient.getClient("https://bittrex.com").create(BittrexApi.class);

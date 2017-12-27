@@ -12,6 +12,7 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,15 +47,11 @@ public class BitfinexService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try {
-            signature = generateSignature(payload_base64, ec.getSecret(), false, "HmacSHA384");
-        } catch (IllegalArgumentException e) {
-            this.returnError(e.getMessage());
-            return;
-        } catch (NullPointerException e) {
-            this.returnError("No credentials have been provided.");
-            return;
-        }
+        try { signature = generateSignature(payload_base64.getBytes("UTF-8"), ec.getSecret(), false, "HmacSHA384"); }
+        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
+        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
+        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
+
 
         // Create request
         BitfinexApi api = RetrofitClient.getClient("https://api.bitfinex.com/").create(BitfinexApi.class);
