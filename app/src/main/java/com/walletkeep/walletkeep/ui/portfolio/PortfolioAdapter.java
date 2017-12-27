@@ -8,18 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.ui.asset.AssetActivity;
 import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
+import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import java.util.List;
 
 public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.ViewHolder> {
     // Data of the recycler view
     private List<Portfolio> portfolios;
+
+    private PortfolioViewModel viewModel;
 
     // Access to the view
     private Context context;
@@ -33,6 +37,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         public CardView mCardView;
         public Button walletButton;
         public Button assetButton;
+        public Button deleteButton;
 
         public ViewHolder(View v) {
             super(v);
@@ -40,6 +45,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
             mCardView = v.findViewById(R.id.card_view);
             walletButton = v.findViewById(R.id.button_wallet);
             assetButton = v.findViewById(R.id.button_assets);
+            deleteButton = v.findViewById(R.id.button_delete_portfolio);
         }
     }
 
@@ -47,9 +53,10 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public PortfolioAdapter(Context context, List<Portfolio> portfolios) {
+    public PortfolioAdapter(Context context, List<Portfolio> portfolios, PortfolioViewModel viewModel) {
         this.portfolios = portfolios;
         this.context = context;
+        this.viewModel = viewModel;
     }
 
     /**
@@ -83,7 +90,9 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ((TextView)holder.mCardView.getChildAt(0)).setText(portfolios.get(position).getName());
+        TextView name = (TextView)((RelativeLayout)holder.mCardView.getChildAt(0)).getChildAt(0);
+        name.setText(portfolios.get(position).getName());
+
         holder.walletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
@@ -93,6 +102,9 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
             Intent intent = new Intent(context, AssetActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
             context.startActivity(intent);
+        });
+        holder.deleteButton.setOnClickListener(view -> {
+            viewModel.deletePortfolio(portfolios.get(position));
         });
     }
 

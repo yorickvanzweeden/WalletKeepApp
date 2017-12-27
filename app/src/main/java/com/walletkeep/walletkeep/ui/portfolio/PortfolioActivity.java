@@ -62,7 +62,7 @@ public class PortfolioActivity extends AppCompatActivity
         viewModel.init();
 
         // Create and set adapter
-        PortfolioAdapter mAdapter = new PortfolioAdapter(this, viewModel.provideDataset());
+        PortfolioAdapter mAdapter = new PortfolioAdapter(this, viewModel.provideDataset(), viewModel);
         mRecyclerView.setAdapter(mAdapter);
 
         // Update recycler view if portfolios are changed
