@@ -1,8 +1,16 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.util.Base64;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
+import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +32,22 @@ public class BitfinexService extends ApiService {
         }
 
         // Get signature
-        long timestamp = System.currentTimeMillis();
-        String data = String.format("/api/v2/auth/r/wallets%s{}", timestamp);
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("request", "/v1/balances");
+            jo.put("nonce", Long.toString(System.currentTimeMillis()));
+        } catch (JSONException e) {
+            this.returnError("Error while creating a Bitfinex request.");
+            return;
+        }
+
+        String payload = jo.toString();
+        String payload_base64 = Base64.encodeToString(payload.getBytes(), Base64.NO_WRAP);
         String signature;
 
         // In case of invalid secret
         try {
-            signature = generateSignature(data, ec.getSecret(), false, "HmacSHA384");
+            signature = generateSignature(payload_base64, ec.getSecret(), false, "HmacSHA384");
         } catch (IllegalArgumentException e) {
             this.returnError(e.getMessage());
             return;
@@ -40,9 +57,9 @@ public class BitfinexService extends ApiService {
         }
 
         // Create request
-        BitfinexApi api = RetrofitClient.getClient("https://api.bitfinex.com").create(BitfinexApi.class);
+        BitfinexApi api = RetrofitClient.getClient("https://api.bitfinex.com/").create(BitfinexApi.class);
         Call<List<BitfinexResponse>> responseCall = api.getBalance(
-                signature, key, timestamp, "{}"
+                key, payload_base64, signature, payload
         );
 
         // Perform request
@@ -54,11 +71,11 @@ public class BitfinexService extends ApiService {
      */
     private interface BitfinexApi {
         @Headers("Content-Type: application/json")
-        @POST("/v2/auth/r/wallets")
+        @POST("/v1/balances")
         Call<List<BitfinexResponse>> getBalance(
-                @Header("bfx-signature") String signature,
-                @Header("bfx-apikey") String key,
-                @Header("bfx-nonce") long timestamp,
+                @Header("X-BFX-APIKEY") String key,
+                @Header("X-BFX-PAYLOAD") String payload,
+                @Header("X-BFX-SIGNATURE") String signature,
                 @Body String body
         );
     }
@@ -67,9 +84,62 @@ public class BitfinexService extends ApiService {
      * POJO used for converting the JSON response to Java
      */
     public class BitfinexResponse extends IResponse {
+
+        @SerializedName("type")
+        @Expose
+        private String type;
+        @SerializedName("currency")
+        @Expose
+        private String currency;
+        @SerializedName("amount")
+        @Expose
+        private String amount;
+        @SerializedName("available")
+        @Expose
+        private String available;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency.toUpperCase();
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public String getAvailable() {
+            return available;
+        }
+
+        public void setAvailable(String available) {
+            this.available = available;
+        }
+
+        private Asset getAsset(int walletId) {
+            return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(amount));
+
+        }
+
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
-            return null;
+            return new ArrayList<Asset>() {{
+                add(getAsset(walletId));
+            }};
         }
     }
 }
