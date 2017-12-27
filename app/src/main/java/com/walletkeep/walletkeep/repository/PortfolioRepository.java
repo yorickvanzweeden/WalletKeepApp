@@ -55,4 +55,12 @@ public class PortfolioRepository {
     public void addPortfolio(Portfolio portfolio) {
         AsyncTask.execute(() -> mDatabase.portfolioDao().insert(portfolio));
     }
+
+    /**
+     * Delete a portfolio (async)
+     * @param portfolio Portfolio to delete
+     */
+    public void deletePortfolio(Portfolio portfolio) {
+        AsyncTask.execute(() -> mDatabase.portfolioDao().delete(portfolio));
+    }
 }

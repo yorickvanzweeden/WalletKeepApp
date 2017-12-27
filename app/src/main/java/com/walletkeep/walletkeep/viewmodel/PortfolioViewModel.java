@@ -50,6 +50,14 @@ public class PortfolioViewModel extends ViewModel {
     }
 
     /**
+     * Delete portfolio (async)
+     * @param portfolio Portfolio to delete
+     */
+    public void deletePortfolio(Portfolio portfolio){
+        this.portfolioRepository.deletePortfolio(portfolio);
+    }
+
+    /**
      * Provides dataset for Recyclerview
      * @return List of strings
      */
