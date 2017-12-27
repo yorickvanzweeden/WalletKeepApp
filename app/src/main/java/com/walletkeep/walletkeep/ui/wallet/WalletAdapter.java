@@ -36,7 +36,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mTextView = v.findViewById(R.id.wallet_listitem_exchange);
+            mTextView = v.findViewById(R.id.wallet_listitem_name);
             editWalletButton = v.findViewById(R.id.button_edit_wallet);
         }
     }
@@ -87,14 +87,16 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
             intent.putExtra("add_exchange", wallets.get(position).getType() == WalletWithRelations.Type.Exchange);
             context.startActivity(intent);
         });
-
-        switch (wallets.get(position).getType()){
-            case Naked:
-                holder.mTextView.setText(wallets.get(position).getAddressCurrency());
-                break;
-            default:
-                holder.mTextView.setText(wallets.get(position).getExchangeName());
-        }
+        if (wallets.get(position).getWalletName().length() > 0) {
+            holder.mTextView.setText(wallets.get(position).getWalletName());
+        } else
+            switch (wallets.get(position).getType()){
+                case Naked:
+                    holder.mTextView.setText("Unnamed " + wallets.get(position).getAddressCurrency());
+                    break;
+                default:
+                    holder.mTextView.setText("Unnamed " + wallets.get(position).getExchangeName());
+            }
     }
 
     /**

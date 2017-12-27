@@ -28,6 +28,13 @@ public class WalletWithRelations {
     }
 
     /**
+     * Gets the name of the wallet
+     * @return Name of the wallet (null if not present)
+     */
+    public String getWalletName() { return this.wallet.getName(); }
+
+
+    /**
      * Gets the name of the exchange of the wallet
      * @return Name of the exchange (null if not present)
      */
