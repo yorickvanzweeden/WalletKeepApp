@@ -5,8 +5,10 @@ import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -39,8 +41,8 @@ public class BitfinexService extends ApiService {
 
         // Create request
         BitfinexApi api = RetrofitClient.getClient("https://api.bitfinex.com").create(BitfinexApi.class);
-        Call<BitfinexResponse> responseCall = api.getBalance(
-                signature, key, timestamp
+        Call<List<BitfinexResponse>> responseCall = api.getBalance(
+                signature, key, timestamp, "{}"
         );
 
         // Perform request
@@ -53,10 +55,11 @@ public class BitfinexService extends ApiService {
     private interface BitfinexApi {
         @Headers("Content-Type: application/json")
         @POST("/v2/auth/r/wallets")
-        Call<BitfinexResponse> getBalance(
+        Call<List<BitfinexResponse>> getBalance(
                 @Header("bfx-signature") String signature,
                 @Header("bfx-apikey") String key,
-                @Header("bfx-nonce") long timestamp
+                @Header("bfx-nonce") long timestamp,
+                @Body String body
         );
     }
 
