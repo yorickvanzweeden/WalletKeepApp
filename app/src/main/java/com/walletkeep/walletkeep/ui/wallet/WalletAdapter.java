@@ -84,18 +84,24 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.editWalletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
-            intent.putExtra("add_exchange", wallets.get(position).getType() == WalletWithRelations.Type.Exchange);
+            intent.putExtra("fragment_type", wallets.get(position).getType().getValue());
             context.startActivity(intent);
         });
         if (wallets.get(position).getWalletName().length() > 0) {
             holder.mTextView.setText(wallets.get(position).getWalletName());
         } else
             switch (wallets.get(position).getType()){
+                case Exchange:
+                    holder.mTextView.setText(wallets.get(position).getExchangeName() + " Wallet");
+                    break;
                 case Naked:
                     holder.mTextView.setText(wallets.get(position).getAddressCurrency() + " Wallet");
                     break;
-                default:
-                    holder.mTextView.setText(wallets.get(position).getExchangeName() + " Wallet");
+                case Transaction:
+                    holder.mTextView.setText(
+                            wallets.get(position).assets.get(0).getCurrencyTicker() + " Transaction"
+                    );
+                    break;
             }
     }
 

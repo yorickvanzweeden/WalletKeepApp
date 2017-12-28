@@ -13,6 +13,7 @@ import android.view.View;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class WalletActivity extends AppCompatActivity {
@@ -87,12 +88,17 @@ public class WalletActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab_add_exchange_wallet);
         fab.setOnClickListener(view -> {
-            addWallet(portfolioId, true);
+            addWallet(portfolioId, WalletWithRelations.Type.Exchange);
             fabmenu.collapse();
         });
         FloatingActionButton fab2 = findViewById(R.id.fab_add_naked_wallet);
         fab2.setOnClickListener(view -> {
-            addWallet(portfolioId, false);
+            addWallet(portfolioId, WalletWithRelations.Type.Naked);
+            fabmenu.collapse();
+        });
+        FloatingActionButton fab3 = findViewById(R.id.fab_add_transaction);
+        fab3.setOnClickListener(view -> {
+            addWallet(portfolioId, WalletWithRelations.Type.Transaction);
             fabmenu.collapse();
         });
 
@@ -103,10 +109,10 @@ public class WalletActivity extends AppCompatActivity {
      * Start add/edit wallet intent
      * @param portfolioId Portfolio to which the walletButton belongs
      */
-    private void addWallet(int portfolioId, boolean addExchange){
+    private void addWallet(int portfolioId, WalletWithRelations.Type fragmentType){
         Intent intent = new Intent(this, EditWalletActivity.class);
         intent.putExtra("portfolio_id", portfolioId);
-        intent.putExtra("add_exchange", addExchange);
+        intent.putExtra("fragment_type", fragmentType.getValue());
         this.startActivity(intent);
     }
 }
