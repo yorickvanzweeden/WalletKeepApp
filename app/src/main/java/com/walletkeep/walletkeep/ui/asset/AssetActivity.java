@@ -1,7 +1,9 @@
 package com.walletkeep.walletkeep.ui.asset;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +17,7 @@ import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.AssetRepository;
+import com.walletkeep.walletkeep.ui.IntroSlider;
 import com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity;
 import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
@@ -30,6 +33,9 @@ public class AssetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asset);
 
+        // Check if IntroSlider should be shown
+        checkFirstRun();
+
         int portfolioId = 1;
         String portfolioName = "My portfolio";
         Bundle parameters = getIntent().getExtras();
@@ -41,6 +47,19 @@ public class AssetActivity extends AppCompatActivity {
         setupOverlay(portfolioId);
         setupRecyclerView(portfolioId);
         setupSwipeRefreshLayout();
+    }
+
+    /**
+     * Check if Introslider should be shown
+     */
+    private void checkFirstRun() {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        boolean show_intro = sharedPref.getBoolean("show_intro", true);
+
+        if (show_intro) {
+            startActivity(new Intent(this, IntroSlider.class));
+            sharedPref.edit().putBoolean("show_intro", false).apply();
+        }
     }
 
     private void setupOverlay(int portfolioId){
