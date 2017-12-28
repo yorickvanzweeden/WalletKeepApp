@@ -110,7 +110,9 @@ public class AssetRepository {
      */
     public void fetchWallets(List<WalletWithRelations> wallets, ErrorListener errorListener){
         for (WalletWithRelations wallet: wallets) {
-            fetchWallet(wallet, errorListener);
+            if (wallet.getType() != WalletWithRelations.Type.Transaction) {
+                fetchWallet(wallet, errorListener);
+            }
         }
     }
 
