@@ -1,7 +1,6 @@
 package com.walletkeep.walletkeep.ui.asset;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +26,19 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        public CardView mCardView;
         public TextView mTextViewTicker;
         public TextView mTextViewAmount;
         public TextView mTextViewPrice;
+        public TextView mTextViewTotal;
         public Button wallet;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mCardView = v.findViewById(R.id.card_view);
             mTextViewTicker = v.findViewById(R.id.asset_ticker);
             mTextViewAmount = v.findViewById(R.id.asset_amount);
             mTextViewPrice = v.findViewById(R.id.asset_price);
+            mTextViewTotal = v.findViewById(R.id.asset_total);
             wallet = v.findViewById(R.id.button_wallet);
         }
     }
@@ -88,7 +87,8 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
 
         holder.mTextViewTicker.setText(asset.getTicker());
         holder.mTextViewAmount.setText(Float.toString(asset.getAmount()));
-        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice()));
+        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getLatestCurrencyPrice()));
+        holder.mTextViewTotal.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice()));
     }
 
     /**

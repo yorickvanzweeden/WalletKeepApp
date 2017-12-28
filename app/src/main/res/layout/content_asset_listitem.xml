@@ -18,8 +18,42 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/asset_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="68dp"
+                android:layout_marginTop="8dp"
+                android:text="Price:"
+                android:textSize="12sp"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="200dp"
+                android:layout_marginTop="8dp"
+                android:text="Holdings:"
+                android:textSize="12sp"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/asset_ticker"
-                android:layout_width="150dp"
+                android:layout_width="59dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
@@ -35,27 +69,27 @@
                 android:id="@+id/asset_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/asset_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/asset_amount"
-                card_view:layout_constraintStart_toEndOf="@+id/asset_ticker"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toEndOf="@+id/textView"
                 card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/asset_total"
+                android:layout_width="91dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="156dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

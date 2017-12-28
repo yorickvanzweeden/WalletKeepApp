@@ -12,25 +12,104 @@
         android:layout_height="50dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/asset_portfolio_value"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:gravity="center"
-            android:text="Portfolio Value"
-            android:textColor="@color/black_semi_transparent"
-            android:textSize="20dp" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/portfolio_name"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="PortfolioName"
-            android:textColor="@color/black_semi_transparent"
-            android:textSize="20dp" />
+            <TextView
+                android:id="@+id/asset_portfolio_value6"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="+ 27.43%"
+                android:textColor="@color/black_semi_transparent"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/asset_portfolio_value3" />
+
+            <TextView
+                android:id="@+id/asset_portfolio_value5"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="+ 9.37%"
+                android:textColor="@color/black_semi_transparent"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/asset_portfolio_value6"
+                app:layout_constraintStart_toEndOf="@+id/asset_portfolio_value2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/asset_portfolio_value4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="24H"
+                android:textColor="@color/black_semi_transparent"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/asset_portfolio_value3"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="178dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="Market:"
+                android:textColor="@color/black_semi_transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/asset_portfolio_value2"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginStart="197dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="You:"
+                android:textColor="@color/black_semi_transparent"
+                app:layout_constraintBottom_toTopOf="@+id/asset_portfolio_value3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/asset_portfolio_value"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="Portfolio Value"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black_semi_transparent"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
 
     </android.support.design.widget.AppBarLayout>
 
@@ -39,5 +118,23 @@
         layout="@layout/content_asset"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteY="372dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_edit_wallets"
+        android:tint="#ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_edit_portfolios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="#ffffff"
+        app:srcCompat="@android:drawable/ic_dialog_info" />
 
 </android.support.design.widget.CoordinatorLayout>

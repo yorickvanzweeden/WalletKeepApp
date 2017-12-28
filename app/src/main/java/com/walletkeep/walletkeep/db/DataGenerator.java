@@ -8,6 +8,7 @@ import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.Exchange;
+import com.walletkeep.walletkeep.db.entity.Portfolio;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -55,5 +56,9 @@ public class DataGenerator {
         List<com.walletkeep.walletkeep.db.entity.Currency> currencies = new Gson().fromJson(json, listType);
 
         return currencies;
+    }
+
+    public static Portfolio loadDefaultPortfolio() {
+        return new Portfolio("My portfolio");
     }
 }
