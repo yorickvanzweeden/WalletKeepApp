@@ -20,10 +20,10 @@ public class EtherscanService extends ApiService {
     public void fetch() {
         // Create request
         EtherscanApi api = RetrofitClient.getClient("https://api.etherscan.io/api/").create(EtherscanApi.class);
-        Call<EtherscanResponse> blockcypherResponseCall = api.getBalance( address );
+        Call<EtherscanResponse> responseCall = api.getBalance( address );
 
         // Perform request
-        performRequest(blockcypherResponseCall);
+        performRequest(responseCall);
     }
 
     /**

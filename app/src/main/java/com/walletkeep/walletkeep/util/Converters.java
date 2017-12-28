@@ -43,6 +43,22 @@ public class Converters {
     }
 
     /**
+     * Convert a user input String to a float
+     * @param amount String to convert
+     * @return Amount as float
+     */
+    public static Float userInputToFloat(String amount) {
+        amount = amount.replace(" ", "").replace(',', '.');
+
+        try {
+            return Float.parseFloat(amount);
+        } catch (NumberFormatException e) {
+            return 0f;
+        }
+    }
+
+
+    /**
      * Convert an inputStream to string
      * @param inputStream Inputstream to convert
      * @return Inputstream as string

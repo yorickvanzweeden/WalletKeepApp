@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.Wallet;
@@ -14,8 +15,8 @@ import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 public class EditWalletActivity extends AppCompatActivity {
     private UpdateWalletViewModel viewModel;
     private WalletWithRelations wallet;
-    private Boolean addExchange;
     private Fragment fragment;
+    private int fragmentType;
 
     /**
      * Setup the activity
@@ -29,10 +30,10 @@ public class EditWalletActivity extends AppCompatActivity {
         // Get intent data
         int walletId = getIntent().getExtras().getInt("wallet_id");
         int portfolioId = getIntent().getExtras().getInt("portfolio_id");
-        addExchange = getIntent().getExtras().getBoolean("add_exchange");
+        fragmentType = getIntent().getExtras().getInt("fragment_type");
 
         // Setup fragment
-        setupFragment(savedInstanceState, addExchange);
+        setupFragment(savedInstanceState, fragmentType);
 
         // Initialise view model
         UpdateWalletViewModel.Factory factory = new UpdateWalletViewModel.Factory(getApplication());
@@ -44,6 +45,10 @@ public class EditWalletActivity extends AppCompatActivity {
             this.wallet = wallet;
             if (wallet == null) return;
             ((IWalletFragment) fragment).updateForm(wallet);
+
+            // Set name
+            String name = wallet.wallet.getName();
+            ((EditText)findViewById(R.id.editText_editWallet_name)).setText(name);
         });
 
         // Setup save button
@@ -58,17 +63,26 @@ public class EditWalletActivity extends AppCompatActivity {
     /**
      * Setup the fragment
      * @param savedInstanceState
-     * @param addExchange
+     * @param fragmentType Type of fragment (exchange|naked|transaction)
      */
-    private void setupFragment(Bundle savedInstanceState, boolean addExchange){
+    private void setupFragment(Bundle savedInstanceState, int fragmentType){
         // Check if fragment exists
         if (findViewById(R.id.fragment_container) == null || savedInstanceState != null) {
             return;
         }
 
         // Add exchange fragment for exchange wallets, naked fragment for naked wallets
-        if (addExchange) fragment = new EditExchangeWalletFragment();
-        else fragment = new EditNakedWalletFragment();
+        switch (WalletWithRelations.Type.values()[fragmentType]) {
+            case Exchange:
+                fragment = new EditExchangeWalletFragment();
+                break;
+            case Naked:
+                fragment = new EditNakedWalletFragment();
+                break;
+            case Transaction:
+                fragment = new EditTransactionFragment();
+                break;
+        }
 
         // Place fragment in container
         fragment.setArguments(getIntent().getExtras()); //TODO: Is this line necessary?
@@ -87,11 +101,14 @@ public class EditWalletActivity extends AppCompatActivity {
         if (wallet == null) {
             wallet = new WalletWithRelations();
             wallet.wallet = new Wallet(portfolioId);
+            wallet.wallet.setType(fragmentType);
             shouldInsert = true;
         }
 
         // Update wallet with form data
         wallet = ((IWalletFragment) fragment).updateWallet(wallet);
+        String name = ((EditText)findViewById(R.id.editText_editWallet_name)).getText().toString();
+        wallet.wallet.setName(name);
 
         // Save wallet to database
         if(shouldInsert) { viewModel.addWallet(wallet);

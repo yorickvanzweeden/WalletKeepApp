@@ -36,7 +36,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mTextView = v.findViewById(R.id.wallet_listitem_exchange);
+            mTextView = v.findViewById(R.id.wallet_listitem_name);
             editWalletButton = v.findViewById(R.id.button_edit_wallet);
         }
     }
@@ -84,17 +84,25 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.editWalletButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
-            intent.putExtra("add_exchange", wallets.get(position).getType() == WalletWithRelations.Type.Exchange);
+            intent.putExtra("fragment_type", wallets.get(position).getType().getValue());
             context.startActivity(intent);
         });
-
-        switch (wallets.get(position).getType()){
-            case Naked:
-                holder.mTextView.setText(wallets.get(position).getAddressCurrency());
-                break;
-            default:
-                holder.mTextView.setText(wallets.get(position).getExchangeName());
-        }
+        if (wallets.get(position).getWalletName().length() > 0) {
+            holder.mTextView.setText(wallets.get(position).getWalletName());
+        } else
+            switch (wallets.get(position).getType()){
+                case Exchange:
+                    holder.mTextView.setText(wallets.get(position).getExchangeName() + " Wallet");
+                    break;
+                case Naked:
+                    holder.mTextView.setText(wallets.get(position).getAddressCurrency() + " Wallet");
+                    break;
+                case Transaction:
+                    holder.mTextView.setText(
+                            wallets.get(position).assets.get(0).getCurrencyTicker() + " Transaction"
+                    );
+                    break;
+            }
     }
 
     /**

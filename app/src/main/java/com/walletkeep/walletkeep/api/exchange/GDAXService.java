@@ -8,6 +8,7 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +26,19 @@ public class GDAXService extends ApiService {
         String signature;
 
         // In case of invalid secret
-        try{ signature = generateSignature(data, this.ec.getSecret(), true); }
+        try{ signature = generateSignature(data.getBytes("UTF-8"), this.ec.getSecret(), true); }
         catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
         catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
+        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
 
         // Create request
         GDAXApi api = RetrofitClient.getClient("https://api.gdax.com").create(GDAXApi.class);
-        Call<List<GDAXResponse>> gdaxResponseCall = api.getBalance(
+        Call<List<GDAXResponse>> responseCall = api.getBalance(
                 signature, timestamp, ec.getKey(), ec.getPassphrase()
         );
 
         // Perform request
-        performRequest(gdaxResponseCall, new ErrorParser("message"));
+        performRequest(responseCall, new ErrorParser("message"));
     }
 
     /**
