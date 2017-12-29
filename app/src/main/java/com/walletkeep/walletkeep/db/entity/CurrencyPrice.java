@@ -38,6 +38,15 @@ public class CurrencyPrice {
     @ColumnInfo(name = "price_btc")
     private float priceBtc;
 
+    @ColumnInfo(name = "change1h")
+    private float change1h;
+
+    @ColumnInfo(name = "change24h")
+    private float change24h;
+
+    @ColumnInfo(name = "change7d")
+    private float change7d;
+
     @ColumnInfo(name = "last_updated")
     @TypeConverters({DateConverter.class})
     private Date lastUpdated;
@@ -47,11 +56,15 @@ public class CurrencyPrice {
     }
 
     @Ignore
-    public CurrencyPrice(String currencyTicker, float priceUsd, float priceEur, float priceBtc, Date lastUpdated) {
+    public CurrencyPrice(String currencyTicker, float priceUsd, float priceEur, float priceBtc,
+                         float change1h, float change24h, float change7d, Date lastUpdated) {
         this.currencyTicker = currencyTicker;
         this.priceUsd = priceUsd;
         this.priceEur = priceEur;
         this.priceBtc = priceBtc;
+        this.change1h = change1h;
+        this.change24h = change24h;
+        this.change7d = change7d;
         this.lastUpdated = lastUpdated;
     }
 
@@ -83,4 +96,16 @@ public class CurrencyPrice {
     public Date getLastUpdated() { return lastUpdated; }
 
     public void setLastUpdated(Date lastUpdated) { this.lastUpdated = lastUpdated; }
+
+    public float getChange1h() { return change1h; }
+
+    public void setChange1h(float change1h) { this.change1h = change1h; }
+
+    public float getChange24h() { return change24h; }
+
+    public void setChange24h(float change24h) { this.change24h = change24h; }
+
+    public float getChange7d() { return change7d; }
+
+    public void setChange7d(float change7d) { this.change7d = change7d; }
 }

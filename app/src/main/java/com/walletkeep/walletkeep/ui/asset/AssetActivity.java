@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import java.util.List;
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
     private List<WalletWithRelations> wallets;
+    private AssetAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,17 @@ public class AssetActivity extends AppCompatActivity {
     }
 
     private void setupOverlay(int portfolioId){
+        // Setup volume change
+        TextView volumeChange = findViewById(R.id.textView_asset_volume_change);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
+                R.array.price_change, android.R.layout.simple_spinner_item);
+        volumeChange.setOnClickListener(view -> {
+            int pos = adapter.getPosition(volumeChange.getText().toString());
+            String setting = adapter.getItem((pos + 1) % 3).toString();
+            volumeChange.setText(setting);
+            mAdapter.updateChangeSetting(setting);
+        });
+
         // Setup fabs
         FloatingActionButton fab = findViewById(R.id.fab_edit_wallets);
         fab.setOnClickListener(view -> {
@@ -113,7 +126,7 @@ public class AssetActivity extends AppCompatActivity {
         viewModel.init(portfolioId);
 
         // Create and set adapter
-        AssetAdapter mAdapter = new AssetAdapter(this, viewModel.getAggregatedAssets().getValue());
+        mAdapter = new AssetAdapter(this, viewModel.getAggregatedAssets().getValue());
         mRecyclerView.setAdapter(mAdapter);
 
         // Update recycler view and portfolio value if portfolios are changed

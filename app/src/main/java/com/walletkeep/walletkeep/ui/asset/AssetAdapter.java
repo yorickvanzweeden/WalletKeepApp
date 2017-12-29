@@ -16,6 +16,7 @@ import java.util.List;
 public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder> {
     // Data of the recycler view
     private List<AggregatedAsset> assets;
+    private String changeSetting;
 
     // Access to the view
     private Context context;
@@ -30,6 +31,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         public TextView mTextViewAmount;
         public TextView mTextViewPrice;
         public TextView mTextViewTotal;
+        public TextView mTextViewChange;
         public Button wallet;
 
         public ViewHolder(View v) {
@@ -39,6 +41,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
             mTextViewAmount = v.findViewById(R.id.asset_amount);
             mTextViewPrice = v.findViewById(R.id.asset_price);
             mTextViewTotal = v.findViewById(R.id.asset_total);
+            mTextViewChange = v.findViewById(R.id.asset_change);
             wallet = v.findViewById(R.id.button_wallet);
         }
     }
@@ -58,6 +61,15 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      */
     public void updateAggregatedAssets(List<AggregatedAsset> assets){
         this.assets = assets;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Update the change setting (1H, 24H, 7D)
+     * @param changeSetting change setting
+     */
+    public void updateChangeSetting(String changeSetting){
+        this.changeSetting = changeSetting;
         notifyDataSetChanged();
     }
 
@@ -89,6 +101,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         holder.mTextViewAmount.setText(Float.toString(asset.getAmount()));
         holder.mTextViewPrice.setText(String.format("€%.2f", asset.getLatestCurrencyPrice()));
         holder.mTextViewTotal.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice()));
+        holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(changeSetting)));
     }
 
     /**
