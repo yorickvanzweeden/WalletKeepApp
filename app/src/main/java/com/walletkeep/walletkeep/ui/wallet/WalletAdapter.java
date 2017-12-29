@@ -39,7 +39,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
             super(v);
             // Initialise UI elements
             mTextView = v.findViewById(R.id.wallet_listitem_textView_name);
-            mCardView = v.findViewById(R.id.wallet_listitem_card_view);
+            mCardView = v.findViewById(R.id.wallet_listitem_cardView);
             mImageView = v.findViewById(R.id.wallet_listitem_imageView);
         }
     }
