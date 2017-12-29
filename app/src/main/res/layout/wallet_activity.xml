@@ -48,21 +48,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
-                fab:fab_title="Transaction" />
+                fab:fab_title="@string/fab_transaction" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/wallet_activity_fab_addNakedWallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
-                fab:fab_title="Naked wallet" />
+                fab:fab_title="@string/fab_wallet_address" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/wallet_activity_fab_addExchangeWallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
-                fab:fab_title="Exchange wallet" />
+                fab:fab_title="@string/fab_exchange_account" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </FrameLayout>

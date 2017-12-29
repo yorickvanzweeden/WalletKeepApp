@@ -69,7 +69,7 @@
                 android:layout_marginStart="178dp"
                 android:layout_weight="0"
                 android:gravity="center"
-                android:text="Market:"
+                android:text="@string/label_market"
                 android:textColor="@color/black_semi_transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -83,7 +83,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_weight="0"
                 android:gravity="center"
-                android:text="You:"
+                android:text="@string/label_you"
                 android:textColor="@color/black_semi_transparent"
                 app:layout_constraintBottom_toTopOf="@+id/asset_activity_textView_label_market"
                 app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +131,7 @@
         android:id="@+id/asset_activity_fab_edit_portfolios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
+        android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
         android:tint="#ffffff"
         app:srcCompat="@android:drawable/ic_dialog_info" />

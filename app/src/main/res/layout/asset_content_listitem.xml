@@ -37,7 +37,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="64dp"
                 android:layout_marginTop="48dp"
-                android:text="Change:"
+                android:text="@string/label_change"
                 android:textSize="12sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="68dp"
                 android:layout_marginTop="8dp"
-                android:text="Price:"
+                android:text="@string/label_price"
                 android:textSize="12sp"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="200dp"
                 android:layout_marginTop="8dp"
-                android:text="Holdings:"
+                android:text="@string/label_holdings"
                 android:textSize="12sp"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />

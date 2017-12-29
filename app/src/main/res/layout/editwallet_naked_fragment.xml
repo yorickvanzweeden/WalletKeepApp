@@ -12,10 +12,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Address"
+        android:text="@string/address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_editText_passphrase" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_editText_address" />
 
     <EditText
         android:id="@+id/editWallet_naked_editText_address"
@@ -25,7 +25,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Address"
+        android:hint="@string/address"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
