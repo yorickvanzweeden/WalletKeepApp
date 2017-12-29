@@ -47,6 +47,7 @@
                 android:id="@+id/wallet_activity_fab_addTransaction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/ic_tx"
                 fab:fab_size="mini"
                 fab:fab_title="@string/fab_transaction" />
 
@@ -54,6 +55,7 @@
                 android:id="@+id/wallet_activity_fab_addNakedWallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/ic_wl"
                 fab:fab_size="mini"
                 fab:fab_title="@string/fab_wallet_address" />
 
@@ -61,6 +63,7 @@
                 android:id="@+id/wallet_activity_fab_addExchangeWallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/ic_xc"
                 fab:fab_size="mini"
                 fab:fab_title="@string/fab_exchange_account" />
 
