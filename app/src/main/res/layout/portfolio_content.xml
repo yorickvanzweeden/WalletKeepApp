@@ -9,7 +9,7 @@
     tools:showIn="@layout/portfolio_activity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_portfolios"
+        android:id="@+id/portfolio_content_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

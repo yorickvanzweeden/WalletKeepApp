@@ -37,12 +37,12 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mTextViewTicker = v.findViewById(R.id.asset_ticker);
-            mTextViewAmount = v.findViewById(R.id.asset_amount);
-            mTextViewPrice = v.findViewById(R.id.asset_price);
-            mTextViewTotal = v.findViewById(R.id.asset_total);
-            mTextViewChange = v.findViewById(R.id.asset_change);
-            wallet = v.findViewById(R.id.button_wallet);
+            mTextViewTicker = v.findViewById(R.id.asset_listitem_textView_ticker);
+            mTextViewAmount = v.findViewById(R.id.asset_listitem_textView_holdings);
+            mTextViewPrice = v.findViewById(R.id.asset_listitem_textView_price);
+            mTextViewTotal = v.findViewById(R.id.asset_listitem_textView_total);
+            mTextViewChange = v.findViewById(R.id.asset_listitem_textView_change);
+            wallet = v.findViewById(R.id.portfolio_listitem_button_wallet);
         }
     }
 

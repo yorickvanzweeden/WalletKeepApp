@@ -6,7 +6,7 @@
     tools:context="com.walletkeep.walletkeep.ui.wallet.EditNakedWalletFragment">
 
     <TextView
-        android:id="@+id/textView_editWallet_address"
+        android:id="@+id/editWallet_naked_textView_label_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -15,10 +15,10 @@
         android:text="Address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_editWallet_passphrase" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_editText_passphrase" />
 
     <EditText
-        android:id="@+id/editText_editWallet_address"
+        android:id="@+id/editWallet_naked_editText_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -29,6 +29,6 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editWallet_address" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_textView_label_address" />
 
 </android.support.constraint.ConstraintLayout>

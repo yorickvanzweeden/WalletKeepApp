@@ -6,10 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.walletkeep.walletkeep.ui.wallet.EditTransactionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <EditText
-        android:id="@+id/editText_editTransaction_currency"
+        android:id="@+id/editWallet_transaction_editText_currency"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -20,10 +18,10 @@
         android:hint="ETH"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editTransaction_currency" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_textView_label_currency" />
 
     <TextView
-        android:id="@+id/textView_editTransaction_currency"
+        android:id="@+id/editWallet_transaction_textView_label_currency"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -35,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_editTransaction_amount"
+        android:id="@+id/editWallet_transaction_textView_label_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -44,10 +42,10 @@
         android:text="Amount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_editTransaction_currency" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_editText_currency" />
 
     <EditText
-        android:id="@+id/editText_editTransaction_amount"
+        android:id="@+id/editWallet_transaction_editText_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -58,6 +56,6 @@
         android:hint="11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editTransaction_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_textView_label_amount" />
 
 </android.support.constraint.ConstraintLayout>

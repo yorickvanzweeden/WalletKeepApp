@@ -6,32 +6,27 @@
     android:background="#0099cc"
     tools:context="com.walletkeep.walletkeep.ui.IntroSlider">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/introSlider_activity_constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ecf0f1"
         android:fitsSystemWindows="true">
 
-        <FrameLayout
-            android:id="@+id/fullscreen_content_controls"
-            style="?metaButtonBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
+        <!--<FrameLayout-->
+            <!--android:id="@+id/fullscreen_content_controls"-->
+            <!--style="?metaButtonBarStyle"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/black_overlay"-->
+            <!--android:orientation="horizontal"-->
+            <!--tools:ignore="UselessParent">-->
 
-        </FrameLayout>
+        <!--</FrameLayout>-->
 
         <ViewFlipper
-            android:id="@+id/simpleViewFlipper"
+            android:id="@+id/introSlider_activity_viewFlipper"
             android:layout_width="match_parent"
             android:layout_height="545dp"
             android:layout_marginEnd="8dp"
@@ -50,7 +45,7 @@
                 tools:ignore="UselessParent">
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/introSlider_activity_textView_screen1"
                     android:layout_width="wrap_content"
                     android:layout_height="233dp"
                     android:layout_marginBottom="32dp"
@@ -64,13 +59,13 @@
                     android:textSize="33sp" />
 
                 <ImageView
-                    android:id="@+id/imageView1"
+                    android:id="@+id/introSlider_activity_imageView_screen1"
                     android:layout_width="382dp"
                     android:layout_height="172dp"
                     android:layout_marginBottom="40dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_below="@id/textView1"
+                    android:layout_below="@id/introSlider_activity_textView_screen1"
                     app:srcCompat="@drawable/titlecoins" />
 
             </RelativeLayout>
@@ -83,7 +78,7 @@
                 tools:ignore="UselessParent">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/introSlider_activity_textView_screen2"
                     android:layout_width="wrap_content"
                     android:layout_height="233dp"
                     android:layout_marginBottom="32dp"
@@ -97,13 +92,13 @@
                     android:textSize="25sp" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/introSlider_activity_imageView_screen2"
                     android:layout_width="382dp"
                     android:layout_height="172dp"
                     android:layout_marginBottom="40dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_below="@id/textView2"
+                    android:layout_below="@id/introSlider_activity_textView_screen2"
                     app:srcCompat="@drawable/automationgears" />
 
             </RelativeLayout>
@@ -116,7 +111,7 @@
                 tools:ignore="UselessParent">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/introSlider_activity_textView_screen3"
                     android:layout_width="wrap_content"
                     android:layout_height="233dp"
                     android:layout_marginBottom="32dp"
@@ -130,13 +125,13 @@
                     android:textSize="30sp" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/introSlider_activity_imageView_screen3"
                     android:layout_width="382dp"
                     android:layout_height="172dp"
                     android:layout_marginBottom="40dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_below="@id/textView3"
+                    android:layout_below="@id/introSlider_activity_textView_screen3"
                     app:srcCompat="@drawable/ethlock" />
 
             </RelativeLayout>
@@ -144,7 +139,7 @@
         </ViewFlipper>
 
         <Button
-            android:id="@+id/buttonnext"
+            android:id="@+id/introSlider_activity_button_next"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

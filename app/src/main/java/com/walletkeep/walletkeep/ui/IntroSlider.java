@@ -17,8 +17,7 @@ public class IntroSlider extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.welcome_activity);
-
+        setContentView(R.layout.introslider_activity);
         setupIntroSlider();
     }
 
@@ -27,8 +26,8 @@ public class IntroSlider extends AppCompatActivity {
      */
     private void setupIntroSlider(){
         // Get references of the Next button and the ViewFlipper
-        Button nextButton = findViewById(R.id.buttonnext);
-        ViewFlipper simpleViewFlipper = findViewById(R.id.simpleViewFlipper); // get the reference of ViewFlipper
+        Button nextButton = findViewById(R.id.introSlider_activity_button_next);
+        ViewFlipper simpleViewFlipper = findViewById(R.id.introSlider_activity_viewFlipper); // get the reference of ViewFlipper
 
         // Declare in and out animations and load them using AnimationUtils class
         Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);

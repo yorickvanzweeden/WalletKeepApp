@@ -66,7 +66,7 @@ public class AssetActivity extends AppCompatActivity {
 
     private void setupOverlay(int portfolioId){
         // Setup volume change
-        TextView volumeChange = findViewById(R.id.textView_asset_volume_change);
+        TextView volumeChange = findViewById(R.id.asset_activity_textView_change_setting);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
                 R.array.price_change, android.R.layout.simple_spinner_item);
         volumeChange.setOnClickListener(view -> {
@@ -77,14 +77,14 @@ public class AssetActivity extends AppCompatActivity {
         });
 
         // Setup fabs
-        FloatingActionButton fab = findViewById(R.id.fab_edit_wallets);
+        FloatingActionButton fab = findViewById(R.id.asset_activity_fab_edit_wallets);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolioId);
             this.startActivity(intent);
         });
 
-        FloatingActionButton fab2 = findViewById(R.id.fab_edit_portfolios);
+        FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_edit_portfolios);
         fab2.setOnClickListener(view -> startActivity(new Intent(this, PortfolioActivity.class)));
     }
 
@@ -98,7 +98,7 @@ public class AssetActivity extends AppCompatActivity {
         };
 
         // Refresh --> Update wallets
-        SwipeRefreshLayout swipeContainer = findViewById(R.id.swipeContainer);
+        SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
             viewModel.fetch(wallets, errorListener);
             swipeContainer.setRefreshing(false);
@@ -110,7 +110,7 @@ public class AssetActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(int portfolioId){
         // Link to the right UI item
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_assets);
+        RecyclerView mRecyclerView = findViewById(R.id.asset_content_recyclerView);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -148,7 +148,7 @@ public class AssetActivity extends AppCompatActivity {
         }
 
         // Set text of TextView
-        TextView portfolioValueTextView = findViewById(R.id.asset_portfolio_value);
+        TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio);
         portfolioValueTextView.setText(String.format("€%.2f", total));
     }
 

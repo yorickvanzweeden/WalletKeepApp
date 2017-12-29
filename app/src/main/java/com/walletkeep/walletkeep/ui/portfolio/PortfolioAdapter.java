@@ -42,10 +42,10 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mCardView = v.findViewById(R.id.card_view);
-            walletButton = v.findViewById(R.id.button_wallet);
-            assetButton = v.findViewById(R.id.button_assets);
-            deleteButton = v.findViewById(R.id.button_delete_portfolio);
+            mCardView = v.findViewById(R.id.portfolio_listitem_cardView);
+            walletButton = v.findViewById(R.id.portfolio_listitem_button_wallet);
+            assetButton = v.findViewById(R.id.portfolio_listitem_button_assets);
+            deleteButton = v.findViewById(R.id.portfolio_listitem_button_delete);
         }
     }
 

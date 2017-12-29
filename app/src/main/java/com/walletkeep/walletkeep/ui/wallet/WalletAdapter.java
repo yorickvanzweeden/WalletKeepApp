@@ -36,8 +36,8 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mTextView = v.findViewById(R.id.wallet_listitem_name);
-            editWalletButton = v.findViewById(R.id.button_edit_wallet);
+            mTextView = v.findViewById(R.id.wallet_listitem_textView_name);
+            editWalletButton = v.findViewById(R.id.wallet_listitem_button_edit);
         }
     }
 

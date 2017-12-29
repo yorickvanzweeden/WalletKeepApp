@@ -4,10 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.walletkeep.walletkeep.ui.portfolio.AddPortfolioDialog">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <EditText
-        android:id="@+id/editPortfolioName"
+        android:id="@+id/portfolio_dialog_editText_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

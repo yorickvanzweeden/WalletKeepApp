@@ -41,7 +41,7 @@ public class CreatePortfolioTest {
     @Test
     public void createPortfolioTest() {
         ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
+                allOf(withId(R.id.portfolio_activity_fab),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -51,7 +51,7 @@ public class CreatePortfolioTest {
         floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editPortfolioName),
+                allOf(withId(R.id.portfolio_dialog_editText_name),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
@@ -70,10 +70,10 @@ public class CreatePortfolioTest {
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction frameLayout = onView(
-                allOf(withId(R.id.card_view),
+                allOf(withId(R.id.asset_content_listitem_card_view),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.recycler_view_portfolios),
+                                        withId(R.id.portfolio_content_recyclerView),
                                         0),
                                 0),
                         isDisplayed()));

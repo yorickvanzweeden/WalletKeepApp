@@ -39,7 +39,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
-        ((EditText)getView().findViewById(R.id.editText_editWallet_address)).setText(wallet.getAddress());
+        ((EditText)getView().findViewById(R.id.editWallet_naked_editText_address)).setText(wallet.getAddress());
     }
 
     /**
@@ -49,7 +49,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet) {
-        String address = ((EditText)getView().findViewById(R.id.editText_editWallet_address)).getText().toString();
+        String address = ((EditText)getView().findViewById(R.id.editWallet_naked_editText_address)).getText().toString();
         wallet.wallet.setAddress(address);
         wallet.wallet.setAddressCurrency("ETH");
         return wallet;

@@ -35,7 +35,7 @@ public class WalletActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(int portfolioId){
         // Link to the right UI item
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_wallets);
+        RecyclerView mRecyclerView = findViewById(R.id.wallet_content_recyclerView);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -64,12 +64,12 @@ public class WalletActivity extends AppCompatActivity {
      */
     private void setupOverlay(int portfolioId){
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.wallet_activity_toolbar_name);
         setSupportActionBar(toolbar);
 
         // Setup fab
-        FloatingActionsMenu fabmenu = findViewById(R.id.fab_menu_add_wallet);
-        View overlay = findViewById(R.id.fab_overlay);
+        FloatingActionsMenu fabmenu = findViewById(R.id.wallet_activity_fab_menu);
+        View overlay = findViewById(R.id.wallet_activity_fab_overlay);
         overlay.setOnClickListener(view -> fabmenu.collapse());
         overlay.setClickable(false);
 
@@ -86,17 +86,17 @@ public class WalletActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab_add_exchange_wallet);
+        FloatingActionButton fab = findViewById(R.id.wallet_activity_fab_addExchangeWallet);
         fab.setOnClickListener(view -> {
             addWallet(portfolioId, WalletWithRelations.Type.Exchange);
             fabmenu.collapse();
         });
-        FloatingActionButton fab2 = findViewById(R.id.fab_add_naked_wallet);
+        FloatingActionButton fab2 = findViewById(R.id.wallet_activity_fab_addNakedWallet);
         fab2.setOnClickListener(view -> {
             addWallet(portfolioId, WalletWithRelations.Type.Naked);
             fabmenu.collapse();
         });
-        FloatingActionButton fab3 = findViewById(R.id.fab_add_transaction);
+        FloatingActionButton fab3 = findViewById(R.id.wallet_activity_fab_addTransaction);
         fab3.setOnClickListener(view -> {
             addWallet(portfolioId, WalletWithRelations.Type.Transaction);
             fabmenu.collapse();

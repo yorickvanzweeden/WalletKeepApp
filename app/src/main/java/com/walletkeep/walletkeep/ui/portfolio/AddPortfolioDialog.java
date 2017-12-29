@@ -62,7 +62,7 @@ public class AddPortfolioDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View mView = inflater.inflate(R.layout.portfolio_add_dialog_fragment, null);
         builder.setView(mView);
-        EditText mEditText = mView.findViewById(R.id.editPortfolioName);
+        EditText mEditText = mView.findViewById(R.id.portfolio_dialog_editText_name);
 
         // Setup button actions
         builder.setPositiveButton("Save", (dialog, id) ->

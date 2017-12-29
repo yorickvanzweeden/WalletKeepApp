@@ -52,7 +52,7 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
         this.view = getView();
 
         // Setup spinner
-        Spinner spinner = view.findViewById(R.id.spinner_editWallet_exchange);
+        Spinner spinner = view.findViewById(R.id.editWallet_exchange_spinner_exchange);
         mAdapter = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.exchange_array, android.R.layout.simple_spinner_item);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -68,11 +68,11 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
         //Update form with Wallet data
         ExchangeCredentials credentials = wallet.getCredentials();
         if (credentials != null) {
-            ((EditText)view.findViewById(R.id.editText_editWallet_key)).setText(wallet.getCredentials().getKey());
-            ((EditText)view.findViewById(R.id.editText_editWallet_secret)).setText(wallet.getCredentials().getSecret());
-            ((EditText)view.findViewById(R.id.editText_editWallet_passphrase)).setText(wallet.getCredentials().getPassphrase());
+            ((EditText)view.findViewById(R.id.editWallet_exchange_editText_key)).setText(wallet.getCredentials().getKey());
+            ((EditText)view.findViewById(R.id.editWallet_exchange_editText_secret)).setText(wallet.getCredentials().getSecret());
+            ((EditText)view.findViewById(R.id.editWallet_exchange_editText_passphrase)).setText(wallet.getCredentials().getPassphrase());
         }
-        ((Spinner)getActivity().findViewById(R.id.spinner_editWallet_exchange)).setSelection(
+        ((Spinner)getActivity().findViewById(R.id.editWallet_exchange_spinner_exchange)).setSelection(
                 mAdapter.getPosition(wallet.getExchangeName())
         );
     }
@@ -85,13 +85,13 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet){
         // Set exchange
-        String exchange = ((Spinner)view.findViewById(R.id.spinner_editWallet_exchange)).getSelectedItem().toString();
+        String exchange = ((Spinner)view.findViewById(R.id.editWallet_exchange_spinner_exchange)).getSelectedItem().toString();
         wallet.wallet.setExchangeName(exchange);
 
         // Set credentials
-        String key = ((EditText)view.findViewById(R.id.editText_editWallet_key)).getText().toString();
-        String secret = ((EditText)view.findViewById(R.id.editText_editWallet_secret)).getText().toString();
-        String passphrase = ((EditText)view.findViewById(R.id.editText_editWallet_passphrase)).getText().toString();
+        String key = ((EditText)view.findViewById(R.id.editWallet_exchange_editText_key)).getText().toString();
+        String secret = ((EditText)view.findViewById(R.id.editWallet_exchange_editText_secret)).getText().toString();
+        String passphrase = ((EditText)view.findViewById(R.id.editWallet_exchange_editText_passphrase)).getText().toString();
 
         ExchangeCredentials exchangeCredentials = new ExchangeCredentials(key, secret, passphrase);
         exchangeCredentials.setWallet_id(wallet.wallet.getId());

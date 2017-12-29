@@ -6,7 +6,7 @@
     tools:context="com.walletkeep.walletkeep.ui.wallet.EditExchangeWalletFragment">
 
     <TextView
-        android:id="@+id/textView_editWallet_passphrase"
+        android:id="@+id/editWallet_exchange_textView_label_passphrase"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -16,10 +16,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_editWallet_secret" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_editText_secret" />
 
     <TextView
-        android:id="@+id/textView_editWallet_secret"
+        android:id="@+id/editWallet_exchange_textView_label_secret"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -28,10 +28,10 @@
         android:text="Secret"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_editWallet_key" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_editText_key" />
 
     <TextView
-        android:id="@+id/textView_editWallet_key"
+        android:id="@+id/editWallet_exchange_textView_label_key"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -40,10 +40,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_editWallet_exchange" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_spinner_exchange" />
 
     <EditText
-        android:id="@+id/editText_editWallet_key"
+        android:id="@+id/editWallet_exchange_editText_key"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -54,10 +54,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editWallet_key" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_key" />
 
     <EditText
-        android:id="@+id/editText_editWallet_passphrase"
+        android:id="@+id/editWallet_exchange_editText_passphrase"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -69,11 +69,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editWallet_passphrase" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_passphrase" />
 
 
     <EditText
-        android:id="@+id/editText_editWallet_secret"
+        android:id="@+id/editWallet_exchange_editText_secret"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -84,22 +84,22 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editWallet_secret" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_secret" />
 
     <TextView
-        android:id="@+id/textView_editWallet_exchange"
+        android:id="@+id/editWallet_exchange_textView_label_exchange"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Exchange (Binance/GDAX)"
+        android:text="Exchange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner_editWallet_exchange"
+        android:id="@+id/editWallet_exchange_spinner_exchange"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -108,7 +108,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editWallet_exchange" />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_exchange" />
 
 
 </android.support.constraint.ConstraintLayout>

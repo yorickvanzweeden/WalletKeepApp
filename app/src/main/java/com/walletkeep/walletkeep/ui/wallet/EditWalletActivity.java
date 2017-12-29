@@ -48,15 +48,15 @@ public class EditWalletActivity extends AppCompatActivity {
 
             // Set name
             String name = wallet.wallet.getName();
-            ((EditText)findViewById(R.id.editText_editWallet_name)).setText(name);
+            ((EditText)findViewById(R.id.editwallet_activity_textView_name)).setText(name);
         });
 
         // Setup save button
-        Button saveButton = findViewById(R.id.button_editWallet_save);
+        Button saveButton = findViewById(R.id.editWallet_activity_button_save);
         saveButton.setOnClickListener(view -> saveWallet(portfolioId));
 
         // Setup delete button
-        Button deleteButton = findViewById(R.id.button_editWallet_delete);
+        Button deleteButton = findViewById(R.id.editWallet_activity_button_delete);
         deleteButton.setOnClickListener(view -> deleteWallet());
     }
 
@@ -67,7 +67,7 @@ public class EditWalletActivity extends AppCompatActivity {
      */
     private void setupFragment(Bundle savedInstanceState, int fragmentType){
         // Check if fragment exists
-        if (findViewById(R.id.fragment_container) == null || savedInstanceState != null) {
+        if (findViewById(R.id.editwallet_activity_fragmentContainer) == null || savedInstanceState != null) {
             return;
         }
 
@@ -87,7 +87,7 @@ public class EditWalletActivity extends AppCompatActivity {
         // Place fragment in container
         fragment.setArguments(getIntent().getExtras()); //TODO: Is this line necessary?
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, fragment).commit();
+                .add(R.id.editwallet_activity_fragmentContainer, fragment).commit();
     }
 
     /**
@@ -107,7 +107,7 @@ public class EditWalletActivity extends AppCompatActivity {
 
         // Update wallet with form data
         wallet = ((IWalletFragment) fragment).updateWallet(wallet);
-        String name = ((EditText)findViewById(R.id.editText_editWallet_name)).getText().toString();
+        String name = ((EditText)findViewById(R.id.editwallet_activity_textView_name)).getText().toString();
         wallet.wallet.setName(name);
 
         // Save wallet to database
