@@ -148,7 +148,7 @@ public class AssetActivity extends AppCompatActivity {
         }
 
         // Set text of TextView
-        TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio);
+        TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio_value);
         portfolioValueTextView.setText(String.format("€%.2f", total));
     }
 
