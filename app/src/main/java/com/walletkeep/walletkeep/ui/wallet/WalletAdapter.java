@@ -69,7 +69,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public WalletAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                                  int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_wallet_listitem, parent, false);
+                .inflate(R.layout.wallet_content_listitem, parent, false);
 
         return new com.walletkeep.walletkeep.ui.wallet.WalletAdapter.ViewHolder(v);
     }

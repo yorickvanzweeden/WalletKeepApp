@@ -22,7 +22,7 @@ public class WalletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wallet);
+        setContentView(R.layout.wallet_activity);
         int portfolioId = getIntent().getExtras().getInt("portfolio_id");
 
         setupOverlay(portfolioId);

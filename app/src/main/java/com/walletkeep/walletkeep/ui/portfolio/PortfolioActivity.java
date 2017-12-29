@@ -21,7 +21,7 @@ public class PortfolioActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_portfolio);
+        setContentView(R.layout.portfolio_activity);
 
         setupOverlay();
         setupRecyclerView();
@@ -75,10 +75,10 @@ public class PortfolioActivity extends AppCompatActivity
      */
     private void buildPortfolioDialog(){
         FragmentManager manager = getFragmentManager();
-        Fragment frag = manager.findFragmentByTag("fragment_add_portfolio_dialog");
+        Fragment frag = manager.findFragmentByTag("portfolio_add_dialog_fragment");
         if (frag != null) { manager.beginTransaction().remove(frag).commit(); }
         AddPortfolioDialog editNameDialog = new AddPortfolioDialog();
-        editNameDialog.show(manager, "fragment_add_portfolio_dialog");
+        editNameDialog.show(manager, "portfolio_add_dialog_fragment");
     }
 
     /**

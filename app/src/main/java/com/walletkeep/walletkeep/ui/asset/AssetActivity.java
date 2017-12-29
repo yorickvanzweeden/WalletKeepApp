@@ -33,7 +33,7 @@ public class AssetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_asset);
+        setContentView(R.layout.asset_activity);
 
         // Check if IntroSlider should be shown
         checkFirstRun();

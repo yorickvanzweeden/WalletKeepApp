@@ -83,7 +83,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     public com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                                  int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_asset_listitem, parent, false);
+                .inflate(R.layout.asset_content_listitem, parent, false);
 
         return new com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder(v);
     }

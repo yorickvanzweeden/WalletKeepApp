@@ -25,7 +25,7 @@ public class EditWalletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_wallet);
+        setContentView(R.layout.editwallet_activity);
 
         // Get intent data
         int walletId = getIntent().getExtras().getInt("wallet_id");

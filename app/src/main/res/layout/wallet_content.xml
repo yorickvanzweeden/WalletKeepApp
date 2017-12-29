@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity"
-    tools:showIn="@layout/activity_portfolio">
+    tools:context="com.walletkeep.walletkeep.ui.wallet.WalletActivity"
+    tools:showIn="@layout/wallet_activity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_portfolios"
+        android:id="@+id/recycler_view_wallets"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

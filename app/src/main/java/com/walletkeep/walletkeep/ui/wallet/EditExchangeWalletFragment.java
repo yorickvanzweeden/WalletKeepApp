@@ -39,7 +39,7 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_edit_exchange_wallet, container, false);
+        return inflater.inflate(R.layout.editwallet_exchange_fragment, container, false);
     }
 
     /**

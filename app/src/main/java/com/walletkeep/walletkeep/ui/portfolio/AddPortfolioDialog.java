@@ -60,7 +60,7 @@ public class AddPortfolioDialog extends DialogFragment {
 
         // Setup UI elements
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View mView = inflater.inflate(R.layout.fragment_add_portfolio_dialog, null);
+        View mView = inflater.inflate(R.layout.portfolio_add_dialog_fragment, null);
         builder.setView(mView);
         EditText mEditText = mView.findViewById(R.id.editPortfolioName);
 

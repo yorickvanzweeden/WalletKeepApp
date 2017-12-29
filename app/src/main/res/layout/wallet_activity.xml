@@ -23,7 +23,7 @@
 
     <include
         android:id="@+id/include2"
-        layout="@layout/content_wallet" />
+        layout="@layout/wallet_content" />
 
     <FrameLayout
         android:id="@+id/fab_overlay"
