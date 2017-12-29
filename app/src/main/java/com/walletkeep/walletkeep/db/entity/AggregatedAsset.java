@@ -32,6 +32,13 @@ public class AggregatedAsset {
         return price_eur;
     }
 
+    /**
+     * Gets the value of the asset (amount*price)
+     * @return Latest value of the asset
+     */
+    public float getEurValue(){ return price_eur * amount; }
+
+
 
     /**
      * Gets percentage of change of the last hour

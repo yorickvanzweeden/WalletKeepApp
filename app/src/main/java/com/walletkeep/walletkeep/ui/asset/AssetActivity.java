@@ -4,12 +4,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +27,7 @@ import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.ui.IntroSlider;
 import com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity;
 import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
+import com.walletkeep.walletkeep.util.AssetDistribution;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.util.List;
@@ -28,7 +35,9 @@ import java.util.List;
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
     private List<WalletWithRelations> wallets;
+    private List<AggregatedAsset> assets;
     private AssetAdapter mAdapter;
+    private SurfaceView mSurfaceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,27 @@ public class AssetActivity extends AppCompatActivity {
         setupRecyclerView(portfolioId);
         setupSwipeRefreshLayout();
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // When the surfaceView is ready, draw distribution bar
+        SurfaceHolder.Callback mSurfaceHolderCallback = new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+                updateDistributionBar();
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {}
+        };
+        mSurfaceView.getHolder().addCallback(mSurfaceHolderCallback);
+    }
+
 
     /**
      * Check if Introslider should be shown
@@ -86,6 +116,10 @@ public class AssetActivity extends AppCompatActivity {
 
         FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_edit_portfolios);
         fab2.setOnClickListener(view -> startActivity(new Intent(this, PortfolioActivity.class)));
+
+        // Initialise surfaceView
+        mSurfaceView = findViewById(R.id.asset_activity_surfaceView);
+        mSurfaceView.setZOrderOnTop(true);
     }
 
     private void setupSwipeRefreshLayout(){
@@ -132,7 +166,9 @@ public class AssetActivity extends AppCompatActivity {
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
             mAdapter.updateAggregatedAssets(aggregatedAssets);
-            updatePortfolioValue(aggregatedAssets);
+            this.assets = aggregatedAssets;
+            updatePortfolioValue();
+            updateDistributionBar();
         });
     }
 
@@ -140,16 +176,54 @@ public class AssetActivity extends AppCompatActivity {
      * Updates portfolio value
      * @param aggregatedAssets List of aggregates assets
      */
-    private void updatePortfolioValue(List<AggregatedAsset> aggregatedAssets) {
+    private void updatePortfolioValue() {
         // Calculate total
         float total = 0;
-        for (AggregatedAsset asset: aggregatedAssets) {
+        for (AggregatedAsset asset: this.assets) {
             total += asset.getAmount() * asset.getLatestCurrencyPrice();
         }
 
         // Set text of TextView
         TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio_value);
         portfolioValueTextView.setText(String.format("€%.2f", total));
+    }
+
+    /**
+     * Updates distribution bar
+     * @param aggregatedAssets List of aggregates assets
+     */
+    private void updateDistributionBar() {
+        if (this.assets == null) return;
+
+        // Calculate distribution
+        AssetDistribution distribution = new AssetDistribution(this.assets,
+                mSurfaceView.getWidth(), mSurfaceView.getHeight());
+
+        // Get paint
+        Boolean color = false;
+        Paint paint = new Paint();
+        paint.setTextSize(40);
+        paint.setColor(getResources().getColor(R.color.half_black));
+
+        // Get canvas
+        Canvas canvas = mSurfaceView.getHolder().lockCanvas();
+        if (canvas == null) return;
+        // Paint canvas
+        for(AssetDistribution.DistributedElement element: distribution.elements) {
+            ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
+            mDrawable.getPaint().setColor(color ? 0xfff2476a : 0xffadd8e6);
+            mDrawable.setBounds(element.getBounds());
+            mDrawable.draw(canvas);
+            if (element.getPercentage() > 5)
+                canvas.drawText(element.getTicker(),
+                        element.getBounds().centerX() - paint.measureText(element.getTicker())/2,
+                        element.getBounds().centerY() + paint.getTextSize() / 2,
+                        paint);
+            color = !color;
+        }
+
+        // Unlock canvas
+        mSurfaceView.getHolder().unlockCanvasAndPost(canvas);
     }
 
 }
