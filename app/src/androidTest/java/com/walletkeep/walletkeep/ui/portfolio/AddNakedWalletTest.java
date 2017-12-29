@@ -43,7 +43,7 @@ public class AddNakedWalletTest {
     @Test
     public void addNakedWalletTest() {
         ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
+                allOf(withId(R.id.portfolio_activity_fab),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -53,7 +53,7 @@ public class AddNakedWalletTest {
         floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editPortfolioName),
+                allOf(withId(R.id.portfolio_dialog_editText_name),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
@@ -72,9 +72,9 @@ public class AddNakedWalletTest {
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction button = onView(
-                allOf(withId(R.id.button_wallet),
+                allOf(withId(R.id.portfolio_listitem_button_wallet),
                         childAtPosition(
-                                allOf(withId(R.id.card_view),
+                                allOf(withId(R.id.asset_content_listitem_card_view),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                                 0)),
@@ -83,9 +83,9 @@ public class AddNakedWalletTest {
         button.check(matches(isDisplayed()));
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.button_wallet), withText("Wallets"),
+                allOf(withId(R.id.portfolio_listitem_button_wallet), withText("Wallets"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view),
+                                allOf(withId(R.id.asset_content_listitem_card_view),
                                         childAtPosition(
                                                 withClassName(is("android.widget.LinearLayout")),
                                                 0)),
@@ -103,9 +103,9 @@ public class AddNakedWalletTest {
         }
 
         ViewInteraction viewGroup = onView(
-                allOf(withId(R.id.fab_menu_add_wallet),
+                allOf(withId(R.id.wallet_activity_fab_menu),
                         childAtPosition(
-                                allOf(withId(R.id.fab_overlay),
+                                allOf(withId(R.id.wallet_activity_fab_overlay),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
                                                 0)),
@@ -116,20 +116,20 @@ public class AddNakedWalletTest {
         ViewInteraction viewInteraction = onView(
                 allOf(withId(R.id.fab_expand_menu_button),
                         childAtPosition(
-                                allOf(withId(R.id.fab_menu_add_wallet),
+                                allOf(withId(R.id.wallet_activity_fab_menu),
                                         childAtPosition(
-                                                withId(R.id.fab_overlay),
+                                                withId(R.id.wallet_activity_fab_overlay),
                                                 0)),
                                 2),
                         isDisplayed()));
         viewInteraction.perform(click());
 
         ViewInteraction floatingActionButton2 = onView(
-                allOf(withId(R.id.fab_add_naked_wallet),
+                allOf(withId(R.id.wallet_activity_fab_addNakedWallet),
                         childAtPosition(
-                                allOf(withId(R.id.fab_menu_add_wallet),
+                                allOf(withId(R.id.wallet_activity_fab_menu),
                                         childAtPosition(
-                                                withId(R.id.fab_overlay),
+                                                withId(R.id.wallet_activity_fab_overlay),
                                                 0)),
                                 0),
                         isDisplayed()));
@@ -145,27 +145,27 @@ public class AddNakedWalletTest {
         }
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.editText_editWallet_address),
+                allOf(withId(R.id.editWallet_naked_editText_address),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withId(R.id.editwallet_activity_fragmentContainer),
                                         0),
                                 1),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("someaddress"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.editText_editWallet_address), withText("someaddress"),
+                allOf(withId(R.id.editWallet_naked_editText_address), withText("someaddress"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.fragment_container),
+                                        withId(R.id.editwallet_activity_fragmentContainer),
                                         0),
                                 1),
                         isDisplayed()));
         appCompatEditText3.perform(pressImeActionButton());
 
         ViewInteraction button2 = onView(
-                allOf(withId(R.id.button_editWallet_save),
+                allOf(withId(R.id.editWallet_activity_button_save),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -175,7 +175,7 @@ public class AddNakedWalletTest {
         button2.check(matches(isDisplayed()));
 
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.button_editWallet_save), withText("Save"),
+                allOf(withId(R.id.editWallet_activity_button_save), withText("Save"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -195,7 +195,7 @@ public class AddNakedWalletTest {
 
         ViewInteraction viewGroup2 = onView(
                 allOf(childAtPosition(
-                        allOf(withId(R.id.card_view),
+                        allOf(withId(R.id.asset_content_listitem_card_view),
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         0)),

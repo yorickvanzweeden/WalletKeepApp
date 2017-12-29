@@ -41,7 +41,7 @@ public class CreatePortfolioCancelTest {
     @Test
     public void createPortfolioCancelTest() {
         ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
+                allOf(withId(R.id.portfolio_activity_fab),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -51,7 +51,7 @@ public class CreatePortfolioCancelTest {
         floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editPortfolioName),
+                allOf(withId(R.id.portfolio_dialog_editText_name),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
@@ -70,7 +70,7 @@ public class CreatePortfolioCancelTest {
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction imageButton = onView(
-                allOf(withId(R.id.card_view),
+                allOf(withId(R.id.asset_content_listitem_card_view),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

@@ -303,11 +303,18 @@ public class CoinmarketgapService {
          * @return currency price
          */
         public CurrencyPrice getCurrencyPrice() {
+            if (percentChange24h == null) percentChange24h = "0";
+            if (percentChange1h == null) percentChange1h = "0";
+            if (percentChange7d == null) percentChange7d = "0";
+
             return new CurrencyPrice(
                     CurrencyTickerCorrection.correct(symbol),
                     Float.parseFloat(priceUsd),
                     Float.parseFloat(priceEur),
                     Float.parseFloat(priceBtc),
+                    Float.parseFloat(percentChange1h),
+                    Float.parseFloat(percentChange24h),
+                    Float.parseFloat(percentChange7d),
                     DateConverter.fromTimestamp(Long.parseLong(lastUpdated))
             );
         }

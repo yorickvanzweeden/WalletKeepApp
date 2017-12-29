@@ -1,7 +1,6 @@
 package com.walletkeep.walletkeep.ui.asset;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import java.util.List;
 public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder> {
     // Data of the recycler view
     private List<AggregatedAsset> assets;
+    private String changeSetting;
 
     // Access to the view
     private Context context;
@@ -27,20 +27,22 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        public CardView mCardView;
         public TextView mTextViewTicker;
         public TextView mTextViewAmount;
         public TextView mTextViewPrice;
+        public TextView mTextViewTotal;
+        public TextView mTextViewChange;
         public Button wallet;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mCardView = v.findViewById(R.id.card_view);
-            mTextViewTicker = v.findViewById(R.id.asset_ticker);
-            mTextViewAmount = v.findViewById(R.id.asset_amount);
-            mTextViewPrice = v.findViewById(R.id.asset_price);
-            wallet = v.findViewById(R.id.button_wallet);
+            mTextViewTicker = v.findViewById(R.id.asset_listitem_textView_ticker);
+            mTextViewAmount = v.findViewById(R.id.asset_listitem_textView_holdings);
+            mTextViewPrice = v.findViewById(R.id.asset_listitem_textView_price);
+            mTextViewTotal = v.findViewById(R.id.asset_listitem_textView_total);
+            mTextViewChange = v.findViewById(R.id.asset_listitem_textView_change);
+            wallet = v.findViewById(R.id.portfolio_listitem_button_wallet);
         }
     }
 
@@ -63,6 +65,15 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     }
 
     /**
+     * Update the change setting (1H, 24H, 7D)
+     * @param changeSetting change setting
+     */
+    public void updateChangeSetting(String changeSetting){
+        this.changeSetting = changeSetting;
+        notifyDataSetChanged();
+    }
+
+    /**
      * Creates new view and specifies which layout to use
      * @param parent
      * @param viewType
@@ -72,7 +83,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     public com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                                  int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_asset_listitem, parent, false);
+                .inflate(R.layout.asset_content_listitem, parent, false);
 
         return new com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder(v);
     }
@@ -88,7 +99,9 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
 
         holder.mTextViewTicker.setText(asset.getTicker());
         holder.mTextViewAmount.setText(Float.toString(asset.getAmount()));
-        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice()));
+        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getLatestCurrencyPrice()));
+        holder.mTextViewTotal.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice()));
+        holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(changeSetting)));
     }
 
     /**

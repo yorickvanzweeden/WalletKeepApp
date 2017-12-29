@@ -1,28 +1,45 @@
 <resources>
+    <!-- - - - - - - - - - - General - - - - - - - - - - -->
     <string name="app_name">WalletKeep</string>
+    <string name="title_activity_wallet">My wallets</string>
+    <string name="title_activity_asset">My assets</string>
 
-    <!--Main activity-->
-    <string name="label_key">Key</string>
-    <string name="label_secret">Secret</string>
-    <string name="label_passphrase">Passphrase</string>
-    <string name="input_key">Key</string>
-    <string name="input_secret">Secret</string>
-    <string name="input_passphrase">Passphrase</string>
-    <string name="button_getData">Get data</string>
-    <string name="button_saveCredentials">Save</string>
-    <string name="text_results">Results</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="name">Name</string>
 
-    <!--Key value preferences-->
-    <string name="preference_key">Key</string>
-    <string name="preference_secret">Secret</string>
-    <string name="preference_passphrase">Passphrase</string>
+    <!--General - Api terminology-->
+    <string name="key">Key</string>
+    <string name="secret">Secret</string>
+    <string name="passphrase">Passphrase</string>
 
-    <string name="title_activity_splash">Splash</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!--General - Crypto terminology-->
+    <string name="exchange">Exchange</string>
+    <string name="address">Address</string>
+    <string name="currency">Currency</string>
+    <string name="amount">Amount</string>
+    <string name="example_currency">ETH</string>
+    <string name="example_amount_float">11.1</string>
 
 
-    <!--Splash pages-->
+    <!-- - - - - - - - - - - Assets - - - - - - - - - - -->
+    <string name="asset">Asset</string>
+    <string name="assets">Assets</string>
+
+    <!--Asset activity-->
+    <string name="label_market">Market:</string>
+    <string name="label_you">You:</string>
+
+    <!--Asset content listitem-->
+    <string name="label_change">Change:</string>
+    <string name="label_price">Price:</string>
+    <string name="label_holdings">Holdings:</string>
+
+
+    <!-- - - - - - - - - - - EditWallet - - - - - - - - - - -->
+
+
+    <!-- - - - - - - - - - - IntroSlider - - - - - - - - - - -->
     <string name="Splash1">WalletKeep is the app that makes tracking your cryptocurrency portfolio truly easy and effortless.</string>
     <string name="Splash2">You enter your wallet address and exchange API View Key and WalletKeep will keep automatic track of all your balances, no more manual editing necessary.</string>
     <string name="Splash3">All the keys, addresses and work is done and stored only on your phone, so no one else has access to your portfolio</string>
@@ -31,15 +48,21 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <!--Portfolio screens-->
+
+    <!-- - - - - - - - - - - Portfolio - - - - - - - - - - -->
+    <string name="portfolios">Portfolios</string>
+    <string name="portfolio">Portfolio</string>
+
     <string name="title_activity_portfolio">Portfolios</string>
     <string name="button_wallets">Wallets</string>
 
-    <!--My wallets-->
-    <string name="title_activity_wallet">My wallets</string>
-    <string name="title_activity_asset">My assets</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- - - - - - - - - - - Wallet - - - - - - - - - - -->
+    <string name="wallets">Wallets</string>
+    <string name="wallet">Wallet</string>
 
+    <!--Wallet activity-->
+    <string name="fab_transaction">Transaction</string>
+    <string name="fab_wallet_address">Wallet address</string>
+    <string name="fab_exchange_account">Exchange account</string>
 </resources>

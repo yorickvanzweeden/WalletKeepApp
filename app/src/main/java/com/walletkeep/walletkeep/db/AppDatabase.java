@@ -97,6 +97,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             database.runInTransaction(() -> {
                                 database.currencyDao().insertAll(currencies);
                                 database.exchangeDao().insertAll(exchanges);
+                                database.portfolioDao().insert(DataGenerator.loadDefaultPortfolio());
                             });
 
                             // notify that the database was created and it's ready to be used

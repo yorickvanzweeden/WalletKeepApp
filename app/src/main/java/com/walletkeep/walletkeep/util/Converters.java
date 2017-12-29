@@ -31,7 +31,7 @@ public class Converters {
         int split = balance.length() - decimalPlace;
         if (split < 0){
             String prefix = "";
-            for(int i = split; i < 1; i++) {
+            for(int i = split; i < 0; i++) {
                 prefix = prefix.concat("0");
             }
             balance = prefix + balance;

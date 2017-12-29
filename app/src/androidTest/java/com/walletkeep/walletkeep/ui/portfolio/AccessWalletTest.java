@@ -44,7 +44,7 @@ public class AccessWalletTest {
     @Test
     public void accessWalletTest() {
         ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
+                allOf(withId(R.id.portfolio_activity_fab),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -54,7 +54,7 @@ public class AccessWalletTest {
         floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editPortfolioName),
+                allOf(withId(R.id.portfolio_dialog_editText_name),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
@@ -73,19 +73,19 @@ public class AccessWalletTest {
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction frameLayout = onView(
-                allOf(withId(R.id.card_view),
+                allOf(withId(R.id.asset_content_listitem_card_view),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.recycler_view_portfolios),
+                                        withId(R.id.portfolio_content_recyclerView),
                                         0),
                                 0),
                         isDisplayed()));
         frameLayout.check(matches(isDisplayed()));
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.button_wallet), withText("Wallets"),
+                allOf(withId(R.id.portfolio_listitem_button_wallet), withText("Wallets"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view),
+                                allOf(withId(R.id.asset_content_listitem_card_view),
                                         childAtPosition(
                                                 withClassName(is("android.widget.LinearLayout")),
                                                 0)),
@@ -103,9 +103,9 @@ public class AccessWalletTest {
         }
 
         ViewInteraction viewGroup = onView(
-                allOf(withId(R.id.fab_menu_add_wallet),
+                allOf(withId(R.id.wallet_activity_fab_menu),
                         childAtPosition(
-                                allOf(withId(R.id.fab_overlay),
+                                allOf(withId(R.id.wallet_activity_fab_overlay),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
                                                 0)),
@@ -116,31 +116,31 @@ public class AccessWalletTest {
         ViewInteraction viewInteraction = onView(
                 allOf(withId(R.id.fab_expand_menu_button),
                         childAtPosition(
-                                allOf(withId(R.id.fab_menu_add_wallet),
+                                allOf(withId(R.id.wallet_activity_fab_menu),
                                         childAtPosition(
-                                                withId(R.id.fab_overlay),
+                                                withId(R.id.wallet_activity_fab_overlay),
                                                 0)),
                                 2),
                         isDisplayed()));
         viewInteraction.perform(click());
 
         ViewInteraction imageButton = onView(
-                allOf(withId(R.id.fab_add_exchange_wallet),
+                allOf(withId(R.id.wallet_activity_fab_addExchangeWallet),
                         childAtPosition(
-                                allOf(withId(R.id.fab_menu_add_wallet),
+                                allOf(withId(R.id.wallet_activity_fab_menu),
                                         childAtPosition(
-                                                withId(R.id.fab_overlay),
+                                                withId(R.id.wallet_activity_fab_overlay),
                                                 0)),
                                 3),
                         isDisplayed()));
         imageButton.check(matches(isDisplayed()));
 
         ViewInteraction imageButton2 = onView(
-                allOf(withId(R.id.fab_add_naked_wallet),
+                allOf(withId(R.id.wallet_activity_fab_addNakedWallet),
                         childAtPosition(
-                                allOf(withId(R.id.fab_menu_add_wallet),
+                                allOf(withId(R.id.wallet_activity_fab_menu),
                                         childAtPosition(
-                                                withId(R.id.fab_overlay),
+                                                withId(R.id.wallet_activity_fab_overlay),
                                                 0)),
                                 1),
                         isDisplayed()));
@@ -149,7 +149,7 @@ public class AccessWalletTest {
         ViewInteraction imageButton3 = onView(
                 allOf(withContentDescription("Navigate up"),
                         childAtPosition(
-                                allOf(withId(R.id.toolbar),
+                                allOf(withId(R.id.portfolio_dialog_editText_name),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                                 0)),
@@ -160,9 +160,9 @@ public class AccessWalletTest {
         ViewInteraction viewInteraction2 = onView(
                 allOf(withId(R.id.fab_expand_menu_button),
                         childAtPosition(
-                                allOf(withId(R.id.fab_menu_add_wallet),
+                                allOf(withId(R.id.wallet_activity_fab_menu),
                                         childAtPosition(
-                                                withId(R.id.fab_overlay),
+                                                withId(R.id.wallet_activity_fab_overlay),
                                                 0)),
                                 2),
                         isDisplayed()));

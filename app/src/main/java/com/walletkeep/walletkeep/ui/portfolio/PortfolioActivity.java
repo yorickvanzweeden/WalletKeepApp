@@ -21,7 +21,7 @@ public class PortfolioActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_portfolio);
+        setContentView(R.layout.portfolio_activity);
 
         setupOverlay();
         setupRecyclerView();
@@ -32,11 +32,11 @@ public class PortfolioActivity extends AppCompatActivity
      */
     private void setupOverlay(){
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.portfolio_dialog_editText_name);
         setSupportActionBar(toolbar);
 
         // Setup fab
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.portfolio_activity_fab);
         fab.setOnClickListener(view -> buildPortfolioDialog());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -46,7 +46,7 @@ public class PortfolioActivity extends AppCompatActivity
      */
     private void setupRecyclerView(){
         // Link to the right UI item
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_portfolios);
+        RecyclerView mRecyclerView = findViewById(R.id.portfolio_content_recyclerView);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -75,10 +75,10 @@ public class PortfolioActivity extends AppCompatActivity
      */
     private void buildPortfolioDialog(){
         FragmentManager manager = getFragmentManager();
-        Fragment frag = manager.findFragmentByTag("fragment_add_portfolio_dialog");
+        Fragment frag = manager.findFragmentByTag("portfolio_add_dialog_fragment");
         if (frag != null) { manager.beginTransaction().remove(frag).commit(); }
         AddPortfolioDialog editNameDialog = new AddPortfolioDialog();
-        editNameDialog.show(manager, "fragment_add_portfolio_dialog");
+        editNameDialog.show(manager, "portfolio_add_dialog_fragment");
     }
 
     /**

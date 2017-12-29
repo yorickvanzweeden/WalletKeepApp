@@ -42,10 +42,10 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mCardView = v.findViewById(R.id.card_view);
-            walletButton = v.findViewById(R.id.button_wallet);
-            assetButton = v.findViewById(R.id.button_assets);
-            deleteButton = v.findViewById(R.id.button_delete_portfolio);
+            mCardView = v.findViewById(R.id.portfolio_listitem_cardView);
+            walletButton = v.findViewById(R.id.portfolio_listitem_button_wallet);
+            assetButton = v.findViewById(R.id.portfolio_listitem_button_assets);
+            deleteButton = v.findViewById(R.id.portfolio_listitem_button_delete);
         }
     }
 
@@ -78,7 +78,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
     public PortfolioAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                           int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_portfolio_listitem, parent, false);
+                .inflate(R.layout.portfolio_content_listitem, parent, false);
 
         return new ViewHolder(v);
     }
@@ -101,6 +101,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         holder.assetButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, AssetActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
+            intent.putExtra(" portfolio_name", portfolios.get(position).getName());
             context.startActivity(intent);
         });
         holder.deleteButton.setOnClickListener(view -> {

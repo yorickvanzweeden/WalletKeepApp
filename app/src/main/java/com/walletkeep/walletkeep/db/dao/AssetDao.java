@@ -22,7 +22,10 @@ public abstract class AssetDao implements BaseDao<Asset> {
 
     @Query("SELECT assets.currency_ticker AS currencyTicker," +
             "  assets.amount AS amount," +
-            "  prices.price_eur AS price_eur " +
+            "  prices.price_eur AS price_eur, " +
+            "  prices.change1h AS change1h, " +
+            "  prices.change24h AS change24h, " +
+            "  prices.change7d AS change7d " +
             "FROM " +
             "  ( SELECT a1.currency_ticker, SUM(a1.amount) AS amount" +
             "    FROM asset a1 LEFT JOIN asset a2" +

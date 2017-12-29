@@ -42,7 +42,7 @@ public class ViewAssetScreenTest {
     @Test
     public void viewAssetScreenTest() {
         ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
+                allOf(withId(R.id.portfolio_activity_fab),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -52,7 +52,7 @@ public class ViewAssetScreenTest {
         floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editPortfolioName),
+                allOf(withId(R.id.portfolio_dialog_editText_name),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
@@ -71,9 +71,9 @@ public class ViewAssetScreenTest {
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction button = onView(
-                allOf(withId(R.id.button_assets),
+                allOf(withId(R.id.portfolio_listitem_button_assets),
                         childAtPosition(
-                                allOf(withId(R.id.card_view),
+                                allOf(withId(R.id.asset_content_listitem_card_view),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                                 0)),
@@ -82,9 +82,9 @@ public class ViewAssetScreenTest {
         button.check(matches(isDisplayed()));
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.button_assets), withText("Assets"),
+                allOf(withId(R.id.portfolio_listitem_button_assets), withText("Assets"),
                         childAtPosition(
-                                allOf(withId(R.id.card_view),
+                                allOf(withId(R.id.asset_content_listitem_card_view),
                                         childAtPosition(
                                                 withClassName(is("android.widget.LinearLayout")),
                                                 0)),
@@ -102,7 +102,7 @@ public class ViewAssetScreenTest {
         }
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.recycler_view_assets),
+                allOf(withId(R.id.asset_content_recyclerView),
                         childAtPosition(
                                 allOf(withId(R.id.include),
                                         childAtPosition(

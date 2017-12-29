@@ -7,64 +7,65 @@
     tools:context="com.walletkeep.walletkeep.ui.wallet.EditWalletActivity">
 
     <Button
-        android:id="@+id/button_editWallet_save"
+        android:id="@+id/editWallet_activity_button_save"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Save"
-        app:layout_constraintBottom_toTopOf="@+id/button_editWallet_delete"
+        android:text="@string/save"
+        app:layout_constraintBottom_toTopOf="@+id/editWallet_activity_button_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button_editWallet_delete"
+        android:id="@+id/editWallet_activity_button_delete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Delete"
+        android:text="@string/delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView_editWallet_name"
+        android:id="@+id/editwallet_activity_textView_label_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Name"
+        android:text="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText_editWallet_name"
+        android:id="@+id/editwallet_activity_textView_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:ems="10"
+        android:hint="@string/name"
         android:inputType="textPersonName"
-        android:hint="Name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_editWallet_name" />
+        app:layout_constraintTop_toBottomOf="@+id/editwallet_activity_textView_label_name" />
 
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/editwallet_activity_fragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_editWallet_name"
+        app:layout_constraintTop_toBottomOf="@+id/editwallet_activity_textView_name"
         app:layout_constraintVertical_bias="0.0">
 
     </FrameLayout>
