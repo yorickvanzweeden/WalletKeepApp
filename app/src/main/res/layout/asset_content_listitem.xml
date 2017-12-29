@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="4dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="32dp"
                 android:text="ChangeVal"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="64dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/label_change"
                 android:textSize="12sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
@@ -68,13 +68,13 @@
 
             <TextView
                 android:id="@+id/asset_listitem_textView_label_holdings"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="200dp"
+                android:layout_marginStart="140dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/label_holdings"
                 android:textSize="12sp"
-                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -95,8 +95,8 @@
                 android:id="@+id/asset_listitem_textView_holdings"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="196dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="200dp"
+                android:layout_marginTop="8dp"
                 android:text="value"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -108,14 +108,14 @@
                 android:layout_width="91dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="156dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="140dp"
+                android:layout_marginTop="32dp"
                 android:text="Total"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/editwallet_activity_textView_label_name" />
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
