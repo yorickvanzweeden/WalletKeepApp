@@ -30,6 +30,7 @@ import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
 import com.walletkeep.walletkeep.util.AssetDistribution;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
+import java.util.Collections;
 import java.util.List;
 
 public class AssetActivity extends AppCompatActivity {
@@ -165,7 +166,23 @@ public class AssetActivity extends AppCompatActivity {
 
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
+            if (aggregatedAssets == null) return;
+
+            // Sort on size
+            Collections.sort(aggregatedAssets, new AggregatedAsset.AssetComparator());
+
+            // Remove assets which are valued less than 1 euro
+            int index = -1;
+            for (int i = aggregatedAssets.size() - 1; i >= 0; i--) {
+                if (aggregatedAssets.get(i).getEurValue() > 1) break;
+                index = i;
+            }
+            if (index != -1) aggregatedAssets = aggregatedAssets.subList(0, index);
+
+            // Update recycler view
             mAdapter.updateAggregatedAssets(aggregatedAssets);
+
+            // Update portfolio total and distribution bar
             this.assets = aggregatedAssets;
             updatePortfolioValue();
             updateDistributionBar();
@@ -174,7 +191,6 @@ public class AssetActivity extends AppCompatActivity {
 
     /**
      * Updates portfolio value
-     * @param aggregatedAssets List of aggregates assets
      */
     private void updatePortfolioValue() {
         // Calculate total
@@ -190,7 +206,6 @@ public class AssetActivity extends AppCompatActivity {
 
     /**
      * Updates distribution bar
-     * @param aggregatedAssets List of aggregates assets
      */
     private void updateDistributionBar() {
         if (this.assets == null) return;

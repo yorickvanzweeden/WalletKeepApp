@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.db.entity;
 
+import java.util.Comparator;
+
 public class AggregatedAsset {
     public String currencyTicker;
     public float amount;
@@ -55,5 +57,10 @@ public class AggregatedAsset {
                 return change24h;
         }
     }
-
+    public static class AssetComparator implements Comparator<AggregatedAsset> {
+        @Override
+        public int compare(AggregatedAsset o1, AggregatedAsset o2) {
+            return Float.valueOf(o2.getEurValue()).compareTo(o1.getEurValue());
+        }
+    }
 }
