@@ -1,7 +1,5 @@
 package com.walletkeep.walletkeep.api.exchange;
 
-import android.util.Base64;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -12,7 +10,6 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +21,11 @@ import retrofit2.http.POST;
 
 
 public class BitfinexService extends ApiService {
+    private String baseUrl = "https://api.bitfinex.com/";
+
     @Override
     public void fetch() {
-        String key;
-        try { key = ec.getKey(); } catch (NullPointerException e) {
-            this.returnError("No credentials have been provided.");
-            return;
-        }
+        super.fetch();
 
         // Get signature
         JSONObject jo = new JSONObject();
@@ -38,25 +33,24 @@ public class BitfinexService extends ApiService {
             jo.put("request", "/v1/balances");
             jo.put("nonce", Long.toString(System.currentTimeMillis()));
         } catch (JSONException e) {
-            this.returnError("Error while creating a Bitfinex request.");
+            this.responseHandler.returnError("Error while creating a Bitfinex request.");
             return;
         }
 
         String payload = jo.toString();
-        String payload_base64 = Base64.encodeToString(payload.getBytes(), Base64.NO_WRAP);
-        String signature;
+        String payload_base64 = sg.encode(sg.getBytes(payload));
 
-        // In case of invalid secret
-        try { signature = generateSignature(payload_base64.getBytes("UTF-8"), ec.getSecret(), false, "HmacSHA384"); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
-        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
-
+        String signature = sg.bytesToHex(
+                sg.hMac(
+                        sg.getBytes(payload_base64),
+                        sg.getBytes(ec.getSecret()),
+                        "HmacSHA384")
+        );
 
         // Create request
-        BitfinexApi api = RetrofitClient.getClient("https://api.bitfinex.com/").create(BitfinexApi.class);
+        BitfinexApi api = RetrofitClient.getClient(baseUrl).create(BitfinexApi.class);
         Call<List<BitfinexResponse>> responseCall = api.getBalance(
-                key, payload_base64, signature, payload
+                ec.getKey(), payload_base64, signature, payload
         );
 
         // Perform request
@@ -80,7 +74,7 @@ public class BitfinexService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    public class BitfinexResponse extends IResponse {
+    public class BitfinexResponse extends AbstractResponse {
 
         @SerializedName("type")
         @Expose

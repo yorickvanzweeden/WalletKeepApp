@@ -8,7 +8,6 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,22 +18,26 @@ import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
 public class BinanceService extends ApiService {
+    private String baseUrl = "https://api.binance.com";
+
     @Override
     public void fetch() {
+        super.fetch();
+
         // Get signature
         int recvWindow = 60000; // Timeframe for allowing the request
         long timestamp = System.currentTimeMillis() - 4000;
-        String data =  "recvWindow=" + recvWindow + "&timestamp=" + timestamp;
-        String signature;
+        String data = "recvWindow=" + recvWindow + "&timestamp=" + timestamp;
 
-        // In case of invalid secret
-        try{ signature = generateSignature(data.getBytes("UTF-8"), ec.getSecret(), false); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
-        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
+        String signature = sg.bytesToHex(
+                sg.hMac(
+                        sg.getBytes(data),
+                        sg.getBytes(ec.getSecret()),
+                        "HmacSHA256")
+        );
 
         // Create request
-        BinanceApi api = RetrofitClient.getClient("https://api.binance.com").create(BinanceApi.class);
+        BinanceApi api = RetrofitClient.getClient(baseUrl).create(BinanceApi.class);
         Call<BinanceResponse> responseCall = api.getBalance(
                 ec.getKey(), recvWindow, timestamp, signature
         );
@@ -60,7 +63,7 @@ public class BinanceService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class BinanceResponse extends IResponse {
+    private class BinanceResponse extends AbstractResponse {
 
         @SerializedName("makerCommission")
         @Expose

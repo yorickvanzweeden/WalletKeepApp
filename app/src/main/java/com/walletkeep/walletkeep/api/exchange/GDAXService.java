@@ -8,7 +8,6 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,21 +17,28 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public class GDAXService extends ApiService {
+    private String baseUrl = "https://api.gdax.com";
+
     @Override
     public void fetch() {
+        super.fetch();
+
         // Get signature
         long timestamp = System.currentTimeMillis() / 1000 + 3;
         String data =  timestamp + "GET/accounts";
-        String signature;
 
-        // In case of invalid secret
-        try{ signature = generateSignature(data.getBytes("UTF-8"), this.ec.getSecret(), true); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
-        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
+        String signature = sg.encode(
+                sg.hMac(
+                        sg.getBytes(data),
+                        sg.decode(
+                                ec.getSecret()
+                        ),
+                        "HmacSHA256"
+                )
+        );
 
         // Create request
-        GDAXApi api = RetrofitClient.getClient("https://api.gdax.com").create(GDAXApi.class);
+        GDAXApi api = RetrofitClient.getClient(baseUrl).create(GDAXApi.class);
         Call<List<GDAXResponse>> responseCall = api.getBalance(
                 signature, timestamp, ec.getKey(), ec.getPassphrase()
         );
@@ -40,6 +46,7 @@ public class GDAXService extends ApiService {
         // Perform request
         performRequest(responseCall, new ErrorParser("message"));
     }
+
 
     /**
      * Retrofit request interfaces
@@ -58,7 +65,7 @@ public class GDAXService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class GDAXResponse extends IResponse{
+    private class GDAXResponse extends AbstractResponse {
 
         @SerializedName("id")
         @Expose
