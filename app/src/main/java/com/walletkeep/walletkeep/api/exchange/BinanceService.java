@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -22,11 +24,27 @@ public class BinanceService extends ApiService {
 
     @Override
     public void fetch() {
+        // Perform time synchronisations
+        BinanceApi api = RetrofitClient.getClient(baseUrl).create(BinanceApi.class);
+        Call<TimestampResponse> responseCall = api.getTimestamp();
+        responseCall.enqueue(new Callback<TimestampResponse>() {
+            @Override
+            public void onResponse(Call<TimestampResponse> call, Response<TimestampResponse> response) {
+                fetch(response.body().getServerTime());
+            }
+
+            @Override
+            public void onFailure(Call<TimestampResponse> call, Throwable t) {
+                fetch(System.currentTimeMillis());
+            }
+        });
+    }
+
+    public void fetch(Long timestamp) {
         super.fetch();
 
         // Get signature
         int recvWindow = 60000; // Timeframe for allowing the request
-        long timestamp = System.currentTimeMillis() - 4000;
         String data = "recvWindow=" + recvWindow + "&timestamp=" + timestamp;
 
         String signature = sg.bytesToHex(
@@ -58,6 +76,10 @@ public class BinanceService extends ApiService {
                 @Query("timestamp") long timestamp,
                 @Query("signature") String signature
         );
+
+        @Headers("Content-Type: application/json")
+        @GET("/api/v1/time")
+        Call<TimestampResponse> getTimestamp();
     }
 
     /**
@@ -202,5 +224,21 @@ public class BinanceService extends ApiService {
         public Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(asset), Float.parseFloat(free));
         }
+    }
+
+    private class TimestampResponse {
+
+        @SerializedName("serverTime")
+        @Expose
+        private Long serverTime;
+
+        public Long getServerTime() {
+            return serverTime;
+        }
+
+        public void setServerTime(Long serverTime) {
+            this.serverTime = serverTime;
+        }
+
     }
 }

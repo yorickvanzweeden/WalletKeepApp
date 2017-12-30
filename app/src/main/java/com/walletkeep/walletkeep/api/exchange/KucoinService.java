@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -21,10 +23,27 @@ public class KucoinService extends ApiService {
 
     @Override
     public void fetch() {
+        // Perform time synchronisations
+        KucoinApi api = RetrofitClient.getClient(baseUrl).create(KucoinApi.class);
+        Call<KucoinResponse> responseCall = api.getTimestamp();
+        responseCall.enqueue(new Callback<KucoinResponse>() {
+            @Override
+            public void onResponse(Call<KucoinResponse> call, Response<KucoinResponse> response) {
+                Long ts = response.body().getTimestamp();
+                fetch(ts);
+            }
+
+            @Override
+            public void onFailure(Call<KucoinResponse> call, Throwable t) {
+                fetch(System.currentTimeMillis());
+            }
+        });
+    }
+
+    public void fetch(Long timestamp) {
         super.fetch();
 
         // Get signature
-        long timestamp = System.currentTimeMillis() + 43000;
         String data =  "/v1/account/balance/" + timestamp + "/";
         data = sg.encode(sg.getBytes(data));
 
@@ -56,6 +75,10 @@ public class KucoinService extends ApiService {
                 @Header("KC-API-SIGNATURE") String signature,
                 @Header("KC-API-NONCE") long timestamp
         );
+
+        @Headers("Content-Type: application/json")
+        @GET("/v1/open/lang-list")
+        Call<KucoinResponse> getTimestamp();
     }
 
     /**
@@ -71,6 +94,10 @@ public class KucoinService extends ApiService {
         @SerializedName("data")
         @Expose
         private List<Coin> data = null;
+        @SerializedName("timestamp")
+        @Expose
+        private Long timestamp;
+
 
         public Boolean getSuccess() {
             return success;
@@ -96,6 +123,14 @@ public class KucoinService extends ApiService {
             this.data = data;
         }
 
+        public Long getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(Long timestamp) {
+            this.timestamp = timestamp;
+        }
+
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             ArrayList<Asset> assets = new ArrayList<Asset>();
@@ -104,6 +139,7 @@ public class KucoinService extends ApiService {
             }
             return assets;
         }
+
     }
 
     public class Coin {
