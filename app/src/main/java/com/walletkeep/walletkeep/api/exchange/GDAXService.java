@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -21,10 +23,26 @@ public class GDAXService extends ApiService {
 
     @Override
     public void fetch() {
+        // Perform time synchronisations
+        GDAXApi api = RetrofitClient.getClient(baseUrl).create(GDAXApi.class);
+        Call<TimestampResponse> responseCall = api.getTimestamp();
+        responseCall.enqueue(new Callback<TimestampResponse>() {
+            @Override
+            public void onResponse(Call<TimestampResponse> call, Response<TimestampResponse> response) {
+                fetch(response.body().getEpoch().longValue());
+            }
+
+            @Override
+            public void onFailure(Call<TimestampResponse> call, Throwable t) {
+                fetch(System.currentTimeMillis() / 1000);
+            }
+        });
+    }
+
+    public void fetch(Long timestamp) {
         super.fetch();
 
         // Get signature
-        long timestamp = System.currentTimeMillis() / 1000 + 3;
         String data =  timestamp + "GET/accounts";
 
         String signature = sg.encode(
@@ -60,6 +78,10 @@ public class GDAXService extends ApiService {
                 @Header("CB-ACCESS-KEY") String key,
                 @Header("CB-ACCESS-PASSPHRASE") String passphrase
         );
+
+        @Headers("Content-Type: application/json")
+        @GET("/time")
+        Call<TimestampResponse> getTimestamp();
     }
 
     /**
@@ -127,6 +149,32 @@ public class GDAXService extends ApiService {
             return new ArrayList<Asset>() {{
                 add(getAsset(walletId));
             }};
+        }
+    }
+
+    private class TimestampResponse {
+
+        @SerializedName("iso")
+        @Expose
+        private String iso;
+        @SerializedName("epoch")
+        @Expose
+        private Double epoch;
+
+        public String getIso() {
+            return iso;
+        }
+
+        public void setIso(String iso) {
+            this.iso = iso;
+        }
+
+        public Double getEpoch() {
+            return epoch;
+        }
+
+        public void setEpoch(Double epoch) {
+            this.epoch = epoch;
         }
     }
 }
