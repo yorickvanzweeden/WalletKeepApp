@@ -90,7 +90,7 @@ public class CoinmarketgapService {
      */
     private interface CoinmarketgapApi {
         @Headers("Content-Type: application/json")
-        @GET("ticker/?convert=EUR&limit=300")
+        @GET("ticker/?convert=EUR&limit=1200")
         Call<List<CoinmarketgapResponse>> getCurrencyData();
     }
 
