@@ -45,6 +45,7 @@ public class CurrencyTickerCorrection {
         hashMap.put("IOT", "IOTA");
         hashMap.put("NLC", "NLC2");
         hashMap.put("OCTO", "888");
+        hashMap.put("QSH", "QASH");
         hashMap.put("RYC", "ROYAL");
         hashMap.put("SPOTS", "SPT");
         hashMap.put("STAR", "STR");
