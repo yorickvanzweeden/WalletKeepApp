@@ -7,12 +7,14 @@ import com.google.gson.reflect.TypeToken;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Currency;
+import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.walletkeep.walletkeep.util.Converters.inputStreamToString;
@@ -61,4 +63,12 @@ public class DataGenerator {
     public static Portfolio loadDefaultPortfolio() {
         return new Portfolio("My portfolio");
     }
+
+    public static List<CurrencyPrice> loadDefaultPrices() {
+        return new ArrayList<CurrencyPrice>() {{
+            add(new CurrencyPrice("EUR", 0.83f, 1f, 0.001f, 0f, 0f, 0f, new Date()));
+            add(new CurrencyPrice("USD", 1f, 1.20f, 0.001f, 0f, 0f, 0f, new Date()));
+        }};
+    }
+
 }

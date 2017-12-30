@@ -6,8 +6,6 @@ import android.graphics.Rect;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AssetDistribution {
@@ -19,7 +17,7 @@ public class AssetDistribution {
         for (AggregatedAsset asset: assets) sum += asset.getEurValue();
 
         // Order on size
-        Collections.sort(assets, new AssetComparator());
+        //Collections.sort(assets, new AggregatedAsset.AssetComparator());
 
         // Calculate individual proportions
         int x = 0;
@@ -50,14 +48,5 @@ public class AssetDistribution {
         public String getTicker() { return this.ticker; }
         public Rect getBounds() { return this.bounds; }
         public int getPercentage() { return this.perc; }
-
-
-    }
-
-    public class AssetComparator implements Comparator<AggregatedAsset> {
-        @Override
-        public int compare(AggregatedAsset o1, AggregatedAsset o2) {
-            return Float.valueOf(o2.getEurValue()).compareTo(o1.getEurValue());
-        }
     }
 }
