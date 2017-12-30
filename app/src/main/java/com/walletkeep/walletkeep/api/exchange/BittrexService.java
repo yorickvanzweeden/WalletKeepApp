@@ -7,7 +7,6 @@ import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,27 +20,23 @@ import retrofit2.http.Query;
 public class BittrexService extends ApiService {
     @Override
     public void fetch() {
-        String key;
-        try { key = ec.getKey(); } catch (NullPointerException e) {
-            this.returnError("No credentials have been provided.");
-            return;
-        }
+        super.fetch();
 
         // Get signature
         long timestamp = System.currentTimeMillis();
-        String data = String.format("https://bittrex.com/api/v1.1/account/getbalances?apikey=%s&nonce=%s", key, timestamp);
-        String signature;
+        String data = String.format("https://bittrex.com/api/v1.1/account/getbalances?apikey=%s&nonce=%s", ec.getKey(), timestamp);
 
-        // In case of invalid secret
-        try { signature = generateSignature(data.getBytes("UTF-8"), ec.getSecret(), false, "HmacSHA512"); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
-        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
+        String signature = sg.bytesToHex(
+                sg.hMac(
+                        sg.getBytes(data),
+                        sg.getBytes(ec.getSecret()),
+                        "HmacSHA512")
+        );
 
         // Create request
         BittrexApi api = RetrofitClient.getClient("https://bittrex.com").create(BittrexApi.class);
         Call<BittrexResponse> responseCall = api.getBalance(
-                signature, key, timestamp
+                signature, ec.getKey(), timestamp
         );
 
         // Perform request
@@ -64,7 +59,7 @@ public class BittrexService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    public class BittrexResponse extends ApiService.IResponse {
+    public class BittrexResponse extends AbstractResponse {
 
         @SerializedName("success")
         @Expose

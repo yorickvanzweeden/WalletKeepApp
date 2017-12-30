@@ -1,7 +1,5 @@
 package com.walletkeep.walletkeep.api.exchange;
 
-import android.util.Base64;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.internal.LinkedTreeMap;
@@ -10,7 +8,6 @@ import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -25,8 +22,12 @@ import retrofit2.http.POST;
 
 
 public class KrakenService extends ApiService {
+    private String baseUrl = "https://api.kraken.com";
+
     @Override
     public void fetch() {
+        super.fetch();
+
         // Get signature
         long timestamp = System.currentTimeMillis();
         String postData = String.format("%snonce=%s", timestamp, timestamp);
@@ -34,22 +35,17 @@ public class KrakenService extends ApiService {
         byte[] data = null;
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashed_data = digest.digest(postData.getBytes("UTF-8"));
-            String b = Base64.encodeToString(hashed_data, Base64.NO_WRAP);
-            String a = Base64.encodeToString(url.getBytes("UTF-8"), Base64.NO_WRAP);
+            byte[] hashed_data = digest.digest(sg.getBytes(postData));
+            String b = sg.encode(hashed_data);
+            String a = sg.encode(sg.getBytes(url));
 
-            data = Base64.decode(a.concat(b), Base64.NO_WRAP);
-        } catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
-        catch (NoSuchAlgorithmException e) { this.returnError("SHA-256 not supported"); return; }
+            data = sg.decode(a.concat(b));
+        } catch (NoSuchAlgorithmException e) { this.responseHandler.returnError("SHA-256 not supported"); return; }
 
-        String signature;
-        // In case of invalid secret
-        try { signature = generateSignature(data, ec.getSecret(), true, "HmacSHA512"); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
+        String signature = sg.encode(sg.hMac(data, sg.decode(ec.getSecret()), "HmacSHA512"));
 
         // Create request
-        KrakenApi api = RetrofitClient.getClient("https://api.kraken.com").create(KrakenApi.class);
+        KrakenApi api = RetrofitClient.getClient(baseUrl).create(KrakenApi.class);
         Call<KrakenResponse> responseCall = api.getBalance(
                 ec.getKey(), signature, timestamp
         );
@@ -75,7 +71,7 @@ public class KrakenService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    public class KrakenResponse extends IResponse {
+    public class KrakenResponse extends AbstractResponse {
         @SerializedName("error")
         @Expose
         private List<String> error;

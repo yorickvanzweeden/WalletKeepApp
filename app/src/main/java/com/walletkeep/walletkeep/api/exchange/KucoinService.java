@@ -1,7 +1,5 @@
 package com.walletkeep.walletkeep.api.exchange;
 
-import android.util.Base64;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -10,7 +8,6 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,24 +17,26 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public class KucoinService extends ApiService {
+    private String baseUrl = "https://api.kucoin.com";
+
     @Override
     public void fetch() {
+        super.fetch();
+
         // Get signature
         long timestamp = System.currentTimeMillis() + 43000;
         String data =  "/v1/account/balance/" + timestamp + "/";
-        try{
-            data = Base64.encodeToString(data.getBytes("UTF-8"), Base64.NO_WRAP);
-        } catch (Exception e) {}
-        String signature;
+        data = sg.encode(sg.getBytes(data));
 
-        // In case of invalid secret
-        try{ signature = generateSignature(data.getBytes("UTF-8"), this.ec.getSecret(), false); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
-        catch (UnsupportedEncodingException e) { this.returnError("Encoding UTF-8 not supported"); return; }
+        String signature = sg.bytesToHex(
+                sg.hMac(
+                        sg.getBytes(data),
+                        sg.getBytes(ec.getSecret()),
+                        "HmacSHA256")
+        );
 
         // Create request
-        KucoinApi api = RetrofitClient.getClient("https://api.kucoin.com").create(KucoinApi.class);
+        KucoinApi api = RetrofitClient.getClient(baseUrl).create(KucoinApi.class);
         Call<KucoinResponse> responseCall = api.getBalance(
                 ec.getKey(), signature, timestamp
         );
@@ -62,7 +61,7 @@ public class KucoinService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class KucoinResponse extends IResponse{
+    private class KucoinResponse extends AbstractResponse {
         @SerializedName("success")
         @Expose
         private Boolean success;

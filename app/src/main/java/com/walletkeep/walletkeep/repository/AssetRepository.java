@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.walletkeep.walletkeep.api.ApiService;
+import com.walletkeep.walletkeep.api.ResponseHandler;
 import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
@@ -14,6 +15,7 @@ import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -125,22 +127,22 @@ public class AssetRepository {
         if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }
 
         // Observe callback and save to db if needed
-        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
+        ResponseHandler.ResponseListener listener = new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
-                for (Asset asset : assets) {
-                    AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
+                if ((wallet.assets == null & assets != null) || !wallet.assets.equals(assets)){
+                    // Do versioning
+                    Date timestamp = new Date();
+                    for (Asset asset: assets) {
+                        asset.setTimestamp(timestamp);
+                    }
+                    for (Asset asset : assets) AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
                 }
             }
 
             @Override
             public void onError(String message) {
-                String origin;
-                if (wallet.getExchangeName() != null) {
-                    origin = wallet.getExchangeName();
-                } else {
-                    origin = wallet.getExchangeName();
-                }
+                String origin = wallet.getExchangeName() == null ? wallet.getExchangeName() : wallet.getAddressCurrency();
                 errorListener.onError(origin + ": " + message);
             }
         };
