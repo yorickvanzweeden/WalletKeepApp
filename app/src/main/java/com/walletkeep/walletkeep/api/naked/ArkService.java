@@ -20,6 +20,7 @@ public class ArkService extends ApiService {
     private String nethash = "6e84d08bd299ed97c212c886c98a57e36545c8f5d645ca7eeae63a8bd62d8988";
     private String version = "1.0.1";
     private String port = "4000";
+    //Documentation: https://ark.brianfaust.me/#/
 
     @Override
     public void fetch() {
