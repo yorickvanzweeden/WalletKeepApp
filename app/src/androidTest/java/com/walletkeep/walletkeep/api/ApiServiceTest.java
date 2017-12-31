@@ -71,7 +71,7 @@ public abstract class ApiServiceTest {
     protected void runEntireFlow(WalletWithRelations wallet, ApiServiceTest.I i) {
         threadsRunning = true;
 
-        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
+        ResponseHandler.ResponseListener listener = new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
                 i.onResponseAssertion(assets);
