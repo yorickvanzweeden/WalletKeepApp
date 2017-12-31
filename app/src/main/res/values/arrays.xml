@@ -12,6 +12,7 @@
     <string-array name="supported_currency_array">
         <item>ARK</item>
         <item>ETH</item>
+        <item>NEO</item>
     </string-array>
 
     <string-array name="price_change">

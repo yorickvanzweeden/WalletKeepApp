@@ -9,6 +9,7 @@ import com.walletkeep.walletkeep.api.exchange.KucoinService;
 import com.walletkeep.walletkeep.api.naked.ArkService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
 import com.walletkeep.walletkeep.api.naked.EtherscanService;
+import com.walletkeep.walletkeep.api.naked.NeoService;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
@@ -191,6 +192,8 @@ public abstract class ApiService {
                     return (T) new BlockcypherService();
                 case "ETH":
                     return (T) new EtherscanService();
+                case "NEO":
+                    return (T) new NeoService();
                 default:
                     return null;
             }
