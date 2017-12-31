@@ -142,7 +142,7 @@ public class AssetRepository {
 
             @Override
             public void onError(String message) {
-                String origin = wallet.getExchangeName() == null ? wallet.getExchangeName() : wallet.getAddressCurrency();
+                String origin = wallet.getExchangeName() == null ? wallet.getAddressCurrency() : wallet.getExchangeName();
                 errorListener.onError(origin + ": " + message);
             }
         };
