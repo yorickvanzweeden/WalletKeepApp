@@ -1,7 +1,9 @@
-package com.walletkeep.walletkeep.api;
+package com.walletkeep.walletkeep.api.exchange;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.walletkeep.walletkeep.api.ApiServiceTest;
+import com.walletkeep.walletkeep.api.MyApiCredentials;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;

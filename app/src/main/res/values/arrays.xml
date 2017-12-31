@@ -9,6 +9,11 @@
         <item>Kucoin</item>
     </string-array>
 
+    <string-array name="supported_currency_array">
+        <item>ARK</item>
+        <item>ETH</item>
+    </string-array>
+
     <string-array name="price_change">
         <item>1H</item>
         <item>24H</item>

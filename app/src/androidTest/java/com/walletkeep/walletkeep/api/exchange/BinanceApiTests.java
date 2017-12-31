@@ -1,7 +1,9 @@
-package com.walletkeep.walletkeep.api;
+package com.walletkeep.walletkeep.api.exchange;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.walletkeep.walletkeep.api.ApiServiceTest;
+import com.walletkeep.walletkeep.api.MyApiCredentials;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
@@ -15,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class GDAXApiTests extends ApiServiceTest {
+public class BinanceApiTests extends ApiServiceTest {
 
-    public GDAXApiTests(){
-        init(MyApiCredentials.getGDAXCredentials());
+    public BinanceApiTests(){
+        init(MyApiCredentials.getBinanceCredentials());
     }
 
     @Override
@@ -30,10 +32,11 @@ public class GDAXApiTests extends ApiServiceTest {
         WalletWithRelations wallet = new WalletWithRelations();
         wallet.exchangeCredentials = new ArrayList<ExchangeCredentials>(){{add(exchangeCredentials);}};
         wallet.wallet = new Wallet(1);
-        wallet.wallet.setExchangeName("GDAX");
+        wallet.wallet.setExchangeName("Binance");
         wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "ETH",  12)) ;}};
         return wallet;
     }
+
 
     @Test
     public void assetsIsNull(){
@@ -95,7 +98,7 @@ public class GDAXApiTests extends ApiServiceTest {
 
             @Override
             public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("invalid api key"));
+                Assert.assertTrue(message.toLowerCase().contains("invalid read-key"));
             }
         });
     }
@@ -110,22 +113,7 @@ public class GDAXApiTests extends ApiServiceTest {
 
             @Override
             public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("invalid signature"));
-            }
-        });
-    }
-
-    @Test
-    public void credentialsIncorrectPassphrase(){
-        runEntireFlow(getDefaultWallet(credentialsIncorrectPassphrase), new I() {
-            @Override
-            public void onResponseAssertion(List<Asset> assets) {
-                Assert.fail("Expected an error, but got a 200");
-            }
-
-            @Override
-            public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("invalid passphrase"));
+                Assert.assertTrue(message.toLowerCase().contains("signature for this request is not valid"));
             }
         });
     }
@@ -155,22 +143,7 @@ public class GDAXApiTests extends ApiServiceTest {
 
             @Override
             public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("invalid signature"));
-            }
-        });
-    }
-
-    @Test
-    public void credentialsInvalidPassphrase(){
-        runEntireFlow(getDefaultWallet(credentialsInvalidPassphrase), new I() {
-            @Override
-            public void onResponseAssertion(List<Asset> assets) {
-                Assert.fail("Expected an error, but got a 200");
-            }
-
-            @Override
-            public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("unexpected char"));
+                Assert.assertTrue(message.toLowerCase().contains("signature for this request is not valid"));
             }
         });
     }
@@ -185,7 +158,7 @@ public class GDAXApiTests extends ApiServiceTest {
 
             @Override
             public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("key header is required"));
+                Assert.assertTrue(message.toLowerCase().contains("invalid read-key"));
             }
         });
     }
@@ -201,21 +174,6 @@ public class GDAXApiTests extends ApiServiceTest {
             @Override
             public void onFailAssertion(String message) {
                 Assert.assertTrue(message.contains("Signature could not be created. Your secret is probably invalid."));
-            }
-        });
-    }
-
-    @Test
-    public void credentialsNullPassphrase(){
-        runEntireFlow(getDefaultWallet(credentialsNullPassphrase), new I() {
-            @Override
-            public void onResponseAssertion(List<Asset> assets) {
-                Assert.fail("Expected an error, but got a 200");
-            }
-
-            @Override
-            public void onFailAssertion(String message) {
-                Assert.assertTrue(message.toLowerCase().contains("passphrase header is required"));
             }
         });
     }
