@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.api.exchange.BittrexService;
 import com.walletkeep.walletkeep.api.exchange.GDAXService;
 import com.walletkeep.walletkeep.api.exchange.KrakenService;
 import com.walletkeep.walletkeep.api.exchange.KucoinService;
+import com.walletkeep.walletkeep.api.naked.ArkService;
 import com.walletkeep.walletkeep.api.naked.BlockcypherService;
 import com.walletkeep.walletkeep.api.naked.EtherscanService;
 import com.walletkeep.walletkeep.db.entity.Asset;
@@ -184,6 +185,8 @@ public abstract class ApiService {
          */
         private <T extends ApiService> T createNakedApiService(String currency){
             switch (currency){
+                case "ARK":
+                    return (T) new ArkService();
                 case "ETH2":
                     return (T) new BlockcypherService();
                 case "ETH":
