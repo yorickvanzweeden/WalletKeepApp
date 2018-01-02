@@ -10,17 +10,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.WalletKeepApp;
-import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
-import com.walletkeep.walletkeep.di.DaggerViewModelComponent;
-import com.walletkeep.walletkeep.di.DatabaseModule;
-import com.walletkeep.walletkeep.di.ViewModelComponent;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
+import com.walletkeep.walletkeep.di.module.ContextModule;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
+
+import javax.inject.Inject;
 
 public class PortfolioActivity extends AppCompatActivity
         implements AddPortfolioDialog.AddPortfolioDialogListener {
-    private PortfolioViewModel viewModel;
+    @Inject
+    public PortfolioViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,9 @@ public class PortfolioActivity extends AppCompatActivity
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        AppDatabase appDatabase = ((WalletKeepApp)getApplication()).getDatabase();
+        // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .databaseModule(new DatabaseModule(appDatabase))
+                .contextModule(new ContextModule(this))
                 .build();
         viewModel = component.getPortfolioViewModel();
         viewModel.init();

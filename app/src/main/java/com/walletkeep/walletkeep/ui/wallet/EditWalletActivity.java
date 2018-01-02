@@ -7,13 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.WalletKeepApp;
-import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
-import com.walletkeep.walletkeep.di.DaggerViewModelComponent;
-import com.walletkeep.walletkeep.di.DatabaseModule;
-import com.walletkeep.walletkeep.di.ViewModelComponent;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
+import com.walletkeep.walletkeep.di.module.ContextModule;
 import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 
 public class EditWalletActivity extends AppCompatActivity {
@@ -40,9 +38,8 @@ public class EditWalletActivity extends AppCompatActivity {
         setupFragment(savedInstanceState, fragmentType);
 
         // Initialise view model
-        AppDatabase appDatabase = ((WalletKeepApp)getApplication()).getDatabase();
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .databaseModule(new DatabaseModule(appDatabase))
+                .contextModule(new ContextModule(this.getApplicationContext()))
                 .build();
         viewModel = component.getUpdateWalletViewModel();
         viewModel.init(walletId);

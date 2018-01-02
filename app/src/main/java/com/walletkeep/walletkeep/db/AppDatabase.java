@@ -1,7 +1,5 @@
 package com.walletkeep.walletkeep.db;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -54,8 +52,6 @@ public abstract class AppDatabase extends RoomDatabase {
     @VisibleForTesting
     public static final String DATABASE_NAME = "walletkeep-db";
 
-    private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
-
     /**
      * Gets instance of the database (singleton)
      * @param context
@@ -67,7 +63,6 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (sInstance == null) {
                     sInstance = buildDatabase(context.getApplicationContext(), executors);
-                    sInstance.updateDatabaseCreated(context.getApplicationContext());
                 }
             }
         }
@@ -87,49 +82,27 @@ public abstract class AppDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-                        executors.diskIO().execute(() -> {
-
-                            // Generate the data for pre-population
-                            AppDatabase database = AppDatabase.getInstance(appContext, executors);
-                            List<Currency> currencies = DataGenerator.loadCurrencies();
-                            List<Exchange> exchanges = DataGenerator.loadExchanges();
-
-                            database.runInTransaction(() -> {
-                                database.currencyDao().insertAll(currencies);
-                                database.exchangeDao().insertAll(exchanges);
-                                database.portfolioDao().insert(DataGenerator.loadDefaultPortfolio());
-                                database.currencyPriceDao().insertAll(DataGenerator.loadDefaultPrices());
-                            });
-
-                            // notify that the database was created and it's ready to be used
-                            database.setDatabaseCreated();
-                        });
+                        executors.diskIO().execute(() -> populateDatabase(appContext, executors));
                     }
                 }).build();
     }
 
     /**
-     * Check if database exists
-     * @param context
+     * Populate newly-created database with default data
+     * @param appContext
+     * @param executors
      */
-    private void updateDatabaseCreated(final Context context) {
-        if (context.getDatabasePath(DATABASE_NAME).exists()) {
-            setDatabaseCreated();
-        }
-    }
+    private static void populateDatabase(Context appContext, AppExecutors executors) {
+        // Generate the data for pre-population
+        AppDatabase database = AppDatabase.getInstance(appContext, executors);
+        List<Currency> currencies = DataGenerator.loadCurrencies();
+        List<Exchange> exchanges = DataGenerator.loadExchanges();
 
-    /**
-     * Set database created flag
-     */
-    private void setDatabaseCreated() {
-        mIsDatabaseCreated.postValue(true);
-    }
-
-    /**
-     * Gets database that was created
-     * @return
-     */
-    public LiveData<Boolean> getDatabaseCreated() {
-        return mIsDatabaseCreated;
+        database.runInTransaction(() -> {
+            database.currencyDao().insertAll(currencies);
+            database.exchangeDao().insertAll(exchanges);
+            database.portfolioDao().insert(DataGenerator.loadDefaultPortfolio());
+            database.currencyPriceDao().insertAll(DataGenerator.loadDefaultPrices());
+        });
     }
 }

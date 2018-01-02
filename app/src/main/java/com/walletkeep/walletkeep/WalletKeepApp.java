@@ -3,8 +3,6 @@ package com.walletkeep.walletkeep;
 import android.app.Application;
 import android.content.Context;
 
-import com.walletkeep.walletkeep.db.AppDatabase;
-
 public class WalletKeepApp extends Application {
 
     private AppExecutors mAppExecutors;
@@ -19,9 +17,5 @@ public class WalletKeepApp extends Application {
         super.onCreate();
         mAppExecutors = new AppExecutors();
         mContext = this;
-    }
-
-    public AppDatabase getDatabase() {
-        return AppDatabase.getInstance(this, mAppExecutors);
     }
 }
