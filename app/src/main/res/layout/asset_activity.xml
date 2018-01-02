@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity">
+    tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity" >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -140,7 +140,7 @@
     <SurfaceView
             android:id="@+id/asset_activity_surfaceView"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="45dp"
             android:background="@android:color/transparent"
             app:layout_anchor="@+id/include"
             app:layout_anchorGravity="bottom"/>

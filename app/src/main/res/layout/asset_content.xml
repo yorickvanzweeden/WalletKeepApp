@@ -6,18 +6,22 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity"
-    tools:showIn="@layout/asset_activity">
+    tools:showIn="@layout/asset_activity"
+    android:padding="5dp" >
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/asset_content_swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:color="@color/black_semi_transparent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/asset_content_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:color="@color/black_semi_transparent"
+        />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
