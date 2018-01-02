@@ -2,7 +2,6 @@ package com.walletkeep.walletkeep.ui.portfolio;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
+import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
+import com.walletkeep.walletkeep.di.DaggerPortfolioViewModelComponent;
+import com.walletkeep.walletkeep.di.DatabaseModule;
+import com.walletkeep.walletkeep.di.PortfolioViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 public class PortfolioActivity extends AppCompatActivity
@@ -56,9 +60,11 @@ public class PortfolioActivity extends AppCompatActivity
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // Initialise view model
-        PortfolioViewModel.Factory factory = new PortfolioViewModel.Factory(getApplication());
-        viewModel = ViewModelProviders.of(this, factory).get(PortfolioViewModel.class);
+        AppDatabase appDatabase = ((WalletKeepApp)getApplication()).getDatabase();
+        PortfolioViewModelComponent component = DaggerPortfolioViewModelComponent.builder()
+                .databaseModule(new DatabaseModule(appDatabase))
+                .build();
+        viewModel = component.getPortfolioViewModel();
         viewModel.init();
 
         // Create and set adapter
