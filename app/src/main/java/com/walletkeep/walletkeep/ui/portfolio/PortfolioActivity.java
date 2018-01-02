@@ -13,9 +13,9 @@ import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
-import com.walletkeep.walletkeep.di.DaggerPortfolioViewModelComponent;
+import com.walletkeep.walletkeep.di.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.DatabaseModule;
-import com.walletkeep.walletkeep.di.PortfolioViewModelComponent;
+import com.walletkeep.walletkeep.di.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 public class PortfolioActivity extends AppCompatActivity
@@ -61,7 +61,7 @@ public class PortfolioActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         AppDatabase appDatabase = ((WalletKeepApp)getApplication()).getDatabase();
-        PortfolioViewModelComponent component = DaggerPortfolioViewModelComponent.builder()
+        ViewModelComponent component = DaggerViewModelComponent.builder()
                 .databaseModule(new DatabaseModule(appDatabase))
                 .build();
         viewModel = component.getPortfolioViewModel();

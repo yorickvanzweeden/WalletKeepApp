@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.walletkeep.walletkeep.db.AppDatabase;
-import com.walletkeep.walletkeep.repository.AssetRepository;
-import com.walletkeep.walletkeep.repository.WalletRepository;
 
 public class WalletKeepApp extends Application {
 
@@ -25,12 +23,5 @@ public class WalletKeepApp extends Application {
 
     public AppDatabase getDatabase() {
         return AppDatabase.getInstance(this, mAppExecutors);
-    }
-    
-    public WalletRepository getWalletRepository() {
-        return WalletRepository.getInstance(getDatabase());
-    }
-    public AssetRepository getAssetRepository() {
-        return AssetRepository.getInstance(getDatabase());
     }
 }

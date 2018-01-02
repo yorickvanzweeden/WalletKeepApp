@@ -1,13 +1,9 @@
 package com.walletkeep.walletkeep.viewmodel;
 
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
 
-import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.AssetRepository;
@@ -63,23 +59,6 @@ public class AssetViewModel extends ViewModel {
     public void fetch(List<WalletWithRelations> wallets, AssetRepository.ErrorListener errorListener){
         if (wallets != null) {
             this.assetRepository.fetchWallets(wallets, errorListener);
-        }
-    }
-
-    /**
-     * Returns view model with repository
-     */
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private final AssetRepository assetRepository;
-
-        public Factory(@NonNull Application application) {
-            assetRepository = ((WalletKeepApp) application).getAssetRepository();
-        }
-
-        @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            //noinspection unchecked
-            return (T) new AssetViewModel(assetRepository);
         }
     }
 }
