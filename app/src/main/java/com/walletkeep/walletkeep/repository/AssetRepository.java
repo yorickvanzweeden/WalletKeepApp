@@ -1,8 +1,8 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
 import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
@@ -12,6 +12,9 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
+import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
+import com.walletkeep.walletkeep.di.module.ApiServiceModule;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.ArrayList;
@@ -24,7 +27,8 @@ public class AssetRepository {
     private static AssetRepository sInstance;
 
     // Database instance
-    private final AppDatabase mDatabase;
+    private final AppDatabase database;
+    private final AppExecutors executors;
 
     // Rate limiter prevent too many requests
     private RateLimiter<String> priceApiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
@@ -35,25 +39,11 @@ public class AssetRepository {
      * Constructor: Initializes repository with database
      * @param database Database to use
      */
-    public AssetRepository(AppDatabase database) {
-        mDatabase = database;
+    public AssetRepository(AppDatabase database, AppExecutors executors) {
+        this.database = database;
+        this.executors = executors;
     }
 
-    /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static AssetRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (AssetRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new AssetRepository(database);
-                }
-            }
-        }
-        return sInstance;
-    }
 
     /**
      * Gets a list of aggregated assets of a portfolio
@@ -61,7 +51,7 @@ public class AssetRepository {
      * @return List of aggregated assets
      */
     public LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId) {
-        return mDatabase.assetDao().getAggregatedAssets(portfolioId);
+        return database.assetDao().getAggregatedAssets(portfolioId);
     }
 
     /**
@@ -70,7 +60,7 @@ public class AssetRepository {
      * @return List of aggregated assets
      */
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
-        return mDatabase.walletDao().getAll(portfolioId);
+        return database.walletDao().getAll(portfolioId);
     }
 
     /**
@@ -85,12 +75,12 @@ public class AssetRepository {
 
             @Override
             public void onCurrenciesUpdated(ArrayList<Currency> currencies) {
-                AsyncTask.execute(() -> mDatabase.currencyDao().insertAll(currencies));
+                executors.diskIO().execute(() -> database.currencyDao().insertAll(currencies));
             }
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
-                AsyncTask.execute(() -> mDatabase.currencyPriceDao().insertAll(prices));
+                executors.diskIO().execute(() -> database.currencyPriceDao().insertAll(prices));
             }
 
             @Override
@@ -136,7 +126,7 @@ public class AssetRepository {
                     for (Asset asset: assets) {
                         asset.setTimestamp(timestamp);
                     }
-                    for (Asset asset : assets) AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
+                    for (Asset asset : assets) executors.diskIO().execute(() -> database.assetDao().insert(asset));
                 }
             }
 
@@ -148,8 +138,10 @@ public class AssetRepository {
         };
 
         // Create ApiService
-        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
-        ApiService apiService = apiServiceFactory.create();
+        ApiServiceComponent component = DaggerApiServiceComponent.builder()
+                .apiServiceModule(new ApiServiceModule(wallet, listener))
+                .build();
+        ApiService apiService = component.getApiService();
 
         // Fetch data
         apiService.fetch();

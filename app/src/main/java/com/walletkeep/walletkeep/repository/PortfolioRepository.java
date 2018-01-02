@@ -1,8 +1,8 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 
@@ -13,31 +13,17 @@ public class PortfolioRepository {
     private static PortfolioRepository sInstance;
 
     // Database instance
-    private final AppDatabase mDatabase;
+    private final AppDatabase database;
+    private final AppExecutors executors;
 
 
     /**
      * Constructor: Initializes repository with database
      * @param database Database to use
      */
-    public PortfolioRepository(AppDatabase database) {
-        mDatabase = database;
-    }
-
-    /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static PortfolioRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (PortfolioRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new PortfolioRepository(database);
-                }
-            }
-        }
-        return sInstance;
+    public PortfolioRepository(AppDatabase database, AppExecutors executors) {
+        this.database = database;
+        this.executors = executors;
     }
 
     /**
@@ -45,7 +31,7 @@ public class PortfolioRepository {
      * @return List of portfolios
      */
     public LiveData<List<Portfolio>> getPortfolios() {
-        return mDatabase.portfolioDao().getAll();
+        return database.portfolioDao().getAll();
     }
 
     /**
@@ -53,7 +39,7 @@ public class PortfolioRepository {
      * @param portfolio Portfolio to insert in the database
      */
     public void addPortfolio(Portfolio portfolio) {
-        AsyncTask.execute(() -> mDatabase.portfolioDao().insert(portfolio));
+        executors.diskIO().execute(() -> database.portfolioDao().insert(portfolio));
     }
 
     /**
@@ -61,6 +47,6 @@ public class PortfolioRepository {
      * @param portfolio Portfolio to delete
      */
     public void deletePortfolio(Portfolio portfolio) {
-        AsyncTask.execute(() -> mDatabase.portfolioDao().delete(portfolio));
+        executors.diskIO().execute(() -> database.portfolioDao().delete(portfolio));
     }
 }

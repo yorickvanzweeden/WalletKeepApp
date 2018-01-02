@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.ui.asset;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.ui.IntroSlider;
 import com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity;
@@ -156,8 +158,10 @@ public class AssetActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Initialise view model
-        AssetViewModel.Factory factory = new AssetViewModel.Factory(getApplication());
-        viewModel = ViewModelProviders.of(this, factory).get(AssetViewModel.class);
+        ViewModelComponent component = DaggerViewModelComponent.builder()
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .build();
+        viewModel = component.getAssetViewModel();
         viewModel.init(portfolioId);
 
         // Create and set adapter
