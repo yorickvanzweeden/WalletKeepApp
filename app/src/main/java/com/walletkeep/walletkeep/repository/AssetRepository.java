@@ -12,6 +12,9 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
+import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
+import com.walletkeep.walletkeep.di.module.ApiServiceModule;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.ArrayList;
@@ -135,8 +138,10 @@ public class AssetRepository {
         };
 
         // Create ApiService
-        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
-        ApiService apiService = apiServiceFactory.create();
+        ApiServiceComponent component = DaggerApiServiceComponent.builder()
+                .apiServiceModule(new ApiServiceModule(wallet, listener))
+                .build();
+        ApiService apiService = component.getApiService();
 
         // Fetch data
         apiService.fetch();
