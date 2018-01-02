@@ -1,8 +1,8 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
 import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
@@ -24,7 +24,8 @@ public class AssetRepository {
     private static AssetRepository sInstance;
 
     // Database instance
-    private final AppDatabase mDatabase;
+    private final AppDatabase database;
+    private final AppExecutors executors;
 
     // Rate limiter prevent too many requests
     private RateLimiter<String> priceApiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
@@ -35,8 +36,9 @@ public class AssetRepository {
      * Constructor: Initializes repository with database
      * @param database Database to use
      */
-    public AssetRepository(AppDatabase database) {
-        mDatabase = database;
+    public AssetRepository(AppDatabase database, AppExecutors executors) {
+        this.database = database;
+        this.executors = executors;
     }
 
 
@@ -46,7 +48,7 @@ public class AssetRepository {
      * @return List of aggregated assets
      */
     public LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId) {
-        return mDatabase.assetDao().getAggregatedAssets(portfolioId);
+        return database.assetDao().getAggregatedAssets(portfolioId);
     }
 
     /**
@@ -55,7 +57,7 @@ public class AssetRepository {
      * @return List of aggregated assets
      */
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
-        return mDatabase.walletDao().getAll(portfolioId);
+        return database.walletDao().getAll(portfolioId);
     }
 
     /**
@@ -70,12 +72,12 @@ public class AssetRepository {
 
             @Override
             public void onCurrenciesUpdated(ArrayList<Currency> currencies) {
-                AsyncTask.execute(() -> mDatabase.currencyDao().insertAll(currencies));
+                executors.diskIO().execute(() -> database.currencyDao().insertAll(currencies));
             }
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
-                AsyncTask.execute(() -> mDatabase.currencyPriceDao().insertAll(prices));
+                executors.diskIO().execute(() -> database.currencyPriceDao().insertAll(prices));
             }
 
             @Override
@@ -121,7 +123,7 @@ public class AssetRepository {
                     for (Asset asset: assets) {
                         asset.setTimestamp(timestamp);
                     }
-                    for (Asset asset : assets) AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
+                    for (Asset asset : assets) executors.diskIO().execute(() -> database.assetDao().insert(asset));
                 }
             }
 
