@@ -39,21 +39,6 @@ public class AssetRepository {
         mDatabase = database;
     }
 
-    /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static AssetRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (AssetRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new AssetRepository(database);
-                }
-            }
-        }
-        return sInstance;
-    }
 
     /**
      * Gets a list of aggregated assets of a portfolio

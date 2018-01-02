@@ -25,22 +25,6 @@ public class PortfolioRepository {
     }
 
     /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static PortfolioRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (PortfolioRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new PortfolioRepository(database);
-                }
-            }
-        }
-        return sInstance;
-    }
-
-    /**
      * Gets a list of portfolios from the database
      * @return List of portfolios
      */

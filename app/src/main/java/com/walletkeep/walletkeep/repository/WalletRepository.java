@@ -26,23 +26,6 @@ public class WalletRepository {
     }
 
     /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static WalletRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (WalletRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new WalletRepository(database);
-                }
-            }
-        }
-        return sInstance;
-    }
-
-
-    /**
      * Gets the wallets of a portfolio
      * @param portfolioId Id of the portfolio
      * @return List of wallets of a portfolio
