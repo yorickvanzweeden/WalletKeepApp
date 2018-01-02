@@ -7,11 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
-import com.walletkeep.walletkeep.di.module.ContextModule;
 import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 
 public class EditWalletActivity extends AppCompatActivity {
@@ -39,7 +39,7 @@ public class EditWalletActivity extends AppCompatActivity {
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .contextModule(new ContextModule(this.getApplicationContext()))
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
                 .build();
         viewModel = component.getUpdateWalletViewModel();
         viewModel.init(walletId);

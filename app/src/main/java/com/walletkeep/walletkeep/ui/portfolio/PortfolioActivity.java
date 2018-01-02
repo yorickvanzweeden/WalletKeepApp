@@ -10,10 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
-import com.walletkeep.walletkeep.di.module.ContextModule;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import javax.inject.Inject;
@@ -63,7 +63,7 @@ public class PortfolioActivity extends AppCompatActivity
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .contextModule(new ContextModule(this))
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
                 .build();
         viewModel = component.getPortfolioViewModel();
         viewModel.init();

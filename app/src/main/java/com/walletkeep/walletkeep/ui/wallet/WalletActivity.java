@@ -12,10 +12,10 @@ import android.view.View;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
-import com.walletkeep.walletkeep.di.module.ContextModule;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class WalletActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class WalletActivity extends AppCompatActivity {
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .contextModule(new ContextModule(this.getApplicationContext()))
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
                 .build();
         viewModel = component.getWalletViewModel();
         viewModel.init(portfolioId);
