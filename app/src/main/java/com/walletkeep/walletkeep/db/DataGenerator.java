@@ -30,7 +30,7 @@ public class DataGenerator {
         //TODO: Replace source of string array to json or something better
 
         // Read string array
-        Context c =  WalletKeepApp.getContext();
+        Context c =  WalletKeepApp.context();
         String[] exchangesArray = c.getResources().getStringArray(R.array.exchange_array);
 
         // Fill list
@@ -49,7 +49,7 @@ public class DataGenerator {
      */
     public static List<Currency> loadCurrencies() {
         // Read json file
-        Context c =  WalletKeepApp.getContext();
+        Context c =  WalletKeepApp.context();
         InputStream inputStream = c.getResources().openRawResource(R.raw.cryptocurrencies);
         String json = inputStreamToString(inputStream);
 
