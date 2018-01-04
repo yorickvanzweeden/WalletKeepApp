@@ -27,7 +27,7 @@ public class AssetViewModel extends ViewModel {
      * Gets the assets
      * @param portfolioId Id of the portfolio containing the assets
      */
-    public void init(int portfolioId) {
+    public void init(int portfolioId, AssetRepository.ErrorListener errorListener) {
         // Update assets
         if (this.aggregatedAssets == null)
             this.aggregatedAssets = assetRepository.getAggregatedAssets(portfolioId);
@@ -37,7 +37,7 @@ public class AssetViewModel extends ViewModel {
             this.wallets = assetRepository.getWallets(portfolioId);
 
         // Update currency prices
-        this.assetRepository.fetchCurrencyPrices();
+        this.assetRepository.fetchCurrencyPrices(errorListener);
     }
 
     /**

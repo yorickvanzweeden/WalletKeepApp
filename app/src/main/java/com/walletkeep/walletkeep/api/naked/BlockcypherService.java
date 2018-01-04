@@ -71,86 +71,10 @@ public class BlockcypherService extends ApiService {
         @Expose
         private String finalNTx;
 
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public String getTotalReceived() {
-            return totalReceived;
-        }
-
-        public void setTotalReceived(String totalReceived) {
-            this.totalReceived = totalReceived;
-        }
-
-        public String getTotalSent() {
-            return totalSent;
-        }
-
-        public void setTotalSent(String totalSent) {
-            this.totalSent = totalSent;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getUnconfirmedBalance() {
-            return unconfirmedBalance;
-        }
-
-        public void setUnconfirmedBalance(String unconfirmedBalance) {
-            this.unconfirmedBalance = unconfirmedBalance;
-        }
-
-        public String getFinalBalance() {
-            return finalBalance;
-        }
-
-        public void setFinalBalance(String finalBalance) {
-            this.finalBalance = finalBalance;
-        }
-
-        public String getNTx() {
-            return nTx;
-        }
-
-        public void setNTx(String nTx) {
-            this.nTx = nTx;
-        }
-
-        public String getUnconfirmedNTx() {
-            return unconfirmedNTx;
-        }
-
-        public void setUnconfirmedNTx(String unconfirmedNTx) {
-            this.unconfirmedNTx = unconfirmedNTx;
-        }
-
-        public String getFinalNTx() {
-            return finalNTx;
-        }
-
-        public void setFinalNTx(String finalNTx) {
-            this.finalNTx = finalNTx;
-        }
-
-        public Asset getAsset(int walletId) {
-            return new Asset(walletId, "ETH", Converters.amountToFloat(getBalance(), 18));
-        }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
-                add(new Asset(walletId, "ETH", Converters.amountToFloat(getBalance(), 18)));
+                add(new Asset(walletId, "ETH", Converters.amountToFloat(balance, 18)));
             }};
         }
     }

@@ -41,6 +41,7 @@ public class AssetActivity extends AppCompatActivity {
     private List<AggregatedAsset> assets;
     private AssetAdapter mAdapter;
     private SurfaceView mSurfaceView;
+    private AssetRepository.ErrorListener errorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +131,8 @@ public class AssetActivity extends AppCompatActivity {
         viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
         // Add error listener
-        AssetRepository.ErrorListener errorListener = message -> {
-            Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        };
+        errorListener = message ->
+                Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
         // Refresh --> Update wallets
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
@@ -162,7 +162,7 @@ public class AssetActivity extends AppCompatActivity {
                 .repositoryComponent(((WalletKeepApp)getApplication()).component())
                 .build();
         viewModel = component.getAssetViewModel();
-        viewModel.init(portfolioId);
+        viewModel.init(portfolioId, errorListener);
 
         // Create and set adapter
         mAdapter = new AssetAdapter(this, viewModel.getAggregatedAssets().getValue());

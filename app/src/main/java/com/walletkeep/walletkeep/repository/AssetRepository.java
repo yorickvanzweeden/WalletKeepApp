@@ -66,7 +66,7 @@ public class AssetRepository {
     /**
      * Update database with the latest currency prices from the api service
      */
-    public void fetchCurrencyPrices(){
+    public void fetchCurrencyPrices(ErrorListener errorListener){
         // Don't execute API calls if rate limit is applied
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
@@ -85,7 +85,7 @@ public class AssetRepository {
 
             @Override
             public void onError(String message) {
-                //TODO: Do something with message
+                errorListener.onError("Error fetching prices: " + message);
             }
         };
 
