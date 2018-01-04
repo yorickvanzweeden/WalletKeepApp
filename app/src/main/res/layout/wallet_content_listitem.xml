@@ -10,9 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
-        card_view:cardCornerRadius="4dp"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="0dp"
+        android:theme="@style/cards"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp"
+        >
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

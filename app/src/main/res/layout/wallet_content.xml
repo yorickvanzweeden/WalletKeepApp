@@ -6,10 +6,13 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.walletkeep.walletkeep.ui.wallet.WalletActivity"
-    tools:showIn="@layout/wallet_activity">
+    android:padding="5dp"
+    tools:showIn="@layout/wallet_activity"
+    android:background="@color/background">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/wallet_content_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:theme="@style/recyclertest"/>
 </android.support.constraint.ConstraintLayout>

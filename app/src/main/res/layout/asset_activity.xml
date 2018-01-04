@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/FullscreenTheme"
     tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity" >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/topbar">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,7 +26,7 @@
                 android:layout_weight="0"
                 android:gravity="center"
                 android:text="+ 27.43%"
-                android:textColor="@color/black_semi_transparent"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/asset_activity_textView_label_market" />
@@ -39,7 +41,7 @@
                 android:layout_weight="0"
                 android:gravity="center"
                 android:text="+ 9.37%"
-                android:textColor="@color/black_semi_transparent"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/asset_portfolio_value6"
                 app:layout_constraintStart_toEndOf="@+id/asset_activity_textView_label_you"
@@ -55,7 +57,7 @@
                 android:layout_weight="0"
                 android:gravity="center"
                 android:text="24H"
-                android:textColor="@color/black_semi_transparent"
+                android:textColor="@color/black"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +72,7 @@
                 android:layout_weight="0"
                 android:gravity="center"
                 android:text="@string/label_market"
-                android:textColor="@color/black_semi_transparent"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -84,7 +86,7 @@
                 android:layout_weight="0"
                 android:gravity="center"
                 android:text="@string/label_you"
-                android:textColor="@color/black_semi_transparent"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/asset_activity_textView_label_market"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -100,7 +102,7 @@
                 android:gravity="center"
                 android:text="Portfolio Value"
                 android:textAlignment="viewStart"
-                android:textColor="@color/black_semi_transparent"
+                android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -123,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginRight="16dp"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
@@ -132,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginLeft="16dp"
         android:tint="#ffffff"
         app:srcCompat="@android:drawable/ic_dialog_info" />
