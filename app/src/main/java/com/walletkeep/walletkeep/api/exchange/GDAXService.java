@@ -108,38 +108,6 @@ public class GDAXService extends ApiService {
         @Expose
         private String profileId;
 
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getCurrency() {
-            return currency;
-        }
-
-        public void setCurrency(String currency) {
-            this.currency = currency;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getAvailable() {
-            return available;
-        }
-
-        public void setAvailable(String available) {
-            this.available = available;
-        }
-
         public Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
@@ -161,20 +129,8 @@ public class GDAXService extends ApiService {
         @Expose
         private Double epoch;
 
-        public String getIso() {
-            return iso;
-        }
-
-        public void setIso(String iso) {
-            this.iso = iso;
-        }
-
         public Double getEpoch() {
             return epoch;
-        }
-
-        public void setEpoch(Double epoch) {
-            this.epoch = epoch;
         }
     }
 }

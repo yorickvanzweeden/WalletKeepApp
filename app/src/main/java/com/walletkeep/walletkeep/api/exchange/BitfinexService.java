@@ -89,38 +89,6 @@ public class BitfinexService extends ApiService {
         @Expose
         private String available;
 
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getCurrency() {
-            return currency;
-        }
-
-        public void setCurrency(String currency) {
-            this.currency = currency.toUpperCase();
-        }
-
-        public String getAmount() {
-            return amount;
-        }
-
-        public void setAmount(String amount) {
-            this.amount = amount;
-        }
-
-        public String getAvailable() {
-            return available;
-        }
-
-        public void setAvailable(String available) {
-            this.available = available;
-        }
-
         private Asset getAsset(int walletId) {
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(amount));
 

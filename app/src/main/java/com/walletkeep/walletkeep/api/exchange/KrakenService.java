@@ -80,22 +80,6 @@ public class KrakenService extends ApiService {
         @Expose
         private Object result;
 
-        public List<String> getError() {
-            return error;
-        }
-
-        public void setError(List<String> error) {
-            this.error = error;
-        }
-
-        public Object getResult() {
-            return result;
-        }
-
-        public void setResult(Object result) {
-            this.result = result;
-        }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             ArrayList<Asset> assets = new ArrayList<Asset>();

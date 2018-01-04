@@ -67,34 +67,6 @@ public class NeoService extends ApiService {
         @Expose
         private Error error;
 
-        public String getJsonrpc() {
-            return jsonrpc;
-        }
-
-        public void setJsonrpc(String jsonrpc) {
-            this.jsonrpc = jsonrpc;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public Result getResult() {
-            return result;
-        }
-
-        public void setResult(Result result) {
-            this.result = result;
-        }
-
-        public Error getError() { return error; }
-
-        public void setError(Error error) { this.error = error; }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{

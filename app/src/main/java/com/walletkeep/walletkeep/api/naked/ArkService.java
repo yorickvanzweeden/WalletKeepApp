@@ -64,38 +64,6 @@ public class ArkService extends ApiService {
         @Expose
         private String error;
 
-        public Boolean getSuccess() {
-            return success;
-        }
-
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getUnconfirmedBalance() {
-            return unconfirmedBalance;
-        }
-
-        public void setUnconfirmedBalance(String unconfirmedBalance) {
-            this.unconfirmedBalance = unconfirmedBalance;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
-        }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{

@@ -98,37 +98,8 @@ public class KucoinService extends ApiService {
         @Expose
         private Long timestamp;
 
-
-        public Boolean getSuccess() {
-            return success;
-        }
-
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public List<Coin> getData() {
-            return data;
-        }
-
-        public void setData(List<Coin> data) {
-            this.data = data;
-        }
-
         public Long getTimestamp() {
             return timestamp;
-        }
-
-        public void setTimestamp(Long timestamp) {
-            this.timestamp = timestamp;
         }
 
         @Override
@@ -152,30 +123,6 @@ public class KucoinService extends ApiService {
         @SerializedName("freezeBalance")
         @Expose
         private String freezeBalance;
-
-        public String getCoinType() {
-            return coinType;
-        }
-
-        public void setCoinType(String coinType) {
-            this.coinType = coinType;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getFreezeBalance() {
-            return freezeBalance;
-        }
-
-        public void setFreezeBalance(String freezeBalance) {
-            this.freezeBalance = freezeBalance;
-        }
 
         public Asset getAsset(int walletId) {
             return new Asset(walletId, CurrencyTickerCorrection.correct(coinType), Float.parseFloat(balance));
