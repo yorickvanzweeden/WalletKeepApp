@@ -16,6 +16,7 @@ local.properties
 
 # User-specific configurations
 .idea/libraries/
+.idea/dictionaries/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/.name
@@ -39,3 +40,5 @@ Thumbs.db
 
 # Ignore personal credentials for testing
 app/src/androidTest/java/com/walletkeep/walletkeep/api/MyApiCredentials.java
+
+app/schemas/**
