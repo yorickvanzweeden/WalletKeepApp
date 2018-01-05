@@ -15,6 +15,7 @@ import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
 import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
 import com.walletkeep.walletkeep.di.module.ApiServiceModule;
+import com.walletkeep.walletkeep.util.DeltaCalculation;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.ArrayList;
@@ -121,6 +122,9 @@ public class AssetRepository {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
                 if ((wallet.assets == null & assets != null) || !wallet.assets.equals(assets)){
+
+                    assets = DeltaCalculation.get(wallet.assets, assets);
+
                     // Do versioning
                     Date timestamp = new Date();
                     for (Asset asset: assets) {

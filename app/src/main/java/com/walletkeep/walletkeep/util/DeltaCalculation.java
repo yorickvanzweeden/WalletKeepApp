@@ -5,6 +5,7 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class DeltaCalculation {
@@ -18,7 +19,7 @@ public class DeltaCalculation {
      * @param newList New version of assets
      * @return Difference in assets
      */
-    public static ArrayList<Asset> get(ArrayList<Asset> oldList, ArrayList<Asset> newList) {
+    public static ArrayList<Asset> get(List<Asset> oldList, List<Asset> newList) {
         // Convert lists to hashmaps (does not assume unique tickers)
         HashMap<String, Asset> oldHashMap = convertToHashMap(oldList);
         HashMap<String, Asset> newHashMap = convertToHashMap(newList);
@@ -36,7 +37,7 @@ public class DeltaCalculation {
      * @param list List of assets
      * @return HashMap(ticker, asset)
      */
-    private static HashMap<String, Asset> convertToHashMap(ArrayList<Asset> list){
+    private static HashMap<String, Asset> convertToHashMap(List<Asset> list){
         HashMap<String, Asset> hashMap = new HashMap<>();
 
         // Reuse to save on garbage collecting
