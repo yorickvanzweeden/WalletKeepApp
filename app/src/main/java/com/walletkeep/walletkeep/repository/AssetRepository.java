@@ -5,7 +5,7 @@ import android.arch.lifecycle.LiveData;
 import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
-import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
+import com.walletkeep.walletkeep.api.data.CoinmarketcapService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
@@ -71,7 +71,7 @@ public class AssetRepository {
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
         // Observe callback and save to db if needed
-        CoinmarketgapService.PricesResponseListener listener = new CoinmarketgapService.PricesResponseListener() {
+        CoinmarketcapService.PricesResponseListener listener = new CoinmarketcapService.PricesResponseListener() {
 
             @Override
             public void onCurrenciesUpdated(ArrayList<Currency> currencies) {
@@ -90,7 +90,7 @@ public class AssetRepository {
         };
 
         // Create ApiService
-        CoinmarketgapService service = new CoinmarketgapService(listener);
+        CoinmarketcapService service = new CoinmarketcapService(listener);
 
         // Fetch data
         service.fetch();

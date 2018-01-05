@@ -17,21 +17,21 @@ import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 
-public class CoinmarketgapService {
+public class CoinmarketcapService {
     PricesResponseListener listener;
 
-    public CoinmarketgapService(PricesResponseListener listener) {
+    public CoinmarketcapService(PricesResponseListener listener) {
         this.listener = listener;
     }
 
     /**
-     * Fetch currency data from Coinmarketgap
+     * Fetch currency data from Coinmarketcap
      */
     public void fetch() {
         // Create request
-        CoinmarketgapApi api = RetrofitClient.getClient("https://api.coinmarketcap.com/v1/")
-                .create(CoinmarketgapApi.class);
-        Call<List<CoinmarketgapResponse>> responseCall = api.getCurrencyData();
+        CoinmarketcapApi api = RetrofitClient.getClient("https://api.coinmarketcap.com/v1/")
+                .create(CoinmarketcapApi.class);
+        Call<List<CoinmarketcapResponse>> responseCall = api.getCurrencyData();
 
         // Perform request
         performRequest(responseCall);
@@ -42,10 +42,10 @@ public class CoinmarketgapService {
      * @param responseCall Call to perform
      */
     private void performRequest(Call responseCall){
-        responseCall.enqueue(new Callback<List<CoinmarketgapResponse>>() {
+        responseCall.enqueue(new Callback<List<CoinmarketcapResponse>>() {
             @Override
-            public void onResponse(Call<List<CoinmarketgapResponse>> call,
-                                   Response<List<CoinmarketgapResponse>> response) {
+            public void onResponse(Call<List<CoinmarketcapResponse>> call,
+                                   Response<List<CoinmarketcapResponse>> response) {
                 // Success
                 if (response.code() == 200) {
                     handleSuccessResponse(response.body());
@@ -56,11 +56,11 @@ public class CoinmarketgapService {
                 }
             }
 
-            public void handleSuccessResponse(List<CoinmarketgapResponse> responses) {
+            private void handleSuccessResponse(List<CoinmarketcapResponse> responses) {
                 ArrayList<CurrencyPrice> prices = new ArrayList<>();
                 ArrayList<Currency> currencies = new ArrayList<>();
 
-                for(CoinmarketgapResponse response: responses) {
+                for(CoinmarketcapResponse response: responses) {
                     prices.add(response.getCurrencyPrice());
                     currencies.add(response.getCurrency());
                 }
@@ -70,7 +70,8 @@ public class CoinmarketgapService {
             }
 
             @Override
-            public void onFailure(Call<List<CoinmarketgapResponse>> call, Throwable t) {
+            public void onFailure(Call<List<CoinmarketcapResponse>> call, Throwable t) {
+
                 listener.onError(t.getMessage());
             }
         });
@@ -88,16 +89,16 @@ public class CoinmarketgapService {
     /**
      * Retrofit request interfaces
      */
-    private interface CoinmarketgapApi {
+    private interface CoinmarketcapApi {
         @Headers("Content-Type: application/json")
         @GET("ticker/?convert=EUR&limit=1200")
-        Call<List<CoinmarketgapResponse>> getCurrencyData();
+        Call<List<CoinmarketcapResponse>> getCurrencyData();
     }
 
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class CoinmarketgapResponse {
+    private class CoinmarketcapResponse {
 
         @SerializedName("id")
         @Expose
