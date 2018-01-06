@@ -18,7 +18,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 
 public class CoinmarketcapService {
-    PricesResponseListener listener;
+    private PricesResponseListener listener;
 
     public CoinmarketcapService(PricesResponseListener listener) {
         this.listener = listener;

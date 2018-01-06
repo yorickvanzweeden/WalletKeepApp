@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
 import com.walletkeep.walletkeep.api.data.CoinmarketcapService;
+import com.walletkeep.walletkeep.api.data.CryptocompareService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
@@ -89,11 +90,30 @@ public class AssetRepository {
             }
         };
 
+        // Old methods
         // Create ApiService
         CoinmarketcapService service = new CoinmarketcapService(listener);
 
         // Fetch data
         service.fetch();
+
+        // New method
+        // Observe callback and save to db if needed
+        CryptocompareService.PricesResponseListener listener2 = new CryptocompareService.PricesResponseListener() {
+
+            @Override
+            public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
+                executors.diskIO().execute(() -> database.currencyPriceDao().insertAll(prices));
+            }
+
+            @Override
+            public void onError(String message) {
+                errorListener.onError("Error fetching prices: " + message);
+            }
+        };
+        CryptocompareService ccService = new CryptocompareService(listener2);
+        // Fetch data
+        ccService.fetch(new ArrayList<String>(){{ add("eth");}});
     }
 
     /**
