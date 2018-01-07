@@ -36,7 +36,7 @@ class DataGenerator {
         // Fill list
         List<Exchange> exchanges = new ArrayList<>();
         for (int i = 0; i < exchangesArray.length; i++) {
-            Exchange exchange = new Exchange(exchangesArray[i].toString());
+            Exchange exchange = new Exchange(exchangesArray[i]);
             exchanges.add(exchange);
         }
 

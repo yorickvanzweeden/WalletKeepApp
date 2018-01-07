@@ -12,14 +12,14 @@ public class Exchange {
     private String name;
 
     // Constructor
-    public Exchange(String name){
+    public Exchange(@NonNull String name){
         this.name = name;
     }
 
     // Getters and setters
     public String getName() { return name; }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 }

@@ -1,5 +1,6 @@
 package com.walletkeep.walletkeep.api.data;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
@@ -48,8 +49,8 @@ public class CryptocompareService {
     private void performRequest(Call responseCall){
         responseCall.enqueue(new Callback<List<CryptocompareResponse>>() {
             @Override
-            public void onResponse(Call<List<CryptocompareResponse>> call,
-                                   Response<List<CryptocompareResponse>> response) {
+            public void onResponse(@NonNull Call<List<CryptocompareResponse>> call,
+                                   @NonNull Response<List<CryptocompareResponse>> response) {
                 // Success
                 if (response.code() == 200) {
                     handleSuccessResponse(response.body());
@@ -71,7 +72,8 @@ public class CryptocompareService {
             }
 
             @Override
-            public void onFailure(Call<List<CryptocompareResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<CryptocompareResponse>> call,
+                                  @NonNull Throwable t) {
 
                 listener.onError(t.getMessage());
             }

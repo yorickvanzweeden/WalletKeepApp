@@ -44,8 +44,6 @@ public class ResponseHandler {
         listener.onError(errorMessage);
     }
 
-
-
     /**
      * Interface for returning data to the repository
      */

@@ -50,7 +50,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase sInstance;
 
     @VisibleForTesting
-    public static final String DATABASE_NAME = "walletkeep-db";
+    private static final String DATABASE_NAME = "walletkeep-db";
 
     /**
      * Gets instance of the database (singleton)

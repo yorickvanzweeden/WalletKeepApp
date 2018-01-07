@@ -44,14 +44,9 @@ public class AssetViewModel extends ViewModel {
      * Loads all the asset (async)
      * @return Livedata list of assets
      */
-    public LiveData<List<AggregatedAsset>> getAggregatedAssets() {
-        return aggregatedAssets;
-    }
+    public LiveData<List<AggregatedAsset>> getAggregatedAssets() { return aggregatedAssets; }
 
-    public LiveData<List<WalletWithRelations>> getWallets() {
-        return wallets;
-    }
-
+    public LiveData<List<WalletWithRelations>> getWallets() { return wallets; }
 
     /**
      * Update all wallets

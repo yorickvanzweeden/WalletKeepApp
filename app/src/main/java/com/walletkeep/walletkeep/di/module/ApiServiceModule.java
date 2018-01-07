@@ -51,7 +51,11 @@ public class ApiServiceModule {
         }
 
         // Set internal parameters
-        apiService.setParameters(wr.getCredentials(), wr.getAddress(), wr.wallet.getId(), new ResponseHandler(listener));
+        apiService.setParameters(
+                wr.getCredentials(),
+                wr.getAddress(),
+                wr.wallet.getId(),
+                new ResponseHandler(listener));
 
         return apiService;
     }

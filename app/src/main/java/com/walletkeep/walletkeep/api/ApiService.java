@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.api;
 
+import android.support.annotation.NonNull;
+
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 
@@ -50,7 +52,7 @@ public abstract class ApiService {
     protected void performRequest(Call responseCall, ErrorParser errorParser){
         responseCall.enqueue(new Callback<AbstractResponse>() {
             @Override
-            public void onResponse(Call<AbstractResponse> call, Response<AbstractResponse> response) {
+            public void onResponse(@NonNull Call<AbstractResponse> call, @NonNull Response<AbstractResponse> response) {
                 // Success
                 if (response.code() == 200) {
                     try{ handleSuccessResponse(response); }
@@ -87,7 +89,7 @@ public abstract class ApiService {
             }
 
             @Override
-            public void onFailure(Call<AbstractResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<AbstractResponse> call,@NonNull Throwable t) {
                 responseHandler.returnError(errorParser.parse(t));
             }
         });
