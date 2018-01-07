@@ -37,7 +37,6 @@ public abstract class ApiService {
     public void fetch() {
         if (ec == null || ec.getKey() == null || ec.getSecret() == null) {
             this.responseHandler.returnError("No credentials have been provided.");
-            return;
         }
     }
 
@@ -66,7 +65,7 @@ public abstract class ApiService {
                 }
             }
 
-            public void handleSuccessResponse(Object responseObject) {
+            void handleSuccessResponse(Object responseObject) {
                 ArrayList<com.walletkeep.walletkeep.db.entity.Asset> assets = new ArrayList<>();
 
                 // Response may be a list or a single item

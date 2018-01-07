@@ -110,7 +110,7 @@ public class BittrexService extends ApiService {
         @Expose
         private Object uuid;
 
-        public Asset getAsset(int walletId) {
+        Asset getAsset(int walletId) {
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
     }

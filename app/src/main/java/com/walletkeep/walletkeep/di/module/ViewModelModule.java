@@ -18,25 +18,25 @@ public class ViewModelModule {
 
     @ActivityScope
     @Provides
-    public PortfolioViewModel portfolioViewModel(PortfolioRepository portfolioRepository) {
+    PortfolioViewModel portfolioViewModel(PortfolioRepository portfolioRepository) {
         return new PortfolioViewModel(portfolioRepository);
     }
 
     @ActivityScope
     @Provides
-    public WalletViewModel walletViewModel(WalletRepository walletRepository) {
+    WalletViewModel walletViewModel(WalletRepository walletRepository) {
         return new WalletViewModel(walletRepository);
     }
 
     @ActivityScope
     @Provides
-    public AssetViewModel assetViewModel(AssetRepository assetRepository) {
+    AssetViewModel assetViewModel(AssetRepository assetRepository) {
         return new AssetViewModel(assetRepository);
     }
 
     @ActivityScope
     @Provides
-    public UpdateWalletViewModel updateWalletViewModel(WalletRepository walletRepository) {
+    UpdateWalletViewModel updateWalletViewModel(WalletRepository walletRepository) {
         return new UpdateWalletViewModel(walletRepository);
     }
 }

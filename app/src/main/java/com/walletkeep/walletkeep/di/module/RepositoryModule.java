@@ -15,19 +15,19 @@ public class RepositoryModule {
 
     @AppScope
     @Provides
-    public PortfolioRepository portfolioRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
+    PortfolioRepository portfolioRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
         return new PortfolioRepository(appDatabase, appExecutors);
     }
 
     @AppScope
     @Provides
-    public WalletRepository walletRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
+    WalletRepository walletRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
         return new WalletRepository(appDatabase, appExecutors);
     }
 
     @AppScope
     @Provides
-    public AssetRepository assetRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
+    AssetRepository assetRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
         return new AssetRepository(appDatabase, appExecutors);
     }
 }

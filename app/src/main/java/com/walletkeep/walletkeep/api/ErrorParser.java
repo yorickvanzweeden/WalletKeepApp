@@ -17,17 +17,17 @@ public class ErrorParser {
         this.stringModifier = stringModifier;
     }
 
-    public String parse(Throwable t) {
+    String parse(Throwable t) {
         return parse(t.getMessage());
     }
 
-    public String parse(String m){
+    String parse(String m){
         if (key == null) return m;
         if (stringModifier != null) m = stringModifier.modify(m);
         return new JsonParser().parse(m).getAsJsonObject().get(key).getAsString();
     }
 
-    public static ErrorParser getStandard() {
+    static ErrorParser getStandard() {
         return new ErrorParser(null);
     }
 

@@ -22,7 +22,7 @@ public class ResponseHandler {
      * Update assets from the callback of a specific ApiService if assets are updated
      * @param assets Coins from callback
      */
-    protected void returnAssets(ArrayList<Asset> assets) {
+    void returnAssets(ArrayList<Asset> assets) {
         // Call listener
         listener.onAssetsUpdated(assets);
     }

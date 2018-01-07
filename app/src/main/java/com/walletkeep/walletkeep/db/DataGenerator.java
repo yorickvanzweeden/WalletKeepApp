@@ -20,12 +20,12 @@ import java.util.List;
 import static com.walletkeep.walletkeep.util.Converters.inputStreamToString;
 
 
-public class DataGenerator {
+class DataGenerator {
     /**
      * Loads the exchanges from a string array
      * @return List of exchanges
      */
-    public static List<Exchange> loadExchanges() {
+    static List<Exchange> loadExchanges() {
         //TODO: Add required credentials to exchanges
         //TODO: Replace source of string array to json or something better
 
@@ -47,7 +47,7 @@ public class DataGenerator {
      * Loads the currencies from a json file (located in /res/raw)
      * @return List of currencies (name and ticker)
      */
-    public static List<Currency> loadCurrencies() {
+    static List<Currency> loadCurrencies() {
         // Read json file
         Context c =  WalletKeepApp.context();
         InputStream inputStream = c.getResources().openRawResource(R.raw.cryptocurrencies);
@@ -55,16 +55,14 @@ public class DataGenerator {
 
         // Fill list
         Type listType = new TypeToken<ArrayList<Currency>>(){}.getType();
-        List<com.walletkeep.walletkeep.db.entity.Currency> currencies = new Gson().fromJson(json, listType);
-
-        return currencies;
+        return new Gson().fromJson(json, listType);
     }
 
-    public static Portfolio loadDefaultPortfolio() {
+    static Portfolio loadDefaultPortfolio() {
         return new Portfolio("My portfolio");
     }
 
-    public static List<CurrencyPrice> loadDefaultPrices() {
+    static List<CurrencyPrice> loadDefaultPrices() {
         return new ArrayList<CurrencyPrice>() {{
             add(new CurrencyPrice("EUR", 0.83f, 1f, 0.001f, 0f, 0f, 0f, new Date()));
             add(new CurrencyPrice("USD", 1f, 1.20f, 0.001f, 0f, 0f, 0f, new Date()));

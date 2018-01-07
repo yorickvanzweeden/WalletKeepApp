@@ -108,7 +108,7 @@ public class GDAXService extends ApiService {
         @Expose
         private String profileId;
 
-        public Asset getAsset(int walletId){
+        Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
 
@@ -129,7 +129,7 @@ public class GDAXService extends ApiService {
         @Expose
         private Double epoch;
 
-        public Double getEpoch() {
+        Double getEpoch() {
             return epoch;
         }
     }
