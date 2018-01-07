@@ -20,7 +20,7 @@ public class Currency {
     private String name;
 
     // Constructor
-    public Currency(String name, String ticker){
+    public Currency(String name,@NonNull String ticker){
         this.name = name;
         this.ticker = ticker;
     }
@@ -28,11 +28,9 @@ public class Currency {
     // Getters and setters
     public String getName() { return name; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
     public String getTicker() { return ticker; }
 
-    public void setTicker(String ticker) { this.ticker = ticker; }
+    public void setTicker(@NonNull String ticker) { this.ticker = ticker; }
 }

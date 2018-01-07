@@ -30,17 +30,17 @@ public class ApiServiceModule {
     }
 
     @Provides
-    public WalletWithRelations getWalletWithRelations() {
+    WalletWithRelations getWalletWithRelations() {
         return walletWithRelations;
     }
 
     @Provides
-    public ResponseHandler.ResponseListener getListener() {
+    ResponseHandler.ResponseListener getListener() {
         return listener;
     }
 
     @AppScope @Provides
-    public ApiService apiService(WalletWithRelations wr, ResponseHandler.ResponseListener listener){
+    ApiService apiService(WalletWithRelations wr, ResponseHandler.ResponseListener listener){
         ApiService apiService;
 
         // Pick right ApiService
@@ -51,7 +51,11 @@ public class ApiServiceModule {
         }
 
         // Set internal parameters
-        apiService.setParameters(wr.getCredentials(), wr.getAddress(), wr.wallet.getId(), new ResponseHandler(listener));
+        apiService.setParameters(
+                wr.getCredentials(),
+                wr.getAddress(),
+                wr.wallet.getId(),
+                new ResponseHandler(listener));
 
         return apiService;
     }

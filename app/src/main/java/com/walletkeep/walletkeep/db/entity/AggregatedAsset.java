@@ -30,9 +30,7 @@ public class AggregatedAsset {
      * Gets latest price_eur of the currency
      * @return Latest price_eur of the currency
      */
-    public float getLatestCurrencyPrice(){
-        return price_eur;
-    }
+    public float getLatestCurrencyPrice(){ return price_eur; }
 
     /**
      * Gets the value of the asset (amount*price)

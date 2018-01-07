@@ -21,12 +21,10 @@ import retrofit2.http.POST;
 
 
 public class BitfinexService extends ApiService {
-    private String baseUrl = "https://api.bitfinex.com/";
-
     @Override
     public void fetch() {
         super.fetch();
-
+        String baseUrl = "https://api.bitfinex.com/";
         // Get signature
         JSONObject jo = new JSONObject();
         try {

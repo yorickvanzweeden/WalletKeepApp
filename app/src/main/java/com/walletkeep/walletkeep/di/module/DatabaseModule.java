@@ -13,12 +13,12 @@ import dagger.Provides;
 public class DatabaseModule {
 
     @AppScope @Provides
-    public AppExecutors appExecutors() {
+    AppExecutors appExecutors() {
         return new AppExecutors();
     }
 
     @AppScope @Provides
-    public AppDatabase appDatabase(Context appContext, AppExecutors appExecutors) {
+    AppDatabase appDatabase(Context appContext, AppExecutors appExecutors) {
         /* Note: RoomDatabase.Callback does not give access to the RoomDatabase. Therefore it's
          * necessary to create a singleton of the database first and return the instance.
          */
