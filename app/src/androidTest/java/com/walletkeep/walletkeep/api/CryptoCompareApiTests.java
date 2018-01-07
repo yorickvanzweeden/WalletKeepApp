@@ -2,7 +2,7 @@ package com.walletkeep.walletkeep.api;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.walletkeep.walletkeep.api.data.CryptocompareService;
+import com.walletkeep.walletkeep.api.data.CryptoCompareService;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class CryptoCompareApiTests {
 
     @Test
     public void credentialsValidCorrect(){
-        CryptocompareService.PricesResponseListener listener = new CryptocompareService.PricesResponseListener() {
+        CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
                 stillRunning = false;
@@ -29,7 +29,7 @@ public class CryptoCompareApiTests {
                 return;
             }
         };
-        CryptocompareService service = new CryptocompareService(listener);
+        CryptoCompareService service = new CryptoCompareService(listener);
 
         ArrayList<String> currencies = new ArrayList<String>() {{
             add("ETH"); add("QASH");

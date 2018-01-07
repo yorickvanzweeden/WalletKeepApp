@@ -8,6 +8,7 @@ import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssetViewModel extends ViewModel {
@@ -37,7 +38,9 @@ public class AssetViewModel extends ViewModel {
             this.wallets = assetRepository.getWallets(portfolioId);
 
         // Update currency prices
-        this.assetRepository.fetchCurrencyPrices(errorListener);
+        //TODO: Use required currencies of the wallet
+        ArrayList<String> currencies = new ArrayList<String>() {{ add("ETH"); }};
+        this.assetRepository.fetchCurrencyPrices(errorListener, currencies);
     }
 
     /**

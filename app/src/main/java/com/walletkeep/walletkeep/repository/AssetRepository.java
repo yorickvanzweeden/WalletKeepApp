@@ -5,12 +5,10 @@ import android.arch.lifecycle.LiveData;
 import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
-import com.walletkeep.walletkeep.api.data.CoinmarketcapService;
-import com.walletkeep.walletkeep.api.data.CryptocompareService;
+import com.walletkeep.walletkeep.api.data.CryptoCompareService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
@@ -67,17 +65,12 @@ public class AssetRepository {
     /**
      * Update database with the latest currency prices from the api service
      */
-    public void fetchCurrencyPrices(ErrorListener errorListener){
+    public void fetchCurrencyPrices(ErrorListener errorListener, List<String> currencies){
         // Don't execute API calls if rate limit is applied
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
         // Observe callback and save to db if needed
-        CoinmarketcapService.PricesResponseListener listener = new CoinmarketcapService.PricesResponseListener() {
-
-            @Override
-            public void onCurrenciesUpdated(ArrayList<Currency> currencies) {
-                executors.diskIO().execute(() -> database.currencyDao().insertAll(currencies));
-            }
+        CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
@@ -89,31 +82,10 @@ public class AssetRepository {
                 errorListener.onError("Error fetching prices: " + message);
             }
         };
-
-        // Old methods
-        // Create ApiService
-        CoinmarketcapService service = new CoinmarketcapService(listener);
+        CryptoCompareService service = new CryptoCompareService(listener);
 
         // Fetch data
-        service.fetch();
-
-        // New method
-        // Observe callback and save to db if needed
-        CryptocompareService.PricesResponseListener listener2 = new CryptocompareService.PricesResponseListener() {
-
-            @Override
-            public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
-                executors.diskIO().execute(() -> database.currencyPriceDao().insertAll(prices));
-            }
-
-            @Override
-            public void onError(String message) {
-                errorListener.onError("Error fetching prices: " + message);
-            }
-        };
-        CryptocompareService ccService = new CryptocompareService(listener2);
-        // Fetch data
-        ccService.fetch(new ArrayList<String>(){{ add("eth");}});
+        service.fetch(currencies);
     }
 
     /**
