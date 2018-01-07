@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -29,12 +31,13 @@ public class BinanceService extends ApiService {
         Call<TimestampResponse> responseCall = api.getTimestamp();
         responseCall.enqueue(new Callback<TimestampResponse>() {
             @Override
-            public void onResponse(Call<TimestampResponse> call, Response<TimestampResponse> response) {
+            public void onResponse(@NonNull Call<TimestampResponse> call,
+                                   @NonNull  Response<TimestampResponse> response) {
                 fetch(response.body().getServerTime());
             }
 
             @Override
-            public void onFailure(Call<TimestampResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TimestampResponse> call,@NonNull  Throwable t) {
                 fetch(System.currentTimeMillis());
             }
         });
@@ -133,7 +136,7 @@ public class BinanceService extends ApiService {
         @Expose
         private String locked;
 
-        public Asset getAsset(int walletId){
+        Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(asset), Float.parseFloat(free));
         }
     }
@@ -144,7 +147,7 @@ public class BinanceService extends ApiService {
         @Expose
         private Long serverTime;
 
-        public Long getServerTime() {
+        Long getServerTime() {
             return serverTime;
         }
 

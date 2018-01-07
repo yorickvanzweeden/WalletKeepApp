@@ -30,9 +30,7 @@ public class PortfolioRepository {
      * Gets a list of portfolios from the database
      * @return List of portfolios
      */
-    public LiveData<List<Portfolio>> getPortfolios() {
-        return database.portfolioDao().getAll();
-    }
+    public LiveData<List<Portfolio>> getPortfolios() { return database.portfolioDao().getAll(); }
 
     /**
      * Adds a portfolio (async)

@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -28,12 +30,13 @@ public class GDAXService extends ApiService {
         Call<TimestampResponse> responseCall = api.getTimestamp();
         responseCall.enqueue(new Callback<TimestampResponse>() {
             @Override
-            public void onResponse(Call<TimestampResponse> call, Response<TimestampResponse> response) {
+            public void onResponse(@NonNull Call<TimestampResponse> call,
+                                   @NonNull Response<TimestampResponse> response) {
                 fetch(response.body().getEpoch().longValue());
             }
 
             @Override
-            public void onFailure(Call<TimestampResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TimestampResponse> call, @NonNull Throwable t) {
                 fetch(System.currentTimeMillis() / 1000);
             }
         });
@@ -108,7 +111,7 @@ public class GDAXService extends ApiService {
         @Expose
         private String profileId;
 
-        public Asset getAsset(int walletId){
+        Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
 
@@ -129,7 +132,7 @@ public class GDAXService extends ApiService {
         @Expose
         private Double epoch;
 
-        public Double getEpoch() {
+        Double getEpoch() {
             return epoch;
         }
     }

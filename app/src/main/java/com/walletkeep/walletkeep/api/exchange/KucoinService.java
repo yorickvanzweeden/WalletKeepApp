@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -28,13 +30,14 @@ public class KucoinService extends ApiService {
         Call<KucoinResponse> responseCall = api.getTimestamp();
         responseCall.enqueue(new Callback<KucoinResponse>() {
             @Override
-            public void onResponse(Call<KucoinResponse> call, Response<KucoinResponse> response) {
+            public void onResponse(@NonNull Call<KucoinResponse> call,
+                                   @NonNull Response<KucoinResponse> response) {
                 Long ts = response.body().getTimestamp();
                 fetch(ts);
             }
 
             @Override
-            public void onFailure(Call<KucoinResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<KucoinResponse> call, @NonNull Throwable t) {
                 fetch(System.currentTimeMillis());
             }
         });
@@ -124,8 +127,11 @@ public class KucoinService extends ApiService {
         @Expose
         private String freezeBalance;
 
-        public Asset getAsset(int walletId) {
-            return new Asset(walletId, CurrencyTickerCorrection.correct(coinType), Float.parseFloat(balance));
+        Asset getAsset(int walletId) {
+            return new Asset(
+                    walletId,
+                    CurrencyTickerCorrection.correct(coinType),
+                    Float.parseFloat(balance));
         }
     }
 }

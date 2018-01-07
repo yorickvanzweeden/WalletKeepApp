@@ -21,7 +21,9 @@ public class WalletKeepApp extends Application {
                 .build();
     }
 
-    public static Context context(){ return mContext; }
+    public static Context context(){
+        return mContext;
+    }
 
     public RepositoryComponent component() {
         return component;

@@ -130,10 +130,6 @@ public class AssetActivity extends AppCompatActivity {
         // Observe wallets
         viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
-        // Add error listener
-        errorListener = message ->
-                Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
         // Refresh --> Update wallets
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
@@ -156,6 +152,9 @@ public class AssetActivity extends AppCompatActivity {
         // Use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Add error listener
+        errorListener = message -> Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()

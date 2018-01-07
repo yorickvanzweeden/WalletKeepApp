@@ -20,14 +20,12 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 
-
 public class KrakenService extends ApiService {
-    private String baseUrl = "https://api.kraken.com";
 
     @Override
     public void fetch() {
         super.fetch();
-
+        String baseUrl = "https://api.kraken.com";
         // Get signature
         long timestamp = System.currentTimeMillis();
         String postData = String.format("%snonce=%s", timestamp, timestamp);
@@ -40,7 +38,9 @@ public class KrakenService extends ApiService {
             String a = sg.encode(sg.getBytes(url));
 
             data = sg.decode(a.concat(b));
-        } catch (NoSuchAlgorithmException e) { this.responseHandler.returnError("SHA-256 not supported"); return; }
+        } catch (NoSuchAlgorithmException e) {
+            this.responseHandler.returnError("SHA-256 not supported"); return;
+        }
 
         String signature = sg.encode(sg.hMac(data, sg.decode(ec.getSecret()), "HmacSHA512"));
 

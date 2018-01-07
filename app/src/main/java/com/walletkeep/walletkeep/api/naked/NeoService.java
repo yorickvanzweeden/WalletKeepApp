@@ -16,13 +16,12 @@ import retrofit2.http.Query;
 
 
 public class NeoService extends ApiService {
-    private String baseUrl = "https://seed3.neo.org:10331/";
-    private String jsonRpc = "2.0";
-    private String id = "1";
-    //Documentation: http://docs.neo.org/en-us/node/api.html
-
     @Override
     public void fetch() {
+        String baseUrl = "https://seed3.neo.org:10331/";
+        String jsonRpc = "2.0";
+        String id = "1";
+        //Documentation: http://docs.neo.org/en-us/node/api.html
         String method = "getaccountstate";
         String params = String.format("[\"%s\"]", address);
 
