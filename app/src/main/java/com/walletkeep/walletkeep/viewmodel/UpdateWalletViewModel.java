@@ -1,12 +1,8 @@
 package com.walletkeep.walletkeep.viewmodel;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
 
-import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.WalletRepository;
@@ -54,21 +50,4 @@ public class UpdateWalletViewModel extends ViewModel{
         }
     }
     public void deleteWallet(Wallet wallet){ this.walletRepository.deleteWallet(wallet); }
-
-    /**
-     * Returns view model with repository
-     */
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private final WalletRepository walletRepository;
-
-        public Factory(@NonNull Application application) {
-            walletRepository = ((WalletKeepApp) application).getWalletRepository();
-        }
-
-        @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            //noinspection unchecked
-            return (T) new UpdateWalletViewModel(walletRepository);
-        }
-    }
 }

@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -29,12 +31,13 @@ public class BinanceService extends ApiService {
         Call<TimestampResponse> responseCall = api.getTimestamp();
         responseCall.enqueue(new Callback<TimestampResponse>() {
             @Override
-            public void onResponse(Call<TimestampResponse> call, Response<TimestampResponse> response) {
+            public void onResponse(@NonNull Call<TimestampResponse> call,
+                                   @NonNull  Response<TimestampResponse> response) {
                 fetch(response.body().getServerTime());
             }
 
             @Override
-            public void onFailure(Call<TimestampResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TimestampResponse> call,@NonNull  Throwable t) {
                 fetch(System.currentTimeMillis());
             }
         });
@@ -112,70 +115,6 @@ public class BinanceService extends ApiService {
         @Expose
         private List<Balance> balances = null;
 
-        public Integer getMakerCommission() {
-            return makerCommission;
-        }
-
-        public void setMakerCommission(Integer makerCommission) {
-            this.makerCommission = makerCommission;
-        }
-
-        public Integer getTakerCommission() {
-            return takerCommission;
-        }
-
-        public void setTakerCommission(Integer takerCommission) {
-            this.takerCommission = takerCommission;
-        }
-
-        public Integer getBuyerCommission() {
-            return buyerCommission;
-        }
-
-        public void setBuyerCommission(Integer buyerCommission) {
-            this.buyerCommission = buyerCommission;
-        }
-
-        public Integer getSellerCommission() {
-            return sellerCommission;
-        }
-
-        public void setSellerCommission(Integer sellerCommission) {
-            this.sellerCommission = sellerCommission;
-        }
-
-        public Boolean getCanTrade() {
-            return canTrade;
-        }
-
-        public void setCanTrade(Boolean canTrade) {
-            this.canTrade = canTrade;
-        }
-
-        public Boolean getCanWithdraw() {
-            return canWithdraw;
-        }
-
-        public void setCanWithdraw(Boolean canWithdraw) {
-            this.canWithdraw = canWithdraw;
-        }
-
-        public Boolean getCanDeposit() {
-            return canDeposit;
-        }
-
-        public void setCanDeposit(Boolean canDeposit) {
-            this.canDeposit = canDeposit;
-        }
-
-        public List<Balance> getBalances() {
-            return balances;
-        }
-
-        public void setBalances(List<Balance> balances) {
-            this.balances = balances;
-        }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
@@ -197,31 +136,7 @@ public class BinanceService extends ApiService {
         @Expose
         private String locked;
 
-        public String getAsset() {
-            return asset;
-        }
-
-        public void setAsset(String asset) {
-            this.asset = asset;
-        }
-
-        public String getFree() {
-            return free;
-        }
-
-        public void setFree(String free) {
-            this.free = free;
-        }
-
-        public String getLocked() {
-            return locked;
-        }
-
-        public void setLocked(String locked) {
-            this.locked = locked;
-        }
-
-        public Asset getAsset(int walletId){
+        Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(asset), Float.parseFloat(free));
         }
     }
@@ -232,7 +147,7 @@ public class BinanceService extends ApiService {
         @Expose
         private Long serverTime;
 
-        public Long getServerTime() {
+        Long getServerTime() {
             return serverTime;
         }
 

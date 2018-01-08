@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 
 public class EditWalletActivity extends AppCompatActivity {
@@ -36,8 +38,10 @@ public class EditWalletActivity extends AppCompatActivity {
         setupFragment(savedInstanceState, fragmentType);
 
         // Initialise view model
-        UpdateWalletViewModel.Factory factory = new UpdateWalletViewModel.Factory(getApplication());
-        viewModel = ViewModelProviders.of(this, factory).get(UpdateWalletViewModel.class);
+        ViewModelComponent component = DaggerViewModelComponent.builder()
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .build();
+        viewModel = component.getUpdateWalletViewModel();
         viewModel.init(walletId);
 
         // Observe wallet --> Update form if changed

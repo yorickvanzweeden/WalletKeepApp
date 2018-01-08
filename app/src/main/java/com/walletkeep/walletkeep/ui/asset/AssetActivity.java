@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.ui.asset;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.ui.IntroSlider;
 import com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity;
@@ -39,6 +41,7 @@ public class AssetActivity extends AppCompatActivity {
     private List<AggregatedAsset> assets;
     private AssetAdapter mAdapter;
     private SurfaceView mSurfaceView;
+    private AssetRepository.ErrorListener errorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,15 +130,11 @@ public class AssetActivity extends AppCompatActivity {
         // Observe wallets
         viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
-        // Add error listener
-        AssetRepository.ErrorListener errorListener = message -> {
-            Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        };
-
         // Refresh --> Update wallets
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
-            viewModel.fetch(wallets, errorListener);
+            viewModel.assetFetch(wallets, errorListener);
+            viewModel.priceFetch(assets, errorListener);
             swipeContainer.setRefreshing(false);
         });
     }
@@ -155,10 +154,15 @@ public class AssetActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        // Add error listener
+        errorListener = message -> Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
         // Initialise view model
-        AssetViewModel.Factory factory = new AssetViewModel.Factory(getApplication());
-        viewModel = ViewModelProviders.of(this, factory).get(AssetViewModel.class);
-        viewModel.init(portfolioId);
+        ViewModelComponent component = DaggerViewModelComponent.builder()
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .build();
+        viewModel = component.getAssetViewModel();
+        viewModel.init(portfolioId, errorListener);
 
         // Create and set adapter
         mAdapter = new AssetAdapter(this, viewModel.getAggregatedAssets().getValue());
@@ -166,28 +170,32 @@ public class AssetActivity extends AppCompatActivity {
 
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
-            if (aggregatedAssets == null) return;
-
-            // Sort on size
-            Collections.sort(aggregatedAssets, new AggregatedAsset.AssetComparator());
-
-            // Remove assets which are valued less than 1 euro
-            int index = -1;
-            for (int i = aggregatedAssets.size() - 1; i >= 0; i--) {
-                if (aggregatedAssets.get(i).getEurValue() > 1) break;
-                index = i;
-            }
-            if (index != -1) aggregatedAssets = aggregatedAssets.subList(0, index);
-
-            // Update recycler view
-            mAdapter.updateAggregatedAssets(aggregatedAssets);
-
-            // Update portfolio total and distribution bar
             this.assets = aggregatedAssets;
-            updatePortfolioValue();
-            updateDistributionBar();
+            onUpdated();
         });
     }
+
+    private void onUpdated() {
+        // Sort on size
+        Collections.sort(assets, new AggregatedAsset.AssetComparator());
+
+        // Remove assets which are valued less than 1 euro
+        int index = -1;
+        for (int i = assets.size() - 1; i >= 0; i--) {
+            if (assets.get(i).getLatestCurrencyPrice() == 0) viewModel.priceFetch(assets, errorListener);
+            if (assets.get(i).getEurValue() > 1) break;
+            index = i;
+        }
+        if (index != -1) assets = assets.subList(0, index);
+
+        // Update recycler view
+        mAdapter.updateAggregatedAssets(assets);
+
+        // Update portfolio total and distribution bar
+        updatePortfolioValue();
+        updateDistributionBar();
+    }
+
 
     /**
      * Updates portfolio value

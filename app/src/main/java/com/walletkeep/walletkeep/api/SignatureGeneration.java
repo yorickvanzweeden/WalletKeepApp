@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class SignatureGeneration {
     private ResponseHandler responseHandler;
 
-    public SignatureGeneration(ResponseHandler responseHandler){
+    SignatureGeneration(ResponseHandler responseHandler){
         this.responseHandler = responseHandler;
     }
 

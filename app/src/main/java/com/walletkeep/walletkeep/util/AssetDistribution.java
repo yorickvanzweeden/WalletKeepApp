@@ -39,7 +39,7 @@ public class AssetDistribution {
         private Rect bounds;
         private int perc;
 
-        public DistributedElement(String ticker, int perc, Rect bounds) {
+        DistributedElement(String ticker, int perc, Rect bounds) {
             this.ticker = ticker;
             this.perc = perc;
             this.bounds = bounds;

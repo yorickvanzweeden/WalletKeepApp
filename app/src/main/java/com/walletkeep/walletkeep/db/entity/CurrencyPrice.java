@@ -68,6 +68,14 @@ public class CurrencyPrice {
         this.lastUpdated = lastUpdated;
     }
 
+    @Ignore
+    public CurrencyPrice(String currencyTicker, float priceUsd, float priceEur, float priceBtc) {
+        this.currencyTicker = currencyTicker;
+        this.priceUsd = priceUsd;
+        this.priceEur = priceEur;
+        this.priceBtc = priceBtc;
+    }
+
     // Getters and setters
     public int getId() {
         return id;

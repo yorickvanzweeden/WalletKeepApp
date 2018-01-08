@@ -23,13 +23,11 @@ public class WalletWithRelations {
         Transaction(2);
 
         private final int value;
-        private Type(int value) {
+        Type(int value) {
             this.value = value;
         }
 
-        public int getValue() {
-            return value;
-        }
+        public int getValue() { return value; }
     }
 
     /**
@@ -44,14 +42,17 @@ public class WalletWithRelations {
      * Gets the name of the wallet
      * @return Name of the wallet (null if not present)
      */
-    public String getWalletName() { return this.wallet.getName(); }
-
+    public String getWalletName() {
+        return this.wallet.getName();
+    }
 
     /**
      * Gets the name of the exchange of the wallet
      * @return Name of the exchange (null if not present)
      */
-    public String getExchangeName() { return this.wallet.getExchangeName(); }
+    public String getExchangeName() {
+        return this.wallet.getExchangeName();
+    }
 
     /**
      * Gets the address of the wallet
@@ -65,7 +66,9 @@ public class WalletWithRelations {
      * Gets the currency of the address
      * @return Currency of the address
      */
-    public String getAddressCurrency() { return this.wallet.getAddressCurrency(); }
+    public String getAddressCurrency() {
+        return this.wallet.getAddressCurrency();
+    }
 
     /**
      * Gets the exchange credentials related to the wallet

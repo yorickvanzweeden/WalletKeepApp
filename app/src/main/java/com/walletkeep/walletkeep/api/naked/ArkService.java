@@ -16,15 +16,15 @@ import retrofit2.http.Query;
 
 
 public class ArkService extends ApiService {
-    private String baseUrl = "https://api.arknode.net/";
-    private String nethash = "6e84d08bd299ed97c212c886c98a57e36545c8f5d645ca7eeae63a8bd62d8988";
-    private String version = "1.0.1";
-    private String port = "4000";
-    //Documentation: https://ark.brianfaust.me/#/
-
     @Override
     public void fetch() {
-         // Create request
+        String baseUrl = "https://api.arknode.net/";
+        String nethash = "6e84d08bd299ed97c212c886c98a57e36545c8f5d645ca7eeae63a8bd62d8988";
+        String version = "1.0.1";
+        String port = "4000";
+        //Documentation: https://ark.brianfaust.me/#/
+
+        // Create request
         Api api = RetrofitClient.getClient(baseUrl).create(Api.class);
         Call<Response> responseCall = api.getBalance(
                 address, nethash, version, port );
@@ -63,38 +63,6 @@ public class ArkService extends ApiService {
         @SerializedName("error")
         @Expose
         private String error;
-
-        public Boolean getSuccess() {
-            return success;
-        }
-
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getUnconfirmedBalance() {
-            return unconfirmedBalance;
-        }
-
-        public void setUnconfirmedBalance(String unconfirmedBalance) {
-            this.unconfirmedBalance = unconfirmedBalance;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
-        }
 
         @Override
         public ArrayList<Asset> getAssets(int walletId) {

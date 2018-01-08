@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,7 +12,10 @@ import android.view.View;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class WalletActivity extends AppCompatActivity {
@@ -46,8 +48,10 @@ public class WalletActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Initialise view model
-        WalletViewModel.Factory factory = new WalletViewModel.Factory(getApplication());
-        viewModel = ViewModelProviders.of(this, factory).get(WalletViewModel.class);
+        ViewModelComponent component = DaggerViewModelComponent.builder()
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .build();
+        viewModel = component.getWalletViewModel();
         viewModel.init(portfolioId);
 
         // Create and set adapter

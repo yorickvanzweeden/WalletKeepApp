@@ -1,17 +1,20 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
-import com.walletkeep.walletkeep.api.data.CoinmarketgapService;
+import com.walletkeep.walletkeep.api.data.CryptoCompareService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
+import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
+import com.walletkeep.walletkeep.di.module.ApiServiceModule;
+import com.walletkeep.walletkeep.util.DeltaCalculation;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.ArrayList;
@@ -20,11 +23,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AssetRepository {
-    // Repository instance
-    private static AssetRepository sInstance;
-
     // Database instance
-    private final AppDatabase mDatabase;
+    private final AppDatabase database;
+    private final AppExecutors executors;
 
     // Rate limiter prevent too many requests
     private RateLimiter<String> priceApiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
@@ -35,25 +36,11 @@ public class AssetRepository {
      * Constructor: Initializes repository with database
      * @param database Database to use
      */
-    public AssetRepository(AppDatabase database) {
-        mDatabase = database;
+    public AssetRepository(AppDatabase database, AppExecutors executors) {
+        this.database = database;
+        this.executors = executors;
     }
 
-    /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static AssetRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (AssetRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new AssetRepository(database);
-                }
-            }
-        }
-        return sInstance;
-    }
 
     /**
      * Gets a list of aggregated assets of a portfolio
@@ -61,7 +48,7 @@ public class AssetRepository {
      * @return List of aggregated assets
      */
     public LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId) {
-        return mDatabase.assetDao().getAggregatedAssets(portfolioId);
+        return database.assetDao().getAggregatedAssets(portfolioId);
     }
 
     /**
@@ -70,40 +57,37 @@ public class AssetRepository {
      * @return List of aggregated assets
      */
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
-        return mDatabase.walletDao().getAll(portfolioId);
+        return database.walletDao().getAll(portfolioId);
     }
+
 
     /**
      * Update database with the latest currency prices from the api service
      */
-    public void fetchCurrencyPrices(){
+    public void fetchPrices(List<String> currencies, ErrorListener errorListener){
         // Don't execute API calls if rate limit is applied
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
         // Observe callback and save to db if needed
-        CoinmarketgapService.PricesResponseListener listener = new CoinmarketgapService.PricesResponseListener() {
-
-            @Override
-            public void onCurrenciesUpdated(ArrayList<Currency> currencies) {
-                AsyncTask.execute(() -> mDatabase.currencyDao().insertAll(currencies));
-            }
+        CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
-                AsyncTask.execute(() -> mDatabase.currencyPriceDao().insertAll(prices));
+                executors.diskIO().execute(() -> {
+                    database.currencyPriceDao().deleteAll();
+                    database.currencyPriceDao().insertAll(prices);
+                });
             }
 
             @Override
             public void onError(String message) {
-                //TODO: Do something with message
+                errorListener.onError("Error fetching prices: " + message);
             }
         };
-
-        // Create ApiService
-        CoinmarketgapService service = new CoinmarketgapService(listener);
+        CryptoCompareService service = new CryptoCompareService(listener);
 
         // Fetch data
-        service.fetch();
+        service.fetch(currencies);
     }
 
     /**
@@ -117,11 +101,6 @@ public class AssetRepository {
             }
         }
     }
-
-    /**
-     * Fetches wallet data from api service
-     * @param wallet Wallets containing credentials
-     */
     private void fetchWallet(WalletWithRelations wallet, ErrorListener errorListener) {
         // Don't execute API calls if rate limit is applied
         if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }
@@ -131,12 +110,13 @@ public class AssetRepository {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
                 if ((wallet.assets == null & assets != null) || !wallet.assets.equals(assets)){
+
+                    assets = DeltaCalculation.get(wallet.assets, assets);
+
                     // Do versioning
                     Date timestamp = new Date();
-                    for (Asset asset: assets) {
-                        asset.setTimestamp(timestamp);
-                    }
-                    for (Asset asset : assets) AsyncTask.execute(() -> mDatabase.assetDao().insert(asset));
+                    for (Asset asset : assets) asset.setTimestamp(timestamp);
+                    for (Asset asset : assets) executors.diskIO().execute(() -> database.assetDao().insert(asset));
                 }
             }
 
@@ -148,8 +128,10 @@ public class AssetRepository {
         };
 
         // Create ApiService
-        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
-        ApiService apiService = apiServiceFactory.create();
+        ApiServiceComponent component = DaggerApiServiceComponent.builder()
+                .apiServiceModule(new ApiServiceModule(wallet, listener))
+                .build();
+        ApiService apiService = component.getApiService();
 
         // Fetch data
         apiService.fetch();

@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -28,13 +30,14 @@ public class KucoinService extends ApiService {
         Call<KucoinResponse> responseCall = api.getTimestamp();
         responseCall.enqueue(new Callback<KucoinResponse>() {
             @Override
-            public void onResponse(Call<KucoinResponse> call, Response<KucoinResponse> response) {
+            public void onResponse(@NonNull Call<KucoinResponse> call,
+                                   @NonNull Response<KucoinResponse> response) {
                 Long ts = response.body().getTimestamp();
                 fetch(ts);
             }
 
             @Override
-            public void onFailure(Call<KucoinResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<KucoinResponse> call, @NonNull Throwable t) {
                 fetch(System.currentTimeMillis());
             }
         });
@@ -98,37 +101,8 @@ public class KucoinService extends ApiService {
         @Expose
         private Long timestamp;
 
-
-        public Boolean getSuccess() {
-            return success;
-        }
-
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public List<Coin> getData() {
-            return data;
-        }
-
-        public void setData(List<Coin> data) {
-            this.data = data;
-        }
-
         public Long getTimestamp() {
             return timestamp;
-        }
-
-        public void setTimestamp(Long timestamp) {
-            this.timestamp = timestamp;
         }
 
         @Override
@@ -153,32 +127,11 @@ public class KucoinService extends ApiService {
         @Expose
         private String freezeBalance;
 
-        public String getCoinType() {
-            return coinType;
-        }
-
-        public void setCoinType(String coinType) {
-            this.coinType = coinType;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getFreezeBalance() {
-            return freezeBalance;
-        }
-
-        public void setFreezeBalance(String freezeBalance) {
-            this.freezeBalance = freezeBalance;
-        }
-
-        public Asset getAsset(int walletId) {
-            return new Asset(walletId, CurrencyTickerCorrection.correct(coinType), Float.parseFloat(balance));
+        Asset getAsset(int walletId) {
+            return new Asset(
+                    walletId,
+                    CurrencyTickerCorrection.correct(coinType),
+                    Float.parseFloat(balance));
         }
     }
 }

@@ -71,30 +71,6 @@ public class BittrexService extends ApiService {
         @Expose
         private List<Result> result = null;
 
-        public Boolean getSuccess() {
-            return success;
-        }
-
-        public void setSuccess(Boolean success) {
-            this.success = success;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public List<Result> getResult() {
-            return result;
-        }
-
-        public void setResult(List<Result> result) {
-            this.result = result;
-        }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
@@ -134,63 +110,7 @@ public class BittrexService extends ApiService {
         @Expose
         private Object uuid;
 
-        public String getCurrency() {
-            return currency;
-        }
-
-        public void setCurrency(String currency) {
-            this.currency = currency;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public Double getAvailable() {
-            return available;
-        }
-
-        public void setAvailable(Double available) {
-            this.available = available;
-        }
-
-        public Double getPending() {
-            return pending;
-        }
-
-        public void setPending(Double pending) {
-            this.pending = pending;
-        }
-
-        public String getCryptoAddress() {
-            return cryptoAddress;
-        }
-
-        public void setCryptoAddress(String cryptoAddress) {
-            this.cryptoAddress = cryptoAddress;
-        }
-
-        public Boolean getRequested() {
-            return requested;
-        }
-
-        public void setRequested(Boolean requested) {
-            this.requested = requested;
-        }
-
-        public Object getUuid() {
-            return uuid;
-        }
-
-        public void setUuid(Object uuid) {
-            this.uuid = uuid;
-        }
-
-        public Asset getAsset(int walletId) {
+        Asset getAsset(int walletId) {
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
     }
