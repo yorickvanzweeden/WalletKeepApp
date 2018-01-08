@@ -239,7 +239,7 @@ public class AssetActivity extends AppCompatActivity {
         for (int i =0; i<distribution.elements.size(); i++) {
             AssetDistribution.DistributedElement element = distribution.elements.get(i);
             ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-            mDrawable.getPaint().setColor(colors[i]);
+            mDrawable.getPaint().setColor(colors[i % 18]);
             mDrawable.setBounds(element.getBounds());
             mDrawable.draw(canvas);
             if (element.getPercentage() > 5)
