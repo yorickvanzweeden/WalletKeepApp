@@ -1,5 +1,7 @@
 package com.walletkeep.walletkeep.util;
 
+import android.support.annotation.NonNull;
+
 import com.walletkeep.walletkeep.db.entity.Asset;
 
 import java.util.ArrayList;
@@ -19,9 +21,11 @@ public class DeltaCalculation {
      * @param newList New version of assets
      * @return Difference in assets
      */
-    public static ArrayList<Asset> get(List<Asset> oldList, List<Asset> newList) {
+    public static ArrayList<Asset> get(List<Asset> oldList, @NonNull  List<Asset> newList) {
         // Convert lists to hashmaps (does not assume unique tickers)
-        HashMap<String, Asset> oldHashMap = convertToHashMap(oldList);
+        HashMap<String, Asset> oldHashMap;
+        if (oldList != null) oldHashMap = new HashMap<>();
+        else oldHashMap = convertToHashMap(oldList);
         HashMap<String, Asset> newHashMap = convertToHashMap(newList);
 
         // Check if they are equal (still faster than List.equals)
