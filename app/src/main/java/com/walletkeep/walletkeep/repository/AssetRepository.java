@@ -72,9 +72,9 @@ public class AssetRepository {
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
-            public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
+            public void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete) {
                 executors.diskIO().execute(() -> {
-                    database.currencyPriceDao().deleteAll();
+                    if (delete) database.currencyPriceDao().deleteAll();
                     database.currencyPriceDao().insertAll(prices);
                 });
             }
