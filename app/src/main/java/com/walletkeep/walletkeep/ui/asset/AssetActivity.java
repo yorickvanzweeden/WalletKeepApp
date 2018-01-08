@@ -226,15 +226,20 @@ public class AssetActivity extends AppCompatActivity {
         Boolean color = false;
         Paint paint = new Paint();
         paint.setTextSize(40);
-        paint.setColor(getResources().getColor(R.color.half_black));
-
+        paint.setColor(getResources().getColor(R.color.black));
         // Get canvas
         Canvas canvas = mSurfaceView.getHolder().lockCanvas();
         if (canvas == null) return;
+
+        //set colors to list
+        // Read string array
+        int[] colors = this.getResources().getIntArray(R.array.distributionbar);
+
         // Paint canvas
-        for(AssetDistribution.DistributedElement element: distribution.elements) {
+        for (int i =0; i<distribution.elements.size(); i++) {
+            AssetDistribution.DistributedElement element = distribution.elements.get(i);
             ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-            mDrawable.getPaint().setColor(color ? 0xfff2476a : 0xffadd8e6);
+            mDrawable.getPaint().setColor(colors[i % 18]);
             mDrawable.setBounds(element.getBounds());
             mDrawable.draw(canvas);
             if (element.getPercentage() > 5)
