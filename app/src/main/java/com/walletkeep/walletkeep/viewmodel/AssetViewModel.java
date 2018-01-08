@@ -36,11 +36,6 @@ public class AssetViewModel extends ViewModel {
         // Update wallets
         if (this.wallets == null)
             this.wallets = assetRepository.getWallets(portfolioId);
-
-        // Update currency prices
-        //TODO: Use required currencies of the wallet
-        ArrayList<String> currencies = new ArrayList<String>() {{ add("ETH"); }};
-        this.assetRepository.fetchCurrencyPrices(errorListener, currencies);
     }
 
     /**
@@ -54,9 +49,21 @@ public class AssetViewModel extends ViewModel {
     /**
      * Update all wallets
      */
-    public void fetch(List<WalletWithRelations> wallets, AssetRepository.ErrorListener errorListener){
+    public void assetFetch(List<WalletWithRelations> wallets, AssetRepository.ErrorListener errorListener){
         if (wallets != null) {
             this.assetRepository.fetchWallets(wallets, errorListener);
+        }
+    }
+
+    /**
+     * Update all prices
+     */
+    public void priceFetch(List<AggregatedAsset> assets, AssetRepository.ErrorListener errorListener) {
+        if (assets != null) {
+            ArrayList<String> currencies = new ArrayList<String>() {{
+                for (AggregatedAsset asset:assets) add(asset.currencyTicker);
+            }};
+            if (currencies.size() != 0) this.assetRepository.fetchPrices(currencies, errorListener);
         }
     }
 }

@@ -133,7 +133,8 @@ public class AssetActivity extends AppCompatActivity {
         // Refresh --> Update wallets
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
-            viewModel.fetch(wallets, errorListener);
+            viewModel.assetFetch(wallets, errorListener);
+            viewModel.priceFetch(assets, errorListener);
             swipeContainer.setRefreshing(false);
         });
     }
@@ -169,28 +170,32 @@ public class AssetActivity extends AppCompatActivity {
 
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
-            if (aggregatedAssets == null) return;
-
-            // Sort on size
-            Collections.sort(aggregatedAssets, new AggregatedAsset.AssetComparator());
-
-            // Remove assets which are valued less than 1 euro
-            int index = -1;
-            for (int i = aggregatedAssets.size() - 1; i >= 0; i--) {
-                if (aggregatedAssets.get(i).getEurValue() > 1) break;
-                index = i;
-            }
-            if (index != -1) aggregatedAssets = aggregatedAssets.subList(0, index);
-
-            // Update recycler view
-            mAdapter.updateAggregatedAssets(aggregatedAssets);
-
-            // Update portfolio total and distribution bar
             this.assets = aggregatedAssets;
-            updatePortfolioValue();
-            updateDistributionBar();
+            onUpdated();
         });
     }
+
+    private void onUpdated() {
+        // Sort on size
+        Collections.sort(assets, new AggregatedAsset.AssetComparator());
+
+        // Remove assets which are valued less than 1 euro
+        int index = -1;
+        for (int i = assets.size() - 1; i >= 0; i--) {
+            if (assets.get(i).getLatestCurrencyPrice() == 0) viewModel.priceFetch(assets, errorListener);
+            if (assets.get(i).getEurValue() > 1) break;
+            index = i;
+        }
+        if (index != -1) assets = assets.subList(0, index);
+
+        // Update recycler view
+        mAdapter.updateAggregatedAssets(assets);
+
+        // Update portfolio total and distribution bar
+        updatePortfolioValue();
+        updateDistributionBar();
+    }
+
 
     /**
      * Updates portfolio value
