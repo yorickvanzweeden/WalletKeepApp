@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AssetRepository {
-    // Repository instance
-    private static AssetRepository sInstance;
-
     // Database instance
     private final AppDatabase database;
     private final AppExecutors executors;
