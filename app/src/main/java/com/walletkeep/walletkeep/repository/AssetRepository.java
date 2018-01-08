@@ -60,10 +60,11 @@ public class AssetRepository {
         return database.walletDao().getAll(portfolioId);
     }
 
+
     /**
      * Update database with the latest currency prices from the api service
      */
-    public void fetchCurrencyPrices(ErrorListener errorListener, List<String> currencies){
+    public void fetchPrices(List<String> currencies, ErrorListener errorListener){
         // Don't execute API calls if rate limit is applied
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
@@ -72,7 +73,10 @@ public class AssetRepository {
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
-                executors.diskIO().execute(() -> database.currencyPriceDao().insertAll(prices));
+                executors.diskIO().execute(() -> {
+                    database.currencyPriceDao().deleteAll();
+                    database.currencyPriceDao().insertAll(prices);
+                });
             }
 
             @Override
@@ -97,11 +101,6 @@ public class AssetRepository {
             }
         }
     }
-
-    /**
-     * Fetches wallet data from api service
-     * @param wallet Wallets containing credentials
-     */
     private void fetchWallet(WalletWithRelations wallet, ErrorListener errorListener) {
         // Don't execute API calls if rate limit is applied
         if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }
@@ -116,9 +115,7 @@ public class AssetRepository {
 
                     // Do versioning
                     Date timestamp = new Date();
-                    for (Asset asset: assets) {
-                        asset.setTimestamp(timestamp);
-                    }
+                    for (Asset asset : assets) asset.setTimestamp(timestamp);
                     for (Asset asset : assets) executors.diskIO().execute(() -> database.assetDao().insert(asset));
                 }
             }

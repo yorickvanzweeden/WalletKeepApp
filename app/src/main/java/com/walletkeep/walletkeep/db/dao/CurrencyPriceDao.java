@@ -10,4 +10,7 @@ import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 public abstract class CurrencyPriceDao implements BaseDao<CurrencyPrice>{
     @Query("SELECT * FROM currencyprice WHERE currency_ticker LIKE :ticker ORDER BY last_updated DESC LIMIT 1")
     public abstract LiveData<CurrencyPrice> getByTicker(String ticker);
+
+    @Query("DELETE FROM currencyprice")
+    public abstract void deleteAll();
 }
