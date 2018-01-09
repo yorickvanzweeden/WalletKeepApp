@@ -58,12 +58,12 @@ public class AssetViewModel extends ViewModel {
     /**
      * Update all prices
      */
-    public void priceFetch(List<AggregatedAsset> assets, AssetRepository.ErrorListener errorListener) {
+    public void priceFetch(List<AggregatedAsset> assets, AssetRepository.ErrorListener errorListener, boolean delete) {
         if (assets != null) {
             ArrayList<String> currencies = new ArrayList<String>() {{
                 for (AggregatedAsset asset:assets) add(asset.currencyTicker);
             }};
-            if (currencies.size() != 0) this.assetRepository.fetchPrices(currencies, errorListener);
+            if (currencies.size() != 0) this.assetRepository.fetchPrices(currencies, errorListener, delete);
         }
     }
 }
