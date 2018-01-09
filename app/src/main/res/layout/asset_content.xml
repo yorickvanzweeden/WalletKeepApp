@@ -23,6 +23,9 @@
         android:layout_height="match_parent"
         android:color="@color/black"
         android:theme="@style/recyclertest"
+        android:clipToPadding="false"
+        android:paddingBottom="70dp"
+        android:scrollbars="vertical"
         />
 
     </android.support.v4.widget.SwipeRefreshLayout>
