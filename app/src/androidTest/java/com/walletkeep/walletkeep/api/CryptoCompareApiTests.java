@@ -18,7 +18,7 @@ public class CryptoCompareApiTests {
     public void credentialsValidCorrect(){
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
             @Override
-            public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
+            public void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete) {
                 stillRunning = false;
                 return;
             }
