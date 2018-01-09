@@ -27,17 +27,17 @@ public class KucoinService extends ApiService {
     public void fetch() {
         // Perform time synchronisations
         KucoinApi api = RetrofitClient.getClient(baseUrl).create(KucoinApi.class);
-        Call<KucoinResponse> responseCall = api.getTimestamp();
-        responseCall.enqueue(new Callback<KucoinResponse>() {
+        Call<TimestampResponse> responseCall = api.getTimestamp();
+        responseCall.enqueue(new Callback<TimestampResponse>() {
             @Override
-            public void onResponse(@NonNull Call<KucoinResponse> call,
-                                   @NonNull Response<KucoinResponse> response) {
+            public void onResponse(@NonNull Call<TimestampResponse> call,
+                                   @NonNull Response<TimestampResponse> response) {
                 Long ts = response.body().getTimestamp() + ApiService.slow_device_delay * 1000;
                 fetch(ts);
             }
 
             @Override
-            public void onFailure(@NonNull Call<KucoinResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<TimestampResponse> call, @NonNull Throwable t) {
                 fetch(System.currentTimeMillis());
             }
         });
@@ -81,7 +81,7 @@ public class KucoinService extends ApiService {
 
         @Headers("Content-Type: application/json")
         @GET("/v1/open/lang-list")
-        Call<KucoinResponse> getTimestamp();
+        Call<TimestampResponse> getTimestamp();
     }
 
     /**
@@ -134,4 +134,15 @@ public class KucoinService extends ApiService {
                     Float.parseFloat(balance));
         }
     }
+
+    private class TimestampResponse {
+        @SerializedName("timestamp")
+        @Expose
+        private Long timestamp;
+
+        public Long getTimestamp() {
+            return timestamp;
+        }
+    }
+
 }
