@@ -21,9 +21,7 @@ public class CryptoCompareService {
     private PricesResponseListener listener;
     private String baseUrl = "https://min-api.cryptocompare.com/data/";
 
-    public CryptoCompareService(PricesResponseListener listener) {
-        this.listener = listener;
-    }
+    public CryptoCompareService(PricesResponseListener listener) { this.listener = listener; }
 
     /**
      * Fetch currency data from CryptoCompare
@@ -32,10 +30,50 @@ public class CryptoCompareService {
         // Create request
         CryptoCompareAPI api = RetrofitClient.getClient(baseUrl).create(CryptoCompareAPI.class);
 
-        Call<Map<String, Response>> responseCall = api.getCurrencyData(TextUtils.join(",", toFetch));
+        String s = TextUtils.join(",", toFetch);
+        if (s.length() >= 300) {
+            List<String> strings = partitionString(s);
+            deleteManager.reset(strings.size());
+            for (String subString: strings) {
+                // Perform request
+                performRequest(api.getCurrencyData(subString));
+            }
+        } else {
+            // Perform request
+            performRequest(api.getCurrencyData(s));
+        }
+    }
 
-        // Perform request
-        performRequest(responseCall);
+    private static class deleteManager {
+        private static final Object lock = new Object();
+        
+        private static int ticket;
+        private static int last;
+        static void reset(int requestCount) {
+            synchronized (lock) {
+                deleteManager.last = requestCount;
+            }
+        }
+        
+        static boolean getDelete() {
+            synchronized (lock) {
+                boolean result = ticket == 0;
+                ticket++;
+                if (ticket == last) ticket = 0;
+                return result;
+            }
+        }
+    }
+    private List<String> partitionString(String s) {
+        List<String> stringList = new ArrayList<>();
+        if (s.length() > 300) {
+            int lastIndex = s.lastIndexOf(',', 300);
+            stringList.addAll(partitionString(s.substring(0, lastIndex)));
+            stringList.addAll(partitionString(s.substring(lastIndex + 1, s.length())));
+        } else {
+            stringList.add(s);
+        }
+        return stringList;
     }
 
     /**
@@ -68,7 +106,7 @@ public class CryptoCompareService {
                     );
                 }
 
-                listener.onPricesUpdated(prices);
+                listener.onPricesUpdated(prices, deleteManager.getDelete());
             }
 
             @Override
@@ -82,7 +120,7 @@ public class CryptoCompareService {
      * Interface for returning data to the repository
      */
     public interface PricesResponseListener {
-        void onPricesUpdated(ArrayList<CurrencyPrice> prices);
+        void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete);
         void onError(String message);
     }
 

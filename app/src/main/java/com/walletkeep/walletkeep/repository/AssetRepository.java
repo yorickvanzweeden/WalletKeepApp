@@ -72,9 +72,9 @@ public class AssetRepository {
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
-            public void onPricesUpdated(ArrayList<CurrencyPrice> prices) {
+            public void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete) {
                 executors.diskIO().execute(() -> {
-                    database.currencyPriceDao().deleteAll();
+                    if (delete) database.currencyPriceDao().deleteAll();
                     database.currencyPriceDao().insertAll(prices);
                 });
             }
@@ -109,9 +109,11 @@ public class AssetRepository {
         ResponseHandler.ResponseListener listener = new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
-                if ((wallet.assets == null & assets != null) || !wallet.assets.equals(assets)){
+                if (assets != null){
 
                     assets = DeltaCalculation.get(wallet.assets, assets);
+                    // In case assets are not updated
+                    if (assets == null) return;
 
                     // Do versioning
                     Date timestamp = new Date();
