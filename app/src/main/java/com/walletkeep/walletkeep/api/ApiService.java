@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
+import com.walletkeep.walletkeep.db.entity.WalletTokenA;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,6 +18,7 @@ public abstract class ApiService {
     protected ExchangeCredentials ec;
     protected String address;
     protected int walletId;
+    protected List<WalletTokenA> tokens;
 
     // Api service helpers
     protected SignatureGeneration sg;
@@ -29,9 +32,11 @@ public abstract class ApiService {
     public void setParameters(ExchangeCredentials exchangeCredentials,
                               String address,
                               int walletId,
+                              List<WalletTokenA> tokens,
                               ResponseHandler responseHandler) {
         this.ec = exchangeCredentials;
         this.address = address;
+        this.tokens = tokens;
         this.walletId = walletId;
         this.responseHandler = responseHandler;
         this.sg = new SignatureGeneration(responseHandler);

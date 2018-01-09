@@ -19,6 +19,10 @@ public class Currency {
     @ColumnInfo(name = "name")
     private String name;
 
+    @SerializedName("token_address") @Expose
+    @ColumnInfo(name = "token_address")
+    private String tokenAddress;
+
     // Constructor
     public Currency(String name,@NonNull String ticker){
         this.name = name;
@@ -33,4 +37,8 @@ public class Currency {
     public String getTicker() { return ticker; }
 
     public void setTicker(@NonNull String ticker) { this.ticker = ticker; }
+
+    public String getTokenAddress() { return tokenAddress; }
+
+    public void setTokenAddress(String tokenAddress) { this.tokenAddress = tokenAddress; }
 }

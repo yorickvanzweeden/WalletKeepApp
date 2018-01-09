@@ -15,6 +15,8 @@ public class WalletWithRelations {
     @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = Asset.class)
     public List<Asset> assets;
 
+    @Relation(parentColumn = "id", entityColumn = "wallet_id", entity = WalletToken.class)
+    public List<WalletTokenA> tokens;
 
     // Direct calls
     public enum Type {

@@ -79,7 +79,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
 
         String currency = ((Spinner)view.findViewById(R.id.editWallet_naked_spinner_currency)).getSelectedItem().toString();
         wallet.wallet.setAddressCurrency(currency);
-
+        
         return wallet;
     }
 }
