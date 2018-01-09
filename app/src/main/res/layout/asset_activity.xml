@@ -29,8 +29,9 @@
     <include
         android:id="@+id/includecon"
         layout="@layout/asset_content"
-        android:layout_width="412dp"
-        android:layout_height="563dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
@@ -64,8 +65,8 @@
         android:background="@android:color/transparent"
         app:layout_anchor="@id/includecon"
         app:layout_anchorGravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/includecon" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
