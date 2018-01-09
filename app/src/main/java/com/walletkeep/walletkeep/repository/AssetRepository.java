@@ -1,6 +1,7 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
@@ -64,9 +65,12 @@ public class AssetRepository {
     /**
      * Update database with the latest currency prices from the api service
      */
-    public void fetchPrices(List<String> currencies, ErrorListener errorListener, boolean delete){
+    public void fetchPrices(@NonNull List<String> currencies, ErrorListener errorListener, boolean delete){
         // Don't execute API calls if rate limit is applied
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
+
+        // Don't execute API calls if no currencies are provided
+        if(currencies.size() == 0) return;
 
         // Observe callback and save to db if needed
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
