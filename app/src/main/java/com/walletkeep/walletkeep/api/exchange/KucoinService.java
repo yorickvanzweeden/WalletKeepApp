@@ -32,7 +32,7 @@ public class KucoinService extends ApiService {
             @Override
             public void onResponse(@NonNull Call<KucoinResponse> call,
                                    @NonNull Response<KucoinResponse> response) {
-                Long ts = response.body().getTimestamp();
+                Long ts = response.body().getTimestamp() + ApiService.slow_device_delay * 1000;
                 fetch(ts);
             }
 
