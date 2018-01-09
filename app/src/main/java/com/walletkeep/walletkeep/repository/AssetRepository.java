@@ -109,9 +109,11 @@ public class AssetRepository {
         ResponseHandler.ResponseListener listener = new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
-                if ((wallet.assets == null & assets != null) || !wallet.assets.equals(assets)){
+                if (assets != null){
 
                     assets = DeltaCalculation.get(wallet.assets, assets);
+                    // In case assets are not updated
+                    if (assets == null) return;
 
                     // Do versioning
                     Date timestamp = new Date();

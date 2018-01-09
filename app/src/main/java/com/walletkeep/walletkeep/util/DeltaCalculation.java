@@ -24,7 +24,7 @@ public class DeltaCalculation {
     public static ArrayList<Asset> get(List<Asset> oldList, @NonNull  List<Asset> newList) {
         // Convert lists to hashmaps (does not assume unique tickers)
         HashMap<String, Asset> oldHashMap;
-        if (oldList != null) oldHashMap = new HashMap<>();
+        if (oldList == null) oldHashMap = new HashMap<>();
         else oldHashMap = convertToHashMap(oldList);
         HashMap<String, Asset> newHashMap = convertToHashMap(newList);
 
@@ -108,8 +108,7 @@ public class DeltaCalculation {
         while (it.hasNext()) {
             Map.Entry<String, Asset> pair = (Map.Entry)it.next();
             Asset x = pair.getValue();
-            x.setAmount(-1 * x.getAmount());
-            delta.add(x);
+            delta.add(new Asset(x.getWalletId(),x.getCurrencyTicker(), -1 * x.getAmount()));
             it.remove(); // avoids a ConcurrentModificationException
         }
 

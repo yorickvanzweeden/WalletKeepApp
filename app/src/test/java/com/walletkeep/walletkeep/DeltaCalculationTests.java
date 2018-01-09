@@ -102,6 +102,33 @@ public class DeltaCalculationTests {
         );
     }
 
+    @Test
+    public void testDifferentListsOldZero(){
+        ArrayList<Asset> oldList = new ArrayList<>();
+        ArrayList<Asset> newList = listOneTicker();
+
+        ArrayList<Asset> deltas = DeltaCalculation.get(oldList, newList);
+        Assert.assertTrue(deltas != null &&
+                deltas.get(0).getCurrencyTicker().equals("BTC") &&
+                deltas.get(0).getAmount() == 3 &&
+                deltas.size() == 1
+        );
+    }
+
+    @Test
+    public void testDifferentListsNewZero(){
+        ArrayList<Asset> oldList = listOneTicker();
+        ArrayList<Asset> newList = new ArrayList<>();
+
+        ArrayList<Asset> deltas = DeltaCalculation.get(oldList, newList);
+        Assert.assertTrue(deltas != null &&
+                deltas.get(0).getCurrencyTicker().equals("BTC") &&
+                deltas.get(0).getAmount() == -3 &&
+                deltas.size() == 1
+        );
+    }
+
+
     private ArrayList<Asset> listOneTicker(){
         return new ArrayList<Asset>() {{
             add(new Asset(_id, "BTC", 3));
