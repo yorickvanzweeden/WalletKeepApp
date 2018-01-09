@@ -117,7 +117,13 @@ public class CryptoCompareService {
 
             @Override
             public void onFailure(Call<Map<String, Response>> call, Throwable t) {
-                listener.onError(t.getMessage());
+                try {
+                    String s = call.request().url().queryParameter("fsyms");
+                    listener.onError(String.format("%1$s %2$s could not be fetched", (s.indexOf(',') < 0 ? "Currency" : "Currencies"), s));
+                }
+                catch (Exception e) {
+                    listener.onError("Unknown error occurred during fetching prices");
+                }
             }
         });
     }
