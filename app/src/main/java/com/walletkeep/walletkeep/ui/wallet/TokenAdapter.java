@@ -2,6 +2,7 @@ package com.walletkeep.walletkeep.ui.wallet;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,6 @@ import android.widget.ToggleButton;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
-
-import java.util.List;
 
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> {
     // Data of the recycler view
@@ -47,10 +46,9 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public TokenAdapter(Context context, WalletViewModel viewModel, int walletId) {
+    public TokenAdapter(Context context, WalletViewModel viewModel) {
         this.context = context;
         this.viewModel = viewModel;
-        this.walletId = walletId;
     }
 
     /**
@@ -60,6 +58,10 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     public void updateTokens(String[] tokens){
         this.tokens = tokens;
         notifyDataSetChanged();
+    }
+
+    public void updateWalletId(int walletId) {
+        this.walletId = walletId;
     }
 
     /**
@@ -85,17 +87,15 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(TokenAdapter.ViewHolder holder, int position) {
 
-        holder.mToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String currency = holder.mToggleButton.getTextOff().toString();
-                WalletToken token = new WalletToken(walletId, currency);
+        holder.mToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String currency = holder.mTextView.getText().toString();
+            WalletToken token = new WalletToken(walletId, currency);
 
-                if (isChecked) {
-                    // The toggle is enabled
-                    viewModel.insertToken(token);
-                } else {
-                    viewModel.deleteToken(token);
-                }
+            if (isChecked) {
+                // The toggle is enabled
+                viewModel.insertToken(token);
+            } else {
+                viewModel.deleteToken(token);
             }
         });
 

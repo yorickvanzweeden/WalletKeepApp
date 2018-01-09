@@ -17,6 +17,6 @@ public class WalletTokenA{
     }
 
     public String getCurrency() {
-        return token.getCurrencyTicker().substring(2);
+        return token.getCurrencyTicker();
     }
 }

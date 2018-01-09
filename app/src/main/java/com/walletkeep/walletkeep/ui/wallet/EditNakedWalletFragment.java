@@ -24,6 +24,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
     private ArrayAdapter<CharSequence> mAdapter;
     private View view;
     private int walletId;
+    private TokenAdapter tokenAdapter;
 
     /**
      * Constructor:
@@ -60,13 +61,14 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
                 R.array.supported_currency_array, android.R.layout.simple_spinner_item);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(mAdapter);
+
+        setupRecyclerView();
     }
 
     /**
      * Sets up the recycler view containing the wallets
-     * @param portfolioId Id of the portfolio containing the wallets
      */
-    private void setupRecyclerView(int portfolioId){
+    private void setupRecyclerView(){
         // Link to the right UI item
         RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
 
@@ -83,13 +85,13 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
                 .repositoryComponent(((WalletKeepApp)getActivity().getApplication()).component())
                 .build();
         WalletViewModel viewModel = component.getWalletViewModel();
-        viewModel.init(portfolioId);
+        viewModel.init(1);
 
 
         // Create and set adapter
-        TokenAdapter mAdapter = new TokenAdapter(view.getContext(), viewModel, walletId);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.updateTokens(view.getResources().getStringArray(R.array.tokens));
+        tokenAdapter = new TokenAdapter(view.getContext(), viewModel);
+        mRecyclerView.setAdapter(tokenAdapter);
+        tokenAdapter.updateTokens(view.getResources().getStringArray(R.array.tokens));
 
     }
 
@@ -99,6 +101,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
+        tokenAdapter.updateWalletId(wallet.wallet.getId());
         ((EditText)view.findViewById(R.id.editWallet_naked_editText_address)).setText(wallet.getAddress());
         ((Spinner)getActivity().findViewById(R.id.editWallet_naked_spinner_currency)).setSelection(
                 mAdapter.getPosition(wallet.getAddressCurrency())
@@ -112,7 +115,6 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet) {
-        walletId = wallet.wallet.getId();
         String address = ((EditText)view.findViewById(R.id.editWallet_naked_editText_address)).getText().toString();
         wallet.wallet.setAddress(address);
 
