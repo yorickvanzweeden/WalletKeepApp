@@ -32,7 +32,7 @@ public class GDAXService extends ApiService {
             @Override
             public void onResponse(@NonNull Call<TimestampResponse> call,
                                    @NonNull Response<TimestampResponse> response) {
-                fetch(response.body().getEpoch().longValue());
+                fetch(response.body().getEpoch().longValue() + ApiService.slow_device_delay);
             }
 
             @Override

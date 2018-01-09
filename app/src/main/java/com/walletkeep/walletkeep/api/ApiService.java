@@ -20,6 +20,7 @@ public abstract class ApiService {
     // Api service helpers
     protected SignatureGeneration sg;
     protected ResponseHandler responseHandler;
+    protected static final byte slow_device_delay = 2;
 
     /**
      * Constructor: Sets internal parameters
