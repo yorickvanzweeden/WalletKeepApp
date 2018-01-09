@@ -44,43 +44,14 @@ public class EtherscanService extends ApiService {
             @Override
             public void onResponse(@NonNull Call<EtherscanResponse> call, @NonNull Response<EtherscanResponse> response) {
                 // Success
-                if (response.code() == 200) {
-                    try{ handleSuccessResponse(response); }
-                    // In case a service returns 200 no matter what
-                    catch (Exception e) {
-                        responseHandler.returnError(response.body().handleError());
-                    }
-                } else {
-                    // If failure, return the server error (or the error for returning that)
-                    try{ responseHandler.returnError(errorParser.parse(response.errorBody().string())); }
-                    catch (Exception e) { responseHandler.returnError(e.getMessage()); }
-                }
-            }
-
-            void handleSuccessResponse(Object responseObject) {
-                ArrayList<com.walletkeep.walletkeep.db.entity.Asset> assets = new ArrayList<>();
-
-                // Response may be a list or a single item
-                try{
-                    Response<AbstractResponse> response = (Response<AbstractResponse>) responseObject;
-                    for(Asset asset: response.body().getAssets(walletId)) {
-                        if (asset.getAmount() != 0) assets.add(asset);
-                    }
-
-                } catch (Exception e){
-                    Response<ArrayList<AbstractResponse>> responseList = (Response<ArrayList<AbstractResponse>>) responseObject;
-                    for(AbstractResponse response: responseList.body()) {
-                        for(Asset asset: response.getAssets(walletId)) {
-                            if (asset.getAmount() != 0) assets.add(asset);
-                        }
-                    }
-                }
-                responseHandler.returnAssets(assets);
+                try{ responseHandler.returnAssets(response.body().getAssets(walletId, currency)); }
+                // In case a service returns 200 no matter what
+                catch (Exception e) { responseHandler.returnError(response.body().handleError()); }
             }
 
             @Override
             public void onFailure(@NonNull Call<EtherscanResponse> call,@NonNull Throwable t) {
-                responseHandler.returnError(errorParser.parse(t));
+                responseHandler.returnError(errorParser.parse(t.getMessage()));
             }
         });
     }
@@ -125,7 +96,6 @@ public class EtherscanService extends ApiService {
             }};
         }
 
-        @Override
         public ArrayList<Asset> getAssets(int walletId, String currency) {
             return new ArrayList<Asset>() {{
                add(new Asset(walletId, currency, Converters.amountToFloat(result, 18)));

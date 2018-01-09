@@ -21,13 +21,13 @@ public class ErrorParser {
         return parse(t.getMessage());
     }
 
-    String parse(String m){
+    public String parse(String m){
         if (key == null) return m;
         if (stringModifier != null) m = stringModifier.modify(m);
         return new JsonParser().parse(m).getAsJsonObject().get(key).getAsString();
     }
 
-    static ErrorParser getStandard() {
+    public static ErrorParser getStandard() {
         return new ErrorParser(null);
     }
 
