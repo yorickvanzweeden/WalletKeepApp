@@ -35,7 +35,7 @@ public class CryptoCompareApiTests {
             add("ETH"); add("QASH");
         }};
 
-        service.fetch(currencies);
+        service.fetch(currencies, true);
         while(stillRunning){}
     }
 }

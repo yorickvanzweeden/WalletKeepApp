@@ -64,7 +64,7 @@ public class AssetRepository {
     /**
      * Update database with the latest currency prices from the api service
      */
-    public void fetchPrices(List<String> currencies, ErrorListener errorListener){
+    public void fetchPrices(List<String> currencies, ErrorListener errorListener, boolean delete){
         // Don't execute API calls if rate limit is applied
         if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
 
@@ -87,7 +87,7 @@ public class AssetRepository {
         CryptoCompareService service = new CryptoCompareService(listener);
 
         // Fetch data
-        service.fetch(currencies);
+        service.fetch(currencies, delete);
     }
 
     /**

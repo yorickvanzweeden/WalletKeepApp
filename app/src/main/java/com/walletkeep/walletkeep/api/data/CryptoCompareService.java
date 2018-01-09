@@ -26,9 +26,11 @@ public class CryptoCompareService {
     /**
      * Fetch currency data from CryptoCompare
      */
-    public void fetch(List<String> toFetch) {
+    public void fetch(List<String> toFetch, boolean delete) {
         // Create request
         CryptoCompareAPI api = RetrofitClient.getClient(baseUrl).create(CryptoCompareAPI.class);
+
+        deleteManager.toggleDeletion(delete);
 
         String s = TextUtils.join(",", toFetch);
         if (s.length() >= 300) {
@@ -54,7 +56,11 @@ public class CryptoCompareService {
                 deleteManager.last = requestCount;
             }
         }
-        
+        static void toggleDeletion(boolean shouldDelete) {
+            synchronized (lock) {
+                deleteManager.ticket = shouldDelete ? 0 : -10000;
+            }
+        }
         static boolean getDelete() {
             synchronized (lock) {
                 boolean result = ticket == 0;

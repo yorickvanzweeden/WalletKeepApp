@@ -134,7 +134,7 @@ public class AssetActivity extends AppCompatActivity {
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
             viewModel.assetFetch(wallets, errorListener);
-            viewModel.priceFetch(assets, errorListener);
+            viewModel.priceFetch(assets, errorListener, true);
             swipeContainer.setRefreshing(false);
         });
     }
@@ -181,11 +181,14 @@ public class AssetActivity extends AppCompatActivity {
 
         // Remove assets which are valued less than 1 euro
         int index = -1;
+        int priceFetchIndex = -1;
+
         for (int i = assets.size() - 1; i >= 0; i--) {
-            if (assets.get(i).getLatestCurrencyPrice() == 0) viewModel.priceFetch(assets, errorListener);
+            if (assets.get(i).getLatestCurrencyPrice() == 0) priceFetchIndex = i;
             if (assets.get(i).getEurValue() > 1) break;
             index = i;
         }
+        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
         if (index != -1) assets = assets.subList(0, index);
 
         // Update recycler view
