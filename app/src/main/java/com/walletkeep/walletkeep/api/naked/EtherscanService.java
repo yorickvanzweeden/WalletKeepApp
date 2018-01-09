@@ -35,6 +35,13 @@ public class EtherscanService extends ApiService {
         Call<EtherscanResponse> getBalance(
                 @Query("address") String address
         );
+
+        @Headers("Content-Type: application/json")
+        @GET("?module=account&action=tokenbalance&tag=latest")
+        Call<EtherscanResponse> getTokenBalance(
+                @Query("address") String address,
+                @Query("contract_address") String contractAddress
+        );
     }
 
     /**
