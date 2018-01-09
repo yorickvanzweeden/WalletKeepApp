@@ -1,150 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/FullscreenTheme"
-    tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity" >
+    tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:id="@+id/appBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/topbar"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:background="@color/topbar">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout
+        <include
+            android:id="@+id/include"
+            layout="@layout/top_bar_portfolio_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/asset_activity_textView_market_change"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="+ 27.43%"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/asset_activity_textView_label_market" />
-
-            <TextView
-                android:id="@+id/asset_activity_textView_you_change"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="+ 9.37%"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/asset_portfolio_value6"
-                app:layout_constraintStart_toEndOf="@+id/asset_activity_textView_label_you"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/asset_activity_textView_change_setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="24H"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/asset_activity_textView_label_market"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginStart="178dp"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="@string/label_market"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/asset_activity_textView_label_you"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginStart="197dp"
-                android:layout_marginTop="4dp"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="@string/label_you"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/asset_activity_textView_label_market"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/asset_activity_textView_portfolio_value"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="Portfolio Value"
-                android:textAlignment="viewStart"
-                android:textColor="@color/black"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </android.support.constraint.ConstraintLayout>
-
+            android:layout_height="wrap_content" />
 
     </android.support.design.widget.AppBarLayout>
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/includecon"
         layout="@layout/asset_content"
-        tools:layout_editor_absoluteY="372dp" />
+        android:layout_width="412dp"
+        android:layout_height="563dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/asset_activity_fab_edit_wallets"
-        android:tint="#ffffff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="50dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:tint="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/asset_activity_fab_edit_portfolios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
         android:tint="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_dialog_info" />
 
     <SurfaceView
-            android:id="@+id/asset_activity_surfaceView"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@android:color/transparent"
-            app:layout_anchor="@+id/include"
-            app:layout_anchorGravity="bottom"/>
+        android:id="@+id/asset_activity_surfaceView"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        app:layout_anchor="@id/includecon"
+        app:layout_anchorGravity="bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includecon" />
 
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>
