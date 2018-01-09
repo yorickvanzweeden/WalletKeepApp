@@ -53,10 +53,20 @@ public abstract class ApiService {
      * @param responseCall Call to perform
      */
     protected void performRequest(Call responseCall) {
-        performRequest(responseCall, ErrorParser.getStandard());
+        performRequest(responseCall, ErrorParser.getStandard(), responseHandler);
     }
-    protected void performRequest(Call responseCall, ErrorParser errorParser){
-        responseCall.enqueue(new Callback<AbstractResponse>() {
+    protected void performRequest(Call responseCall, ErrorParser errorParser) {
+        performRequest(responseCall, errorParser, responseHandler);
+    }
+    protected void performRequest(Call responseCall, ResponseHandler responseHandler) {
+        performRequest(responseCall, ErrorParser.getStandard(), responseHandler);
+    }
+    protected void performRequest(Call responseCall, ErrorParser errorParser, ResponseHandler responseHandler){
+        responseCall.enqueue(getCallBack(errorParser, responseHandler));
+    }
+
+    private Callback<AbstractResponse> getCallBack(ErrorParser errorParser, ResponseHandler responseHandler) {
+        return new Callback<AbstractResponse>() {
             @Override
             public void onResponse(@NonNull Call<AbstractResponse> call, @NonNull Response<AbstractResponse> response) {
                 // Success
@@ -98,7 +108,7 @@ public abstract class ApiService {
             public void onFailure(@NonNull Call<AbstractResponse> call,@NonNull Throwable t) {
                 responseHandler.returnError(errorParser.parse(t));
             }
-        });
+        };
     }
 
     /**

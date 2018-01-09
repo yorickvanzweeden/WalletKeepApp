@@ -6,10 +6,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ErrorParser;
+import com.walletkeep.walletkeep.api.ResponseHandler;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.WalletTokenA;
 import com.walletkeep.walletkeep.util.Converters;
+import com.walletkeep.walletkeep.util.SynchronisedTicket;
 
 import java.util.ArrayList;
 
@@ -28,18 +30,48 @@ public class EtherscanService extends ApiService {
         EtherscanApi api = RetrofitClient.getClient("https://api.etherscan.io/api/").create(EtherscanApi.class);
         Call<EtherscanResponse> responseCall = api.getBalance( address );
 
-        // Perform request
-        performRequest(responseCall);
+        if (tokens == null || tokens.size() == 0) {
+            // Perform request
+            performRequest(responseCall);
+            return;
+        }
 
-        if (tokens != null && tokens.size() > 0) {
-            for (WalletTokenA token: tokens) {
-                responseCall = api.getTokenBalance( address, token.getAddress());
-                performTokenRequest(responseCall, ErrorParser.getStandard(), token.getCurrency());
+        // ___
+        // There are tokens
+
+        // Setup ticketing so only the last returns the assets
+        SynchronisedTicket ticketing = new SynchronisedTicket(tokens.size() + 1);
+
+        // Get actual responseHandler to return assets/errors to
+        ResponseHandler apiServiceResponseHandler = this.responseHandler;
+
+        // Collect assets
+        ArrayList<Asset> assetList = new ArrayList<>();
+
+        // Setup local responseHandler
+        ResponseHandler responseHandler = new ResponseHandler(  new ResponseHandler.ResponseListener() {
+            @Override
+            public void onAssetsUpdated(ArrayList<Asset> assets) {
+                assetList.addAll(assets);
+                if (ticketing.isLast())
+                    apiServiceResponseHandler.returnAssets(assetList);
             }
+
+            @Override
+            public void onError(String message) { apiServiceResponseHandler.returnError(message); }
+        });
+
+        // Perform request for Ethereum
+        performRequest(responseCall, responseHandler);
+
+        // Perform requests for tokens
+        for (WalletTokenA token: tokens) {
+            responseCall = api.getTokenBalance( address, token.getAddress());
+            performTokenRequest(responseCall, ErrorParser.getStandard(), responseHandler, token.getCurrency());
         }
     }
 
-    private void performTokenRequest(Call responseCall, ErrorParser errorParser, String currency){
+    private void performTokenRequest(Call responseCall, ErrorParser errorParser, ResponseHandler responseHandler, String currency){
         responseCall.enqueue(new Callback<EtherscanResponse>() {
             @Override
             public void onResponse(@NonNull Call<EtherscanResponse> call, @NonNull Response<EtherscanResponse> response) {
@@ -55,7 +87,6 @@ public class EtherscanService extends ApiService {
             }
         });
     }
-
 
     /**
      * Retrofit request interfaces

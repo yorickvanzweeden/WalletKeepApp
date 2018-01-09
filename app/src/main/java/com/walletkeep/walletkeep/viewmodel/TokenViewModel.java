@@ -36,9 +36,6 @@ public class TokenViewModel extends ViewModel {
     public LiveData<List<WalletTokenA>> loadTokens() {
         return tokens;
     }
-
-    public void insertTokens(List<WalletTokenA> tokens) {
-        tokenRepository.insertTokens(tokens);
-    }
+    public void insertTokens(List<WalletTokenA> tokens) { tokenRepository.insertTokens(tokens); }
     public void deleteTokens(List<WalletTokenA> tokens) { tokenRepository.deleteTokens(tokens); }
 }

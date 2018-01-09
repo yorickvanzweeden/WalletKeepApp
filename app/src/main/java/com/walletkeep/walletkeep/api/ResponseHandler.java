@@ -9,7 +9,7 @@ public class ResponseHandler {
     private ErrorParser errorParser;
     private ResponseListener listener;
 
-    public ResponseHandler(ErrorParser errorParser, ResponseListener listener) {
+    public ResponseHandler() {
         this.errorParser = errorParser;
         this.listener = listener;
     }
