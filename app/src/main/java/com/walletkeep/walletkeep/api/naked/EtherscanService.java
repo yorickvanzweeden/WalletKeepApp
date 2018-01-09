@@ -68,6 +68,13 @@ public class EtherscanService extends ApiService {
         for (WalletTokenA token: tokens) {
             responseCall = api.getTokenBalance( address, token.getAddress());
             performTokenRequest(responseCall, ErrorParser.getStandard(), responseHandler, token.getCurrency());
+
+            // Avoid Etherscan ban at 5 req/s
+            if (tokens.size() > 3) {
+                try { Thread.sleep(500); }
+                catch(InterruptedException ex) { Thread.currentThread().interrupt(); }
+            }
+
         }
     }
 
