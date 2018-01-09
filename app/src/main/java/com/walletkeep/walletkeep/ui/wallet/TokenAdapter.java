@@ -2,28 +2,34 @@ package com.walletkeep.walletkeep.ui.wallet;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.WalletToken;
-import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
+import com.walletkeep.walletkeep.db.entity.WalletTokenA;
+import com.walletkeep.walletkeep.viewmodel.TokenViewModel;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> {
     // Data of the recycler view
     private String[] tokens;
 
+    // Wallet data
+    private HashMap<String, WalletTokenA> walletTokens = new HashMap<>();
+    private HashMap<String, Boolean> changeRecord = new HashMap<>();
     private int walletId;
-
-    private WalletViewModel viewModel;
 
     // Access to the view
     private Context context;
+    private TokenViewModel viewModel;
 
     /**
      * Provide a reference to the views for each data item
@@ -46,22 +52,39 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public TokenAdapter(Context context, WalletViewModel viewModel) {
+    public TokenAdapter(Context context, TokenViewModel viewModel) {
         this.context = context;
         this.viewModel = viewModel;
     }
 
     /**
      * Update data of the list
-     * @param Wallets containing assets, exchange credentials
+     * @param tokens List of supported tokens
      */
     public void updateTokens(String[] tokens){
         this.tokens = tokens;
         notifyDataSetChanged();
     }
-
-    public void updateWalletId(int walletId) {
+    public void setWalletId(int walletId){
         this.walletId = walletId;
+    }
+
+    public List<WalletTokenA> getWalletTokens(Boolean add) {
+        List<WalletTokenA> list = new ArrayList<>();
+        if (changeRecord.isEmpty()) return list;
+        for (Map.Entry<String, Boolean> entry: changeRecord.entrySet()) {
+            if (entry.getValue() == add) list.add(walletTokens.get(entry.getKey()));
+        }
+        return list;
+    }
+
+
+
+    public void setWalletTokens(List<WalletTokenA> walletTokenList) {
+        for(WalletTokenA token: walletTokenList) {
+            walletTokens.put(token.getCurrency(), token);
+        }
+        notifyDataSetChanged();
     }
 
     /**
@@ -86,20 +109,21 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      */
     @Override
     public void onBindViewHolder(TokenAdapter.ViewHolder holder, int position) {
-
-        holder.mToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String currency = holder.mTextView.getText().toString();
-            WalletToken token = new WalletToken(walletId, currency);
-
-            if (isChecked) {
-                // The toggle is enabled
-                viewModel.insertToken(token);
-            } else {
-                viewModel.deleteToken(token);
-            }
-        });
-
         holder.mTextView.setText(tokens[position]);
+        holder.mToggleButton.setChecked(walletTokens.containsKey(tokens[position]));
+
+        holder.mToggleButton.setOnClickListener((view) -> {
+            String currency = tokens[position];
+            if (!walletTokens.containsKey(currency)) {
+                WalletTokenA token = new WalletTokenA();
+                token.token = new WalletToken(walletId, currency);
+                walletTokens.put(currency, token);
+            }
+
+            // Mark change, if already exists, undo change
+            if (changeRecord.containsKey(currency)) changeRecord.remove(currency);
+            else changeRecord.put(currency, holder.mToggleButton.isChecked());
+        });
 
     }
 

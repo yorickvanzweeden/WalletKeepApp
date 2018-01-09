@@ -4,6 +4,7 @@ import com.walletkeep.walletkeep.di.module.RepositoryModule;
 import com.walletkeep.walletkeep.di.scope.AppScope;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 import com.walletkeep.walletkeep.repository.PortfolioRepository;
+import com.walletkeep.walletkeep.repository.TokenRepository;
 import com.walletkeep.walletkeep.repository.WalletRepository;
 
 import dagger.Component;
@@ -17,4 +18,6 @@ public interface RepositoryComponent {
     WalletRepository getWalletRepository();
 
     AssetRepository getAssetRepository();
+
+    TokenRepository getTokenRepository();
 }

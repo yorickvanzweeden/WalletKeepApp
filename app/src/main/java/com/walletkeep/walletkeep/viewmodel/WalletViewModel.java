@@ -2,7 +2,6 @@ package com.walletkeep.walletkeep.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.WalletRepository;
 
@@ -36,8 +35,5 @@ public class WalletViewModel extends ViewModel {
     public LiveData<List<WalletWithRelations>> loadWallets() {
         return wallets;
     }
-
-    public void insertToken(WalletToken token) { walletRepository.insertToken(token);}
-    public void deleteToken(WalletToken token) { walletRepository.deleteToken(token);}
 }
 

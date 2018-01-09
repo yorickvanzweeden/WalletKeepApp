@@ -18,13 +18,13 @@ import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
-import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
+import com.walletkeep.walletkeep.viewmodel.TokenViewModel;
 
 public class EditNakedWalletFragment extends Fragment implements EditWalletActivity.IWalletFragment{
     private ArrayAdapter<CharSequence> mAdapter;
     private View view;
-    private int walletId;
     private TokenAdapter tokenAdapter;
+    private TokenViewModel viewModel;
 
     /**
      * Constructor:
@@ -84,9 +84,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         ViewModelComponent component = DaggerViewModelComponent.builder()
                 .repositoryComponent(((WalletKeepApp)getActivity().getApplication()).component())
                 .build();
-        WalletViewModel viewModel = component.getWalletViewModel();
-        viewModel.init(1);
-
+        viewModel = component.getTokenViewModel();
 
         // Create and set adapter
         tokenAdapter = new TokenAdapter(view.getContext(), viewModel);
@@ -101,7 +99,12 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
-        tokenAdapter.updateWalletId(wallet.wallet.getId());
+        if (wallet.wallet != null) {
+            tokenAdapter.setWalletId(wallet.wallet.getId());
+            viewModel.init(wallet.wallet.getId());
+            viewModel.loadTokens().observe(this, tokens -> tokenAdapter.setWalletTokens(tokens));
+        }
+
         ((EditText)view.findViewById(R.id.editWallet_naked_editText_address)).setText(wallet.getAddress());
         ((Spinner)getActivity().findViewById(R.id.editWallet_naked_spinner_currency)).setSelection(
                 mAdapter.getPosition(wallet.getAddressCurrency())
@@ -120,7 +123,9 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
 
         String currency = ((Spinner)view.findViewById(R.id.editWallet_naked_spinner_currency)).getSelectedItem().toString();
         wallet.wallet.setAddressCurrency(currency);
-        
+
+        viewModel.deleteTokens(tokenAdapter.getWalletTokens(false));
+        viewModel.insertTokens(tokenAdapter.getWalletTokens(true));
         return wallet;
     }
 }
