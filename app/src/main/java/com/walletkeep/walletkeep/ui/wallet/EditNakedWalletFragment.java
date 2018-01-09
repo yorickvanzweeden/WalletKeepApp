@@ -4,6 +4,8 @@ package com.walletkeep.walletkeep.ui.wallet;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +14,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
+import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class EditNakedWalletFragment extends Fragment implements EditWalletActivity.IWalletFragment{
     private ArrayAdapter<CharSequence> mAdapter;
     private View view;
+    private int walletId;
 
     /**
      * Constructor:
@@ -56,6 +63,37 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
     }
 
     /**
+     * Sets up the recycler view containing the wallets
+     * @param portfolioId Id of the portfolio containing the wallets
+     */
+    private void setupRecyclerView(int portfolioId){
+        // Link to the right UI item
+        RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
+
+        // Use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // Use a linear layout manager
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // Initialise view model
+        ViewModelComponent component = DaggerViewModelComponent.builder()
+                .repositoryComponent(((WalletKeepApp)getActivity().getApplication()).component())
+                .build();
+        WalletViewModel viewModel = component.getWalletViewModel();
+        viewModel.init(portfolioId);
+
+
+        // Create and set adapter
+        TokenAdapter mAdapter = new TokenAdapter(view.getContext(), viewModel, walletId);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.updateTokens(view.getResources().getStringArray(R.array.tokens));
+
+    }
+
+    /**
      * Update form with saved wallet data
      * @param wallet Wallet containing the data for the form
      */
@@ -74,6 +112,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet) {
+        walletId = wallet.wallet.getId();
         String address = ((EditText)view.findViewById(R.id.editWallet_naked_editText_address)).getText().toString();
         wallet.wallet.setAddress(address);
 

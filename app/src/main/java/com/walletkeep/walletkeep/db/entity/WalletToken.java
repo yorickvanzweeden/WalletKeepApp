@@ -31,6 +31,12 @@ public class WalletToken {
     @ColumnInfo(name = "currency_ticker")
     private String currencyTicker;
 
+    public WalletToken(int walletId, String currencyTicker) {
+        this.walletId = walletId;
+        this.currencyTicker = currencyTicker;
+    }
+
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

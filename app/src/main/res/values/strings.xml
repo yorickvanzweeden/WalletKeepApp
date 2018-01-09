@@ -65,4 +65,5 @@
     <string name="fab_transaction">Transaction</string>
     <string name="fab_wallet_address">Wallet address</string>
     <string name="fab_exchange_account">Exchange account</string>
+    <string name="tokens">Tokens:</string>
 </resources>
