@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
 import java.util.List;
@@ -75,5 +76,21 @@ public class WalletRepository {
      */
     public void updateCredentials(ExchangeCredentials credentials) {
         executors.diskIO().execute(() -> database.exchangeCredentialsDao().update(credentials));
+    }
+
+    /**
+     * Updates token in the database
+     * @param token Updated token
+     */
+    public void insertToken(WalletToken token) {
+        executors.diskIO().execute(() -> database.walletTokenDao().insert(token));
+    }
+
+    /**
+     * Deletes token in the database
+     * @param token Token to delete
+     */
+    public void deleteToken(WalletToken token) {
+        executors.diskIO().execute(() -> database.walletTokenDao().delete(token));
     }
 }
