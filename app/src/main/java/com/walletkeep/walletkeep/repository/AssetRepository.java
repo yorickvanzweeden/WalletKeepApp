@@ -28,7 +28,7 @@ public class AssetRepository {
     private final AppExecutors executors;
 
     // Rate limiter prevent too many requests
-    private RateLimiter<String> priceApiRateLimit = new RateLimiter<>(3, TimeUnit.MINUTES);
+    private RateLimiter<String> priceApiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
     private RateLimiter<String> apiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
 
 
