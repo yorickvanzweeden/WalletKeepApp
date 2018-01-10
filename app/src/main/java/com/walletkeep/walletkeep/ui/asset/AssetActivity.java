@@ -52,11 +52,9 @@ public class AssetActivity extends AppCompatActivity {
         checkFirstRun();
 
         int portfolioId = 1;
-        String portfolioName = "My portfolio";
         Bundle parameters = getIntent().getExtras();
         if (parameters != null) {
             portfolioId = getIntent().getExtras().getInt("portfolio_id", 1);
-            portfolioName = getIntent().getExtras().getString("portfolio_name", " My Portfolio");
         }
 
         setupOverlay(portfolioId);
