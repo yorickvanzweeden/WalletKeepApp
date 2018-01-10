@@ -45,14 +45,12 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      * Constructor: Sets lists of supported supportedTokens
      * @param supportedTokens
      */
-    TokenAdapter(String[] supportedTokens) {
+    TokenAdapter(String[] supportedTokens, int walletId) {
         this.supportedTokens = supportedTokens;
+        this.walletId = walletId;
         notifyDataSetChanged();
     }
 
-    public void setWalletId(int walletId){
-        this.walletId = walletId;
-    }
     void setWalletTokens(List<WalletToken> walletTokenList) {
         for(WalletToken token: walletTokenList)
             walletTokens.put(token.getCurrencyTicker(), token);
