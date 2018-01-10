@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.ToggleButton;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.WalletToken;
-import com.walletkeep.walletkeep.viewmodel.TokenViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,16 +17,12 @@ import java.util.Map;
 
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> {
     // Data of the recycler view
-    private String[] tokens;
+    private String[] supportedTokens;
 
     // Wallet data
     private HashMap<String, WalletToken> walletTokens = new HashMap<>();
     private HashMap<String, Boolean> changeRecord = new HashMap<>();
     private int walletId;
-
-    // Access to the view
-    private Context context;
-    private TokenViewModel viewModel;
 
     /**
      * Provide a reference to the views for each data item
@@ -36,39 +30,36 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        public TextView mTextView;
-        public ToggleButton mToggleButton;
+        TextView tokenLabel;
+        ToggleButton toggleButton;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mTextView = v.findViewById(R.id.editwallet_naked_token_tickertext);
-            mToggleButton = v.findViewById(R.id.editwallet_naked_token_togglebutton);
+            tokenLabel = v.findViewById(R.id.editwallet_naked_token_tickertext);
+            toggleButton = v.findViewById(R.id.editwallet_naked_token_togglebutton);
         }
     }
 
     /**
-     * Constructor: Sets context
-     * @param context Allows for referencing of UI elements
+     * Constructor: Sets lists of supported supportedTokens
+     * @param supportedTokens
      */
-    public TokenAdapter(Context context, TokenViewModel viewModel) {
-        this.context = context;
-        this.viewModel = viewModel;
-    }
-
-    /**
-     * Update data of the list
-     * @param tokens List of supported tokens
-     */
-    public void updateTokens(String[] tokens){
-        this.tokens = tokens;
+    TokenAdapter(String[] supportedTokens) {
+        this.supportedTokens = supportedTokens;
         notifyDataSetChanged();
     }
+
     public void setWalletId(int walletId){
         this.walletId = walletId;
     }
+    void setWalletTokens(List<WalletToken> walletTokenList) {
+        for(WalletToken token: walletTokenList)
+            walletTokens.put(token.getCurrencyTicker(), token);
+        notifyDataSetChanged();
+    }
 
-    public List<WalletToken> getWalletTokens(Boolean add) {
+    List<WalletToken> getWalletTokens(Boolean add) {
         List<WalletToken> list = new ArrayList<>();
         if (changeRecord.isEmpty()) return list;
         for (Map.Entry<String, Boolean> entry: changeRecord.entrySet()) {
@@ -78,13 +69,6 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     }
 
 
-
-    public void setWalletTokens(List<WalletToken> walletTokenList) {
-        for(WalletToken token: walletTokenList) {
-            walletTokens.put(token.getCurrencyTicker(), token);
-        }
-        notifyDataSetChanged();
-    }
 
     /**
      * Creates new view and specifies which layout to use
@@ -108,18 +92,18 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      */
     @Override
     public void onBindViewHolder(TokenAdapter.ViewHolder holder, int position) {
-        holder.mTextView.setText(tokens[position]);
-        holder.mToggleButton.setChecked(walletTokens.containsKey(tokens[position]));
+        holder.tokenLabel.setText(supportedTokens[position]);
+        holder.toggleButton.setChecked(walletTokens.containsKey(supportedTokens[position]));
 
-        holder.mToggleButton.setOnClickListener((view) -> {
-            String currency = tokens[position];
+        holder.toggleButton.setOnClickListener((view) -> {
+            String currency = supportedTokens[position];
             if (!walletTokens.containsKey(currency)) {
                 walletTokens.put(currency, new WalletToken(walletId, currency));
             }
 
             // Mark change, if already exists, undo change
             if (changeRecord.containsKey(currency)) changeRecord.remove(currency);
-            else changeRecord.put(currency, holder.mToggleButton.isChecked());
+            else changeRecord.put(currency, holder.toggleButton.isChecked());
         });
 
     }
@@ -130,7 +114,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      */
     @Override
     public int getItemCount() {
-        if (tokens == null) return 0;
-        return tokens.length;
+        if (supportedTokens == null) return 0;
+        return supportedTokens.length;
     }
 }

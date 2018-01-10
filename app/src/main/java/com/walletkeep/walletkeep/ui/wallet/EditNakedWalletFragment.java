@@ -96,9 +96,8 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         viewModel = component.getTokenViewModel();
 
         // Create and set adapter
-        tokenAdapter = new TokenAdapter(view.getContext(), viewModel);
+        tokenAdapter = new TokenAdapter(view.getResources().getStringArray(R.array.tokens));
         mRecyclerView.setAdapter(tokenAdapter);
-        tokenAdapter.updateTokens(view.getResources().getStringArray(R.array.tokens));
     }
     private void resetRecyclerView() {
         // Link to the right UI item
