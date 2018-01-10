@@ -9,7 +9,7 @@ public class ResponseHandler {
     private ErrorParser errorParser;
     private ResponseListener listener;
 
-    public ResponseHandler(ErrorParser errorParser, ResponseListener listener) {
+    public ResponseHandler() {
         this.errorParser = errorParser;
         this.listener = listener;
     }
@@ -22,7 +22,7 @@ public class ResponseHandler {
      * Update assets from the callback of a specific ApiService if assets are updated
      * @param assets Coins from callback
      */
-    void returnAssets(ArrayList<Asset> assets) {
+    public void returnAssets(ArrayList<Asset> assets) {
         // Call listener
         listener.onAssetsUpdated(assets);
     }

@@ -55,6 +55,7 @@ public class ApiServiceModule {
                 wr.getCredentials(),
                 wr.getAddress(),
                 wr.wallet.getId(),
+                wr.tokens,
                 new ResponseHandler(listener));
 
         return apiService;

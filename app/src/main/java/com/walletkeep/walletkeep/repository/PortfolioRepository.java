@@ -9,9 +9,6 @@ import com.walletkeep.walletkeep.db.entity.Portfolio;
 import java.util.List;
 
 public class PortfolioRepository {
-    // Repository instance
-    private static PortfolioRepository sInstance;
-
     // Database instance
     private final AppDatabase database;
     private final AppExecutors executors;

@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,6 +18,7 @@ public abstract class ApiService {
     protected ExchangeCredentials ec;
     protected String address;
     protected int walletId;
+    protected List<WalletToken> tokens;
 
     // Api service helpers
     protected SignatureGeneration sg;
@@ -29,9 +32,11 @@ public abstract class ApiService {
     public void setParameters(ExchangeCredentials exchangeCredentials,
                               String address,
                               int walletId,
+                              List<WalletToken> tokens,
                               ResponseHandler responseHandler) {
         this.ec = exchangeCredentials;
         this.address = address;
+        this.tokens = tokens;
         this.walletId = walletId;
         this.responseHandler = responseHandler;
         this.sg = new SignatureGeneration(responseHandler);
@@ -48,10 +53,20 @@ public abstract class ApiService {
      * @param responseCall Call to perform
      */
     protected void performRequest(Call responseCall) {
-        performRequest(responseCall, ErrorParser.getStandard());
+        performRequest(responseCall, ErrorParser.getStandard(), responseHandler);
     }
-    protected void performRequest(Call responseCall, ErrorParser errorParser){
-        responseCall.enqueue(new Callback<AbstractResponse>() {
+    protected void performRequest(Call responseCall, ErrorParser errorParser) {
+        performRequest(responseCall, errorParser, responseHandler);
+    }
+    protected void performRequest(Call responseCall, ResponseHandler responseHandler) {
+        performRequest(responseCall, ErrorParser.getStandard(), responseHandler);
+    }
+    protected void performRequest(Call responseCall, ErrorParser errorParser, ResponseHandler responseHandler){
+        responseCall.enqueue(getCallBack(errorParser, responseHandler));
+    }
+
+    private Callback<AbstractResponse> getCallBack(ErrorParser errorParser, ResponseHandler responseHandler) {
+        return new Callback<AbstractResponse>() {
             @Override
             public void onResponse(@NonNull Call<AbstractResponse> call, @NonNull Response<AbstractResponse> response) {
                 // Success
@@ -93,7 +108,7 @@ public abstract class ApiService {
             public void onFailure(@NonNull Call<AbstractResponse> call,@NonNull Throwable t) {
                 responseHandler.returnError(errorParser.parse(t));
             }
-        });
+        };
     }
 
     /**
