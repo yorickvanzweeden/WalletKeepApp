@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -62,7 +63,16 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(mAdapter);
 
-        setupRecyclerView();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (mAdapter.getPosition("ETH") == position) setupRecyclerView();
+                else resetRecyclerView();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { resetRecyclerView(); }
+        });
+
     }
 
     /**
@@ -77,8 +87,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         mRecyclerView.setHasFixedSize(true);
 
         // Use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
@@ -90,7 +99,13 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         tokenAdapter = new TokenAdapter(view.getContext(), viewModel);
         mRecyclerView.setAdapter(tokenAdapter);
         tokenAdapter.updateTokens(view.getResources().getStringArray(R.array.tokens));
-
+    }
+    private void resetRecyclerView() {
+        // Link to the right UI item
+        RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
+        tokenAdapter = null;
+        mRecyclerView.setAdapter(null);
+        mRecyclerView.setLayoutManager(null);
     }
 
     /**
@@ -99,7 +114,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
-        if (wallet.wallet != null) {
+        if (wallet.wallet != null && tokenAdapter != null) {
             tokenAdapter.setWalletId(wallet.wallet.getId());
             viewModel.init(wallet.wallet.getId());
             viewModel.loadTokens().observe(this, tokens -> tokenAdapter.setWalletTokens(tokens));
@@ -124,9 +139,12 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         String currency = ((Spinner)view.findViewById(R.id.editWallet_naked_spinner_currency)).getSelectedItem().toString();
         wallet.wallet.setAddressCurrency(currency);
 
-        viewModel.deleteTokens(tokenAdapter.getWalletTokens(false));
-        if (wallet.wallet.getId() > 0) viewModel.insertTokens(tokenAdapter.getWalletTokens(true));
-        else wallet.tokens = tokenAdapter.getWalletTokens(true);
+        if (wallet.wallet != null && tokenAdapter != null) {
+            viewModel.deleteTokens(tokenAdapter.getWalletTokens(false));
+            if (wallet.wallet.getId() > 0)
+                viewModel.insertTokens(tokenAdapter.getWalletTokens(true));
+            else wallet.tokens = tokenAdapter.getWalletTokens(true);
+        }
 
         return wallet;
     }
