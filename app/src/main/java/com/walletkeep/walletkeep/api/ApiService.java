@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
-import com.walletkeep.walletkeep.db.entity.WalletTokenA;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public abstract class ApiService {
     protected ExchangeCredentials ec;
     protected String address;
     protected int walletId;
-    protected List<WalletTokenA> tokens;
+    protected List<WalletToken> tokens;
 
     // Api service helpers
     protected SignatureGeneration sg;
@@ -32,7 +32,7 @@ public abstract class ApiService {
     public void setParameters(ExchangeCredentials exchangeCredentials,
                               String address,
                               int walletId,
-                              List<WalletTokenA> tokens,
+                              List<WalletToken> tokens,
                               ResponseHandler responseHandler) {
         this.ec = exchangeCredentials;
         this.address = address;

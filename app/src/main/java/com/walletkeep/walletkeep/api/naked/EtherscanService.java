@@ -10,7 +10,7 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.ResponseHandler;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
-import com.walletkeep.walletkeep.db.entity.WalletTokenA;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.util.Converters;
 import com.walletkeep.walletkeep.util.SynchronisedTicket;
 
@@ -65,10 +65,10 @@ public class EtherscanService extends ApiService {
         performRequest(responseCall, responseHandler);
 
         // Perform requests for tokens
-        for (WalletTokenA token: tokens) {
+        for (WalletToken token: tokens) {
             (new AppExecutors()).networkIO().execute(() -> {
                 Call<EtherscanResponse> responseCall2 = api.getTokenBalance( address, token.getAddress());
-                performTokenRequest(responseCall2, ErrorParser.getStandard(), responseHandler, token.getCurrency());
+                performTokenRequest(responseCall2, ErrorParser.getStandard(), responseHandler, token.getCurrencyTicker());
 
                 // Avoid Etherscan ban at 5 req/s
                 if (tokens.size() > 3) {
@@ -76,8 +76,6 @@ public class EtherscanService extends ApiService {
                     catch(InterruptedException ex) { Thread.currentThread().interrupt(); }
                 }
             });
-
-
         }
     }
 

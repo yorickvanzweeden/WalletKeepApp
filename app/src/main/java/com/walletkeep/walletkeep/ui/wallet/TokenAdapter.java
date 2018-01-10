@@ -10,7 +10,6 @@ import android.widget.ToggleButton;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.WalletToken;
-import com.walletkeep.walletkeep.db.entity.WalletTokenA;
 import com.walletkeep.walletkeep.viewmodel.TokenViewModel;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     private String[] tokens;
 
     // Wallet data
-    private HashMap<String, WalletTokenA> walletTokens = new HashMap<>();
+    private HashMap<String, WalletToken> walletTokens = new HashMap<>();
     private HashMap<String, Boolean> changeRecord = new HashMap<>();
     private int walletId;
 
@@ -69,8 +68,8 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
         this.walletId = walletId;
     }
 
-    public List<WalletTokenA> getWalletTokens(Boolean add) {
-        List<WalletTokenA> list = new ArrayList<>();
+    public List<WalletToken> getWalletTokens(Boolean add) {
+        List<WalletToken> list = new ArrayList<>();
         if (changeRecord.isEmpty()) return list;
         for (Map.Entry<String, Boolean> entry: changeRecord.entrySet()) {
             if (entry.getValue() == add) list.add(walletTokens.get(entry.getKey()));
@@ -80,9 +79,9 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
 
 
 
-    public void setWalletTokens(List<WalletTokenA> walletTokenList) {
-        for(WalletTokenA token: walletTokenList) {
-            walletTokens.put(token.getCurrency(), token);
+    public void setWalletTokens(List<WalletToken> walletTokenList) {
+        for(WalletToken token: walletTokenList) {
+            walletTokens.put(token.getCurrencyTicker(), token);
         }
         notifyDataSetChanged();
     }
@@ -115,9 +114,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
         holder.mToggleButton.setOnClickListener((view) -> {
             String currency = tokens[position];
             if (!walletTokens.containsKey(currency)) {
-                WalletTokenA token = new WalletTokenA();
-                token.token = new WalletToken(walletId, currency);
-                walletTokens.put(currency, token);
+                walletTokens.put(currency, new WalletToken(walletId, currency));
             }
 
             // Mark change, if already exists, undo change

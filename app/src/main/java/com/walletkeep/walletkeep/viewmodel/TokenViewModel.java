@@ -3,13 +3,13 @@ package com.walletkeep.walletkeep.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.walletkeep.walletkeep.db.entity.WalletTokenA;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.repository.TokenRepository;
 
 import java.util.List;
 
 public class TokenViewModel extends ViewModel {
-    private LiveData<List<WalletTokenA>> tokens;
+    private LiveData<List<WalletToken>> tokens;
     private TokenRepository tokenRepository;
 
     /**
@@ -33,9 +33,9 @@ public class TokenViewModel extends ViewModel {
      * Loads all the walletButton (async)
      * @return Livedata list of tokens
      */
-    public LiveData<List<WalletTokenA>> loadTokens() {
+    public LiveData<List<WalletToken>> loadTokens() {
         return tokens;
     }
-    public void insertTokens(List<WalletTokenA> tokens) { tokenRepository.insertTokens(tokens); }
-    public void deleteTokens(List<WalletTokenA> tokens) { tokenRepository.deleteTokens(tokens); }
+    public void insertTokens(List<WalletToken> tokens) { tokenRepository.insertTokens(tokens); }
+    public void deleteTokens(List<WalletToken> tokens) { tokenRepository.deleteTokens(tokens); }
 }

@@ -24,7 +24,7 @@ import com.walletkeep.walletkeep.db.entity.Exchange;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.db.entity.Wallet;
-import com.walletkeep.walletkeep.db.entity.WalletToken;
+import com.walletkeep.walletkeep.db.entity.WalletTokenWithoutAddress;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import java.util.List;
         ExchangeCredentials.class,
         Portfolio.class,
         Wallet.class,
-        WalletToken.class
+        WalletTokenWithoutAddress.class
 }, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -106,7 +106,6 @@ public abstract class AppDatabase extends RoomDatabase {
             database.currencyDao().insertAll(currencies);
             database.exchangeDao().insertAll(exchanges);
             database.portfolioDao().insert(DataGenerator.loadDefaultPortfolio());
-            database.currencyPriceDao().insertAll(DataGenerator.loadDefaultPrices());
         });
     }
 }

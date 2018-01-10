@@ -1,48 +1,44 @@
 package com.walletkeep.walletkeep.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Relation;
 
-@Entity(indices = {@Index("wallet_id"), @Index("currency_ticker")},
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Wallet.class,
-                        parentColumns = "id",
-                        childColumns = "wallet_id",
-                        onDelete = ForeignKey.CASCADE
-                ),
-                @ForeignKey(
-                        entity = Currency.class,
-                        parentColumns = "ticker",
-                        childColumns = "currency_ticker",
-                        onDelete = ForeignKey.CASCADE
-                )
-        })
+import java.util.List;
+
 public class WalletToken {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @Embedded
+    public WalletTokenWithoutAddress token;
 
-    @ColumnInfo(name = "wallet_id")
-    private int walletId;
+    @Relation(parentColumn = "currency_ticker", entityColumn = "ticker", entity = Currency.class)
+    public List<Currency> currency;
 
-    @ColumnInfo(name = "currency_ticker")
-    private String currencyTicker;
+    // Empty constructor used by Room
+    public WalletToken(){}
 
+    /**
+     * Constructor: Sets a new WalletTokenWithoutAddress
+     * @param walletId Id of the wallet
+     * @param currencyTicker Ticker of the currency
+     */
     public WalletToken(int walletId, String currencyTicker) {
-        this.walletId = walletId;
-        this.currencyTicker = currencyTicker;
+        this.token = new WalletTokenWithoutAddress();
+        token.setWalletId(walletId);
+        token.setCurrencyTicker(currencyTicker);
     }
 
+    /**
+     * Gets the address of the smart contract of the token
+     * @return The address of the smart contract of the token
+     */
+    public String getAddress() {
+        return (currency == null || currency.size() == 0) ? "" : currency.get(0).getTokenAddress();
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public int getWalletId() { return walletId; }
-    public void setWalletId(int walletId) { this.walletId = walletId; }
-
-    public String getCurrencyTicker() { return currencyTicker; }
-    public void setCurrencyTicker(String currencyTicker) { this.currencyTicker = currencyTicker; }
+    /**
+     * Gets the ticker of the currency the token
+     * @return The ticker of the currency the token
+     */
+    public String getCurrencyTicker() {
+        return token.getCurrencyTicker();
+    }
 }

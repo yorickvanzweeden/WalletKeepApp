@@ -8,22 +8,22 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.walletkeep.walletkeep.db.entity.WalletToken;
-import com.walletkeep.walletkeep.db.entity.WalletTokenA;
+import com.walletkeep.walletkeep.db.entity.WalletTokenWithoutAddress;
 
 import java.util.List;
 
 @Dao
-public abstract class WalletTokenDao implements BaseDao<WalletToken> {
-    @Query("SELECT * FROM wallettoken WHERE wallet_id LIKE :walletId")
-    public abstract LiveData<List<WalletTokenA>> getByWalletId(int walletId);
+public abstract class WalletTokenDao implements BaseDao<WalletTokenWithoutAddress> {
+    @Query("SELECT * FROM WalletTokenWithoutAddress WHERE wallet_id LIKE :walletId")
+    public abstract LiveData<List<WalletToken>> getByWalletId(int walletId);
 
     @Insert
-    public void insertTokens(List<WalletTokenA> tokens) {
-        for(WalletTokenA token: tokens) insert(token.token);
+    public void insertTokens(List<WalletToken> tokens) {
+        for(WalletToken token: tokens) insert(token.token);
     }
 
     @Delete
-    public void deleteTokens(List<WalletTokenA> tokens) {
-        for(WalletTokenA token: tokens) delete(token.token);
+    public void deleteTokens(List<WalletToken> tokens) {
+        for(WalletToken token: tokens) delete(token.token);
     }
 }

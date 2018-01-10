@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.db.AppDatabase;
-import com.walletkeep.walletkeep.db.entity.WalletTokenA;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 
 import java.util.List;
 
@@ -27,15 +27,15 @@ public class TokenRepository {
      * @param walletId Id of the wallet
      * @return List of tokens of a wallet
      */
-    public LiveData<List<WalletTokenA>> getTokens(int walletId) {
+    public LiveData<List<WalletToken>> getTokens(int walletId) {
         return database.walletTokenDao().getByWalletId(walletId);
     }
 
-    public void insertTokens(List<WalletTokenA> tokens) {
+    public void insertTokens(List<WalletToken> tokens) {
         executors.diskIO().execute(() -> database.walletTokenDao().insertTokens(tokens));
     }
 
-    public void deleteTokens(List<WalletTokenA> tokens) {
+    public void deleteTokens(List<WalletToken> tokens) {
         executors.diskIO().execute(() -> database.walletTokenDao().deleteTokens(tokens));
     }
 }
