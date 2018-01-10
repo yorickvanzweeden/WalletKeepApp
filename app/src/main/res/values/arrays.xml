@@ -20,4 +20,20 @@
         <item>24H</item>
         <item>7D</item>
     </string-array>
+
+    <string-array name="tokens">
+        <item>C20</item>
+        <item>DATA</item>
+        <item>GNT</item>
+        <item>GVT</item>
+        <item>KCS</item>
+        <item>LINK</item>
+        <item>OMG</item>
+        <item>PBL</item>
+        <item>QASH</item>
+        <item>RDN*</item>
+        <item>REQ</item>
+        <item>VEN</item>
+        <item>WTC</item>
+    </string-array>
 </resources>

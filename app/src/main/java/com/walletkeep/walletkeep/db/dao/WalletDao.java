@@ -9,6 +9,8 @@ import android.arch.persistence.room.Transaction;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
+import com.walletkeep.walletkeep.db.entity.WalletTokenWithoutAddress;
+import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 
 import java.util.List;
@@ -23,19 +25,26 @@ public abstract class WalletDao implements BaseDao<Wallet> {
     public abstract LiveData<WalletWithRelations> getById(int id);
 
     public void insertWalletWithRelations(WalletWithRelations wallet) {
-        long walletId = insertWallet(wallet.wallet);
+        int walletId = (int)insertWallet(wallet.wallet);
 
         // Don't try to save if credentials are null
         if (wallet.getCredentials() != null) {
-            wallet.getCredentials().setWallet_id((int)walletId);
+            wallet.getCredentials().setWallet_id(walletId);
             insertCredentials(wallet.getCredentials());
         }
 
         if (wallet.assets != null) {
             for (Asset asset: wallet.assets){
-                asset.setWalletId((int)walletId);
+                asset.setWalletId(walletId);
             }
             insertAssets(wallet.assets);
+        }
+
+        if (wallet.tokens != null) {
+            for(WalletToken token: wallet.tokens) {
+                token.token.setWalletId(walletId);
+                insertToken(token.token);
+            }
         }
     }
 
@@ -47,4 +56,7 @@ public abstract class WalletDao implements BaseDao<Wallet> {
 
     @Insert
     public abstract void insertAssets(List<Asset> assets);
+
+    @Insert
+    public abstract void insertToken(WalletTokenWithoutAddress token);
 }

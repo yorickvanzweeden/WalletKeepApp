@@ -11,9 +11,6 @@ import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import java.util.List;
 
 public class WalletRepository {
-    // Repository instance
-    private static WalletRepository sInstance;
-
     // Database instance
     private final AppDatabase database;
     private final AppExecutors executors;
