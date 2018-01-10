@@ -1,5 +1,6 @@
 package com.walletkeep.walletkeep.ui.portfolio;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -101,11 +102,16 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         holder.assetButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, AssetActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
-            intent.putExtra(" portfolio_name", portfolios.get(position).getName());
             context.startActivity(intent);
         });
         holder.deleteButton.setOnClickListener(view -> {
-            viewModel.deletePortfolio(portfolios.get(position));
+            // Ask for confirmation
+            new AlertDialog.Builder(this.context)
+                    .setMessage(R.string.confirmation_delete_portfolio)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) ->
+                            viewModel.deletePortfolio(portfolios.get(position)))
+                    .setNegativeButton(android.R.string.no, null).show();
         });
     }
 

@@ -18,6 +18,8 @@ import com.walletkeep.walletkeep.di.module.ApiServiceModule;
 import com.walletkeep.walletkeep.util.DeltaCalculation;
 import com.walletkeep.walletkeep.util.RateLimiter;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,12 +100,20 @@ public class AssetRepository {
      * Fetches wallet data from api service
      * @param wallets Wallets containing credentials
      */
-    public void fetchWallets(List<WalletWithRelations> wallets, ErrorListener errorListener){
-        for (WalletWithRelations wallet: wallets) {
-            if (wallet.getType() != WalletWithRelations.Type.Transaction) {
-                fetchWallet(wallet, errorListener);
-            }
-        }
+    public void fetchWallets(List<WalletWithRelations> wallets, ErrorListener errorListener) {
+        // Test internet connection
+        executors.networkIO().execute(() -> {
+            boolean internet = true;
+            try { InetAddress.getByName("www.google.com"); }
+            catch (UnknownHostException e) { internet = false; }
+
+            if (!internet)
+                executors.mainThread().execute(() -> errorListener.onError("No Internet connection"));
+            else
+                for (WalletWithRelations wallet : wallets)
+                    if (wallet.getType() != WalletWithRelations.Type.Transaction)
+                        fetchWallet(wallet, errorListener);
+            });
     }
     private void fetchWallet(WalletWithRelations wallet, ErrorListener errorListener) {
         // Don't execute API calls if rate limit is applied
