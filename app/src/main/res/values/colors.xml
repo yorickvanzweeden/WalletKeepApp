@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
     <color name="black_overlay">#66000000</color>
 
     <!--Main colors for app-->
-    <color name="MainBackground">#ecf0f1</color>
+    <color name="colorPrimary">#e0e0e0</color>
+    <color name="colorPrimaryDark">#bdbdbd</color>
+    <color name="colorAccent">#c62828</color>
     <color name="MainAccent">#CE2029</color>
 
+    <color name="topbar">#BDBDBD</color>
+    <color name="background">#E0E0E0</color>
+    <color name="middlelayer">#f9f9f9</color>
+    <color name="toplayer">#fafafa</color>
 
-    <color name="black_semi_transparent">#B2000000</color>
-    <color name="background">#e5e5e5</color>
+    <color name="black">#000000</color>
     <color name="half_black">#808080</color>
     <color name="white">#fafafa</color>
     <color name="white_pressed">#f1f1f1</color>
@@ -21,4 +22,24 @@
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
+    <array name="distributionbar">
+        <item>#80CBC4</item>
+        <item>#EF9A9A</item>
+        <item>#A5D6A7</item>
+        <item>#9FA8DA</item>
+        <item>#81D4FA</item>
+        <item>#FFE082</item>
+        <item>#CE93D8</item>
+        <item>#F48FB1</item>
+        <item>#B39DDB</item>
+        <item>#9FA8DA</item>
+        <item>#90CAF9</item>
+        <item>#80DEEA</item>
+        <item>#C5E1A5</item>
+        <item>#E6EE9C</item>
+        <item>#FFF59D</item>
+        <item>#FFCC80</item>
+        <item>#FFAB91</item>
+        <item>#BCAAA4</item>
+    </array>
 </resources>

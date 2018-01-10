@@ -3,6 +3,9 @@ package com.walletkeep.walletkeep.api;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
+import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
+import com.walletkeep.walletkeep.di.module.ApiServiceModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +74,7 @@ public abstract class ApiServiceTest {
     protected void runEntireFlow(WalletWithRelations wallet, ApiServiceTest.I i) {
         threadsRunning = true;
 
-        ApiService.AssetResponseListener listener = new ApiService.AssetResponseListener() {
+        ResponseHandler.ResponseListener listener = new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
                 i.onResponseAssertion(assets);
@@ -86,8 +89,12 @@ public abstract class ApiServiceTest {
         };
 
         // Create ApiService
-        ApiService.Factory apiServiceFactory = new ApiService.Factory(wallet, listener);
-        ApiService apiService = apiServiceFactory.create();
+
+        // Create ApiService
+        ApiServiceComponent component = DaggerApiServiceComponent.builder()
+                .apiServiceModule(new ApiServiceModule(wallet, listener))
+                .build();
+        ApiService apiService = component.getApiService();
 
         // Fetch data
         apiService.fetch();

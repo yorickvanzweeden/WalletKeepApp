@@ -31,6 +31,12 @@ public class Wallet {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "name")
+    private String name;
+
+    @ColumnInfo(name = "type")
+    private int type;
+
     @ColumnInfo(name = "address")
     private String address;
 
@@ -49,25 +55,25 @@ public class Wallet {
     }
 
     // Getters and setters
-    public int getId() {
-        return id;
-    }
-
+    public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public String getAddress() { return address; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
+    public int getType() { return type; }
+    public void setType(int type) { this.type = type; }
+
+    public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
     public String getAddressCurrency() { return addressCurrency; }
-
     public void setAddressCurrency(String addressCurrency) { this.addressCurrency = addressCurrency; }
-    
-    public int getPortfolioId() { return portfolioId; }
 
+    public int getPortfolioId() { return portfolioId; }
     public void setPortfolioId(int portfolioId) { this.portfolioId = portfolioId; }
 
     public String getExchangeName() { return exchangeName; }
-
     public void setExchangeName(String exchangeName) { this.exchangeName = exchangeName; }
+
 }

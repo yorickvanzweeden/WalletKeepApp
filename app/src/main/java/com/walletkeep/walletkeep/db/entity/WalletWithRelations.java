@@ -17,21 +17,42 @@ public class WalletWithRelations {
 
 
     // Direct calls
-    public enum Type { Naked, Exchange }
+    public enum Type {
+        Naked(0),
+        Exchange(1),
+        Transaction(2);
+
+        private final int value;
+        Type(int value) {
+            this.value = value;
+        }
+
+        public int getValue() { return value; }
+    }
 
     /**
      * Returns the type of the wallet
      * @return Exchange or Naked
      */
     public Type getType() {
-        return this.wallet.getExchangeName() == null ? Type.Naked : Type.Exchange;
+        return Type.values()[this.wallet.getType()];
+    }
+
+    /**
+     * Gets the name of the wallet
+     * @return Name of the wallet (null if not present)
+     */
+    public String getWalletName() {
+        return this.wallet.getName();
     }
 
     /**
      * Gets the name of the exchange of the wallet
      * @return Name of the exchange (null if not present)
      */
-    public String getExchangeName() { return this.wallet.getExchangeName(); }
+    public String getExchangeName() {
+        return this.wallet.getExchangeName();
+    }
 
     /**
      * Gets the address of the wallet
@@ -45,7 +66,9 @@ public class WalletWithRelations {
      * Gets the currency of the address
      * @return Currency of the address
      */
-    public String getAddressCurrency() { return this.wallet.getAddressCurrency(); }
+    public String getAddressCurrency() {
+        return this.wallet.getAddressCurrency();
+    }
 
     /**
      * Gets the exchange credentials related to the wallet

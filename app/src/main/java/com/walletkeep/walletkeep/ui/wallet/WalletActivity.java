@@ -1,6 +1,5 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +12,10 @@ import android.view.View;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
+import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 public class WalletActivity extends AppCompatActivity {
@@ -21,7 +24,7 @@ public class WalletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wallet);
+        setContentView(R.layout.wallet_activity);
         int portfolioId = getIntent().getExtras().getInt("portfolio_id");
 
         setupOverlay(portfolioId);
@@ -34,7 +37,7 @@ public class WalletActivity extends AppCompatActivity {
      */
     private void setupRecyclerView(int portfolioId){
         // Link to the right UI item
-        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_wallets);
+        RecyclerView mRecyclerView = findViewById(R.id.wallet_content_recyclerView);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -45,8 +48,10 @@ public class WalletActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Initialise view model
-        WalletViewModel.Factory factory = new WalletViewModel.Factory(getApplication());
-        viewModel = ViewModelProviders.of(this, factory).get(WalletViewModel.class);
+        ViewModelComponent component = DaggerViewModelComponent.builder()
+                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .build();
+        viewModel = component.getWalletViewModel();
         viewModel.init(portfolioId);
 
         // Create and set adapter
@@ -63,12 +68,12 @@ public class WalletActivity extends AppCompatActivity {
      */
     private void setupOverlay(int portfolioId){
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.wallet_activity_toolbar_name);
         setSupportActionBar(toolbar);
 
         // Setup fab
-        FloatingActionsMenu fabmenu = findViewById(R.id.fab_menu_add_wallet);
-        View overlay = findViewById(R.id.fab_overlay);
+        FloatingActionsMenu fabmenu = findViewById(R.id.wallet_activity_fab_menu);
+        View overlay = findViewById(R.id.wallet_activity_fab_overlay);
         overlay.setOnClickListener(view -> fabmenu.collapse());
         overlay.setClickable(false);
 
@@ -85,14 +90,19 @@ public class WalletActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab_add_exchange_wallet);
+        FloatingActionButton fab = findViewById(R.id.wallet_activity_fab_addExchangeWallet);
         fab.setOnClickListener(view -> {
-            addWallet(portfolioId, true);
+            addWallet(portfolioId, WalletWithRelations.Type.Exchange);
             fabmenu.collapse();
         });
-        FloatingActionButton fab2 = findViewById(R.id.fab_add_naked_wallet);
+        FloatingActionButton fab2 = findViewById(R.id.wallet_activity_fab_addNakedWallet);
         fab2.setOnClickListener(view -> {
-            addWallet(portfolioId, false);
+            addWallet(portfolioId, WalletWithRelations.Type.Naked);
+            fabmenu.collapse();
+        });
+        FloatingActionButton fab3 = findViewById(R.id.wallet_activity_fab_addTransaction);
+        fab3.setOnClickListener(view -> {
+            addWallet(portfolioId, WalletWithRelations.Type.Transaction);
             fabmenu.collapse();
         });
 
@@ -103,10 +113,10 @@ public class WalletActivity extends AppCompatActivity {
      * Start add/edit wallet intent
      * @param portfolioId Portfolio to which the walletButton belongs
      */
-    private void addWallet(int portfolioId, boolean addExchange){
+    private void addWallet(int portfolioId, WalletWithRelations.Type fragmentType){
         Intent intent = new Intent(this, EditWalletActivity.class);
         intent.putExtra("portfolio_id", portfolioId);
-        intent.putExtra("add_exchange", addExchange);
+        intent.putExtra("fragment_type", fragmentType.getValue());
         this.startActivity(intent);
     }
 }

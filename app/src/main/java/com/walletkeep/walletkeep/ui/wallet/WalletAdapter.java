@@ -2,11 +2,12 @@ package com.walletkeep.walletkeep.ui.wallet;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
@@ -31,13 +32,15 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         public TextView mTextView;
-        public Button editWalletButton;
+        public CardView mCardView;
+        public ImageView mImageView;
 
         public ViewHolder(View v) {
             super(v);
             // Initialise UI elements
-            mTextView = v.findViewById(R.id.wallet_listitem_exchange);
-            editWalletButton = v.findViewById(R.id.button_edit_wallet);
+            mTextView = v.findViewById(R.id.wallet_listitem_textView_name);
+            mCardView = v.findViewById(R.id.wallet_listitem_cardView);
+            mImageView = v.findViewById(R.id.wallet_listitem_imageView);
         }
     }
 
@@ -69,7 +72,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public WalletAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                                  int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_wallet_listitem, parent, false);
+                .inflate(R.layout.wallet_content_listitem, parent, false);
 
         return new com.walletkeep.walletkeep.ui.wallet.WalletAdapter.ViewHolder(v);
     }
@@ -81,20 +84,31 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
      */
     @Override
     public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
-        holder.editWalletButton.setOnClickListener(view -> {
+        holder.mCardView.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
-            intent.putExtra("add_exchange", wallets.get(position).getType() == WalletWithRelations.Type.Exchange);
+            intent.putExtra("fragment_type", wallets.get(position).getType().getValue());
             context.startActivity(intent);
         });
 
+        // Set wallet name and type icon
+        String walletName = wallets.get(position).getWalletName();
+
         switch (wallets.get(position).getType()){
-            case Naked:
-                holder.mTextView.setText(wallets.get(position).getAddressCurrency());
+            case Exchange:
+                if (walletName.length() == 0) walletName = wallets.get(position).getExchangeName() + " Wallet";
+                holder.mImageView.setImageResource(R.drawable.xc);
                 break;
-            default:
-                holder.mTextView.setText(wallets.get(position).getExchangeName());
+            case Naked:
+                if (walletName.length() == 0) walletName = wallets.get(position).getAddressCurrency() + " Wallet";
+                holder.mImageView.setImageResource(R.drawable.wl);
+                break;
+            case Transaction:
+                if (walletName.length() == 0) walletName = wallets.get(position).assets.get(0).getCurrencyTicker() + " Wallet";
+                holder.mImageView.setImageResource(R.drawable.tx);
+                break;
         }
+        holder.mTextView.setText(walletName);
     }
 
     /**

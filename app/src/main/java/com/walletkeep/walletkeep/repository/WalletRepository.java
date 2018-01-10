@@ -1,52 +1,31 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 
+import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.Wallet;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
-import com.walletkeep.walletkeep.util.RateLimiter;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class WalletRepository {
     // Repository instance
     private static WalletRepository sInstance;
 
     // Database instance
-    private final AppDatabase mDatabase;
-
-    // Rate limiter prevent too many requests
-    private RateLimiter<String> apiRateLimit = new RateLimiter<>(10, TimeUnit.SECONDS);
-
+    private final AppDatabase database;
+    private final AppExecutors executors;
 
     /**
      * Constructor: Initializes repository with database
      * @param database Database to use
      */
-    public WalletRepository(AppDatabase database) {
-        this.mDatabase = database;
+    public WalletRepository(AppDatabase database, AppExecutors executors) {
+        this.database = database;
+        this.executors = executors;
     }
-
-    /**
-     * Gets instance of the repository (singleton)
-     * @param database Database to use
-     * @return Instance of the repository
-     */
-    public static WalletRepository getInstance(final AppDatabase database) {
-        if (sInstance == null) {
-            synchronized (WalletRepository.class) {
-                if (sInstance == null) {
-                    sInstance = new WalletRepository(database);
-                }
-            }
-        }
-        return sInstance;
-    }
-
 
     /**
      * Gets the wallets of a portfolio
@@ -54,7 +33,7 @@ public class WalletRepository {
      * @return List of wallets of a portfolio
      */
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
-        return mDatabase.walletDao().getAll(portfolioId);
+        return database.walletDao().getAll(portfolioId);
     }
 
     /**
@@ -63,7 +42,7 @@ public class WalletRepository {
      * @return Wallet
      */
     public LiveData<WalletWithRelations> getWallet(int walletId) {
-        return mDatabase.walletDao().getById(walletId);
+        return database.walletDao().getById(walletId);
     }
 
     /**
@@ -71,7 +50,7 @@ public class WalletRepository {
      * @param wallet Wallet with relations
      */
     public void addWalletWithRelations(WalletWithRelations wallet) {
-        AsyncTask.execute(() -> mDatabase.walletDao().insertWalletWithRelations(wallet));
+        executors.diskIO().execute(() -> database.walletDao().insertWalletWithRelations(wallet));
     }
 
     /**
@@ -79,7 +58,7 @@ public class WalletRepository {
      * @param wallet Updated wallet
      */
     public void updateWallet(Wallet wallet) {
-        AsyncTask.execute(() -> mDatabase.walletDao().update(wallet));
+        executors.diskIO().execute(() -> database.walletDao().update(wallet));
     }
 
     /**
@@ -87,7 +66,7 @@ public class WalletRepository {
      * @param wallet Wallet to delete
      */
     public void deleteWallet(Wallet wallet) {
-        AsyncTask.execute(() -> mDatabase.walletDao().delete(wallet));
+        executors.diskIO().execute(() -> database.walletDao().delete(wallet));
     }
 
     /**
@@ -95,6 +74,6 @@ public class WalletRepository {
      * @param credentials Updated credentials
      */
     public void updateCredentials(ExchangeCredentials credentials) {
-        AsyncTask.execute(() -> mDatabase.exchangeCredentialsDao().update(credentials));
+        executors.diskIO().execute(() -> database.exchangeCredentialsDao().update(credentials));
     }
 }

@@ -1,17 +1,14 @@
 package com.walletkeep.walletkeep.viewmodel;
 
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
 
-import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssetViewModel extends ViewModel {
@@ -31,7 +28,7 @@ public class AssetViewModel extends ViewModel {
      * Gets the assets
      * @param portfolioId Id of the portfolio containing the assets
      */
-    public void init(int portfolioId) {
+    public void init(int portfolioId, AssetRepository.ErrorListener errorListener) {
         // Update assets
         if (this.aggregatedAssets == null)
             this.aggregatedAssets = assetRepository.getAggregatedAssets(portfolioId);
@@ -39,48 +36,34 @@ public class AssetViewModel extends ViewModel {
         // Update wallets
         if (this.wallets == null)
             this.wallets = assetRepository.getWallets(portfolioId);
-
-        // Update currency prices
-        this.assetRepository.fetchCurrencyPrices();
     }
 
     /**
      * Loads all the asset (async)
      * @return Livedata list of assets
      */
-    public LiveData<List<AggregatedAsset>> getAggregatedAssets() {
-        return aggregatedAssets;
-    }
+    public LiveData<List<AggregatedAsset>> getAggregatedAssets() { return aggregatedAssets; }
 
-    public LiveData<List<WalletWithRelations>> getWallets() {
-        return wallets;
-    }
-
+    public LiveData<List<WalletWithRelations>> getWallets() { return wallets; }
 
     /**
      * Update all wallets
      */
-    public void fetch(List<WalletWithRelations> wallets){
+    public void assetFetch(List<WalletWithRelations> wallets, AssetRepository.ErrorListener errorListener){
         if (wallets != null) {
-            this.assetRepository.fetchWallets(wallets);
+            this.assetRepository.fetchWallets(wallets, errorListener);
         }
     }
 
-
     /**
-     * Returns view model with repository
+     * Update all prices
      */
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private final AssetRepository assetRepository;
-
-        public Factory(@NonNull Application application) {
-            assetRepository = ((WalletKeepApp) application).getAssetRepository();
-        }
-
-        @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            //noinspection unchecked
-            return (T) new AssetViewModel(assetRepository);
+    public void priceFetch(List<AggregatedAsset> assets, AssetRepository.ErrorListener errorListener, boolean delete) {
+        if (assets != null) {
+            ArrayList<String> currencies = new ArrayList<String>() {{
+                for (AggregatedAsset asset:assets) add(asset.currencyTicker);
+            }};
+            if (currencies.size() != 0) this.assetRepository.fetchPrices(currencies, errorListener, delete);
         }
     }
 }

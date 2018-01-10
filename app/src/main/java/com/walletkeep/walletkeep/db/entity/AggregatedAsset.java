@@ -1,9 +1,15 @@
 package com.walletkeep.walletkeep.db.entity;
 
+import java.util.Comparator;
+
+//Per portfolio
 public class AggregatedAsset {
     public String currencyTicker;
     public float amount;
     public float price_eur;
+    public float change1h;
+    public float change24h;
+    public float change7d;
 
     /**
      * Gets ticker of the currency
@@ -25,7 +31,33 @@ public class AggregatedAsset {
      * Gets latest price_eur of the currency
      * @return Latest price_eur of the currency
      */
-    public float getLatestCurrencyPrice(){
-        return price_eur;
+    public float getLatestCurrencyPrice(){ return price_eur; }
+
+    /**
+     * Gets the value of the asset (amount*price)
+     * @return Latest value of the asset
+     */
+    public float getEurValue(){ return price_eur * amount; }
+
+    /**
+     * Gets percentage of change of the last hour
+     * @return Latest percentage of change of the last hour
+     */
+    public float getChange(String s){
+        if (s == null) return change24h;
+        switch (s.trim().toUpperCase()) {
+            case "1H":
+                return change1h;
+            case "7D":
+                return change7d;
+            default:
+                return change24h;
+        }
+    }
+    public static class AssetComparator implements Comparator<AggregatedAsset> {
+        @Override
+        public int compare(AggregatedAsset o1, AggregatedAsset o2) {
+            return Float.valueOf(o2.getEurValue()).compareTo(o1.getEurValue());
+        }
     }
 }
