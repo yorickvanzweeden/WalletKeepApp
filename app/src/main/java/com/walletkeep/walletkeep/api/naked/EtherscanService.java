@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.ResponseHandler;
@@ -52,9 +53,8 @@ public class EtherscanService extends ApiService {
         ResponseHandler responseHandler = new ResponseHandler(  new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
-                assetList.addAll(assets);
-                if (ticketing.isLast())
-                    apiServiceResponseHandler.returnAssets(assetList);
+                for (Asset asset: assets) if (asset.getAmount() != 0) assetList.add(asset);
+                if (ticketing.isLast()) apiServiceResponseHandler.returnAssets(assetList);
             }
 
             @Override
@@ -66,14 +66,17 @@ public class EtherscanService extends ApiService {
 
         // Perform requests for tokens
         for (WalletTokenA token: tokens) {
-            responseCall = api.getTokenBalance( address, token.getAddress());
-            performTokenRequest(responseCall, ErrorParser.getStandard(), responseHandler, token.getCurrency());
+            (new AppExecutors()).networkIO().execute(() -> {
+                Call<EtherscanResponse> responseCall2 = api.getTokenBalance( address, token.getAddress());
+                performTokenRequest(responseCall2, ErrorParser.getStandard(), responseHandler, token.getCurrency());
 
-            // Avoid Etherscan ban at 5 req/s
-            if (tokens.size() > 3) {
-                try { Thread.sleep(500); }
-                catch(InterruptedException ex) { Thread.currentThread().interrupt(); }
-            }
+                // Avoid Etherscan ban at 5 req/s
+                if (tokens.size() > 3) {
+                    try { Thread.sleep(500); }
+                    catch(InterruptedException ex) { Thread.currentThread().interrupt(); }
+                }
+            });
+
 
         }
     }
