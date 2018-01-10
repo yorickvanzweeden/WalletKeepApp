@@ -14,5 +14,8 @@
         android:id="@+id/wallet_content_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/recyclertest"/>
+        android:theme="@style/recyclertest"
+        android:clipToPadding="false"
+        android:paddingBottom="70dp"
+        android:scrollbars="vertical"/>
 </android.support.constraint.ConstraintLayout>
