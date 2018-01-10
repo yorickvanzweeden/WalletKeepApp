@@ -2,18 +2,21 @@ package com.walletkeep.walletkeep.ui.portfolio;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
+import com.walletkeep.walletkeep.ui.asset.AssetActivity;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import javax.inject.Inject;
@@ -39,6 +42,16 @@ public class PortfolioActivity extends AppCompatActivity
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.portfolio_dialog_editText_name);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),AssetActivity.class));
+            }
+        });
 
         // Setup fab
         FloatingActionButton fab = findViewById(R.id.portfolio_activity_fab);
