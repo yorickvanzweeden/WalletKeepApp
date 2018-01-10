@@ -125,7 +125,9 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         wallet.wallet.setAddressCurrency(currency);
 
         viewModel.deleteTokens(tokenAdapter.getWalletTokens(false));
-        viewModel.insertTokens(tokenAdapter.getWalletTokens(true));
+        if (wallet.wallet.getId() > 0) viewModel.insertTokens(tokenAdapter.getWalletTokens(true));
+        else wallet.tokens = tokenAdapter.getWalletTokens(true);
+
         return wallet;
     }
 }
