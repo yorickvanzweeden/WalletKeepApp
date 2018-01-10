@@ -1,5 +1,6 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -127,10 +128,22 @@ public class EditWalletActivity extends AppCompatActivity {
      */
     private void deleteWallet() {
         // Don't delete if not saved
-        if(wallet != null) viewModel.deleteWallet(wallet.wallet);
+        if(wallet == null) {
+            finish();
+            return;
+        }
 
-        // Kill activity --> Return to previous activity
-        finish();
+        // Ask for confirmation
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.confirmation_delete_wallet)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                    viewModel.deleteWallet(wallet.wallet);
+
+                    // Kill activity --> Return to previous activity
+                    finish();
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     /**
