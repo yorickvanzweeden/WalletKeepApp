@@ -1,12 +1,8 @@
 package com.walletkeep.walletkeep.viewmodel;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
 
-import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.repository.PortfolioRepository;
 
@@ -50,6 +46,14 @@ public class PortfolioViewModel extends ViewModel {
     }
 
     /**
+     * Delete portfolio (async)
+     * @param portfolio Portfolio to delete
+     */
+    public void deletePortfolio(Portfolio portfolio){
+        this.portfolioRepository.deletePortfolio(portfolio);
+    }
+
+    /**
      * Provides dataset for Recyclerview
      * @return List of strings
      */
@@ -58,22 +62,5 @@ public class PortfolioViewModel extends ViewModel {
             return null;
         }
         return this.portfolios.getValue();
-    }
-
-    /**
-     * Returns view model with repository
-     */
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private final PortfolioRepository mRepository;
-
-        public Factory(@NonNull Application application) {
-            mRepository = ((WalletKeepApp) application).getPortfolioRepository();
-        }
-
-        @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            //noinspection unchecked
-            return (T) new PortfolioViewModel(mRepository);
-        }
     }
 }

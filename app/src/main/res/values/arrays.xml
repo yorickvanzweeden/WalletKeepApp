@@ -2,6 +2,22 @@
 <resources>
     <string-array name="exchange_array">
         <item>Binance</item>
+        <item>Bitfinex</item>
+        <item>Bittrex</item>
         <item>GDAX</item>
+        <item>Kraken</item>
+        <item>Kucoin</item>
+    </string-array>
+
+    <string-array name="supported_currency_array">
+        <item>ARK</item>
+        <item>ETH</item>
+        <item>NEO</item>
+    </string-array>
+
+    <string-array name="price_change">
+        <item>1H</item>
+        <item>24H</item>
+        <item>7D</item>
     </string-array>
 </resources>

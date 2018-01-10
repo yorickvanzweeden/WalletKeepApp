@@ -1,9 +1,12 @@
 package com.walletkeep.walletkeep.api.exchange;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
+import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
@@ -11,32 +14,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public class GDAXService extends ApiService {
+    private String baseUrl = "https://api.gdax.com";
+
     @Override
     public void fetch() {
-        // Get signature
-        long timestamp = System.currentTimeMillis() / 1000 + 3;
-        String data =  timestamp + "GET/accounts";
-        String signature;
+        // Perform time synchronisations
+        GDAXApi api = RetrofitClient.getClient(baseUrl).create(GDAXApi.class);
+        Call<TimestampResponse> responseCall = api.getTimestamp();
+        responseCall.enqueue(new Callback<TimestampResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TimestampResponse> call,
+                                   @NonNull Response<TimestampResponse> response) {
+                fetch(response.body().getEpoch().longValue() + ApiService.slow_device_delay);
+            }
 
-        // In case of invalid secret
-        try{ signature = generateSignature(data, this.ec.getSecret(), true); }
-        catch (IllegalArgumentException e) { this.returnError(e.getMessage()); return; }
-        catch (NullPointerException e) { this.returnError("No credentials have been provided."); return; }
+            @Override
+            public void onFailure(@NonNull Call<TimestampResponse> call, @NonNull Throwable t) {
+                fetch(System.currentTimeMillis() / 1000);
+            }
+        });
+    }
+
+    public void fetch(Long timestamp) {
+        super.fetch();
+
+        // Get signature
+        String data =  timestamp + "GET/accounts";
+
+        String signature = sg.encode(
+                sg.hMac(
+                        sg.getBytes(data),
+                        sg.decode(
+                                ec.getSecret()
+                        ),
+                        "HmacSHA256"
+                )
+        );
 
         // Create request
-        GDAXApi api = RetrofitClient.getClient("https://api.gdax.com").create(GDAXApi.class);
-        Call<List<GDAXResponse>> gdaxResponseCall = api.getBalance(
+        GDAXApi api = RetrofitClient.getClient(baseUrl).create(GDAXApi.class);
+        Call<List<GDAXResponse>> responseCall = api.getBalance(
                 signature, timestamp, ec.getKey(), ec.getPassphrase()
         );
 
         // Perform request
-        performRequest(gdaxResponseCall);
+        performRequest(responseCall, new ErrorParser("message"));
     }
+
 
     /**
      * Retrofit request interfaces
@@ -50,12 +81,16 @@ public class GDAXService extends ApiService {
                 @Header("CB-ACCESS-KEY") String key,
                 @Header("CB-ACCESS-PASSPHRASE") String passphrase
         );
+
+        @Headers("Content-Type: application/json")
+        @GET("/time")
+        Call<TimestampResponse> getTimestamp();
     }
 
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class GDAXResponse implements IResponse{
+    private class GDAXResponse extends AbstractResponse {
 
         @SerializedName("id")
         @Expose
@@ -76,39 +111,7 @@ public class GDAXService extends ApiService {
         @Expose
         private String profileId;
 
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getCurrency() {
-            return currency;
-        }
-
-        public void setCurrency(String currency) {
-            this.currency = currency;
-        }
-
-        public String getBalance() {
-            return balance;
-        }
-
-        public void setBalance(String balance) {
-            this.balance = balance;
-        }
-
-        public String getAvailable() {
-            return available;
-        }
-
-        public void setAvailable(String available) {
-            this.available = available;
-        }
-
-        public Asset getAsset(int walletId){
+        Asset getAsset(int walletId){
             return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
         }
 
@@ -117,6 +120,20 @@ public class GDAXService extends ApiService {
             return new ArrayList<Asset>() {{
                 add(getAsset(walletId));
             }};
+        }
+    }
+
+    private class TimestampResponse {
+
+        @SerializedName("iso")
+        @Expose
+        private String iso;
+        @SerializedName("epoch")
+        @Expose
+        private Double epoch;
+
+        Double getEpoch() {
+            return epoch;
         }
     }
 }

@@ -20,10 +20,10 @@ public class EtherscanService extends ApiService {
     public void fetch() {
         // Create request
         EtherscanApi api = RetrofitClient.getClient("https://api.etherscan.io/api/").create(EtherscanApi.class);
-        Call<EtherscanResponse> blockcypherResponseCall = api.getBalance( address );
+        Call<EtherscanResponse> responseCall = api.getBalance( address );
 
         // Perform request
-        performRequest(blockcypherResponseCall);
+        performRequest(responseCall);
     }
 
     /**
@@ -40,7 +40,7 @@ public class EtherscanService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class EtherscanResponse implements IResponse{
+    private class EtherscanResponse extends AbstractResponse {
         @SerializedName("status")
         @Expose
         private String status;
@@ -51,34 +51,10 @@ public class EtherscanService extends ApiService {
         @Expose
         private String result;
 
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public String getResult() {
-            return result;
-        }
-
-        public void setResult(String result) {
-            this.result = result;
-        }
-
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
-               add(new Asset(walletId, "ETH", Converters.amountToFloat(getResult(), 18)));
+               add(new Asset(walletId, "ETH", Converters.amountToFloat(result, 18)));
             }};
         }
     }
