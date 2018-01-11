@@ -29,6 +29,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="32dp"
+                android:gravity="right"
+                android:textAlignment="gravity"
                 android:text="ChangeVal"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
@@ -40,9 +42,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:gravity="right"
+                android:textAlignment="gravity"
                 android:text="PriceVal"
                 card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_label_price"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
