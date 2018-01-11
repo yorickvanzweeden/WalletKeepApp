@@ -68,9 +68,10 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet) {
         // Retrieve data from form
-        String currency = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_currency)).getText().toString();
+        String currency = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_currency)).getText().toString().trim().toUpperCase();
         String amountString = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_amount)).getText().toString();
 
+        // Check user input
         float amount = Converters.userInputToFloat(amountString);
 
         // Define new asset

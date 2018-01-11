@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,11 +53,9 @@ public class AssetActivity extends AppCompatActivity {
         checkFirstRun();
 
         int portfolioId = 1;
-        String portfolioName = "My portfolio";
         Bundle parameters = getIntent().getExtras();
         if (parameters != null) {
             portfolioId = getIntent().getExtras().getInt("portfolio_id", 1);
-            portfolioName = getIntent().getExtras().getString("portfolio_name", " My Portfolio");
         }
 
         setupOverlay(portfolioId);
@@ -123,7 +122,7 @@ public class AssetActivity extends AppCompatActivity {
 
         // Initialise surfaceView
         mSurfaceView = findViewById(R.id.asset_activity_surfaceView);
-        mSurfaceView.setZOrderOnTop(true);
+        mSurfaceView.setVisibility(View.GONE);
     }
 
     private void setupSwipeRefreshLayout(){
@@ -219,7 +218,12 @@ public class AssetActivity extends AppCompatActivity {
      * Updates distribution bar
      */
     private void updateDistributionBar() {
-        if (this.assets == null) return;
+        if (this.assets == null || this.assets.size() == 0) {
+            if (mSurfaceView.getVisibility() != View.GONE)
+                mSurfaceView.setVisibility(View.GONE);
+            return;
+        }
+        mSurfaceView.setVisibility(View.VISIBLE);
 
         // Calculate distribution
         AssetDistribution distribution = new AssetDistribution(this.assets,

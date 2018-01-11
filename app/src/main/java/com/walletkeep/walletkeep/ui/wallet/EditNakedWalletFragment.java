@@ -26,6 +26,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
     private View view;
     private TokenAdapter tokenAdapter;
     private TokenViewModel viewModel;
+    private int walletId;
 
     /**
      * Constructor:
@@ -94,9 +95,11 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
                 .repositoryComponent(((WalletKeepApp)getActivity().getApplication()).component())
                 .build();
         viewModel = component.getTokenViewModel();
+        viewModel.init(walletId);
+        viewModel.loadTokens().observe(this, tokens -> tokenAdapter.setWalletTokens(tokens));
 
         // Create and set adapter
-        tokenAdapter = new TokenAdapter(view.getResources().getStringArray(R.array.tokens));
+        tokenAdapter = new TokenAdapter(view.getResources().getStringArray(R.array.tokens), walletId);
         mRecyclerView.setAdapter(tokenAdapter);
     }
     private void resetRecyclerView() {
@@ -113,11 +116,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
-        if (wallet.wallet != null && tokenAdapter != null) {
-            tokenAdapter.setWalletId(wallet.wallet.getId());
-            viewModel.init(wallet.wallet.getId());
-            viewModel.loadTokens().observe(this, tokens -> tokenAdapter.setWalletTokens(tokens));
-        }
+        if (wallet.wallet != null) this.walletId = wallet.wallet.getId();
 
         ((EditText)view.findViewById(R.id.editWallet_naked_editText_address)).setText(wallet.getAddress());
         ((Spinner)getActivity().findViewById(R.id.editWallet_naked_spinner_currency)).setSelection(
