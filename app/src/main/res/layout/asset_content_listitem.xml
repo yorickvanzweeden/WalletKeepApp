@@ -54,7 +54,7 @@
                 style="@style/LabelTextNormal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/label_price"
                 card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_holdings"
@@ -88,10 +88,10 @@
             <TextView
                 android:id="@+id/asset_listitem_textView_holdings"
                 style="@style/GuideText"
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:text="value"
                 card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_label_holdings"
                 card_view:layout_constraintTop_toTopOf="parent" />
