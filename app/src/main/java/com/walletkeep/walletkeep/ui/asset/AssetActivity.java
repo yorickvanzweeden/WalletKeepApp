@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
@@ -110,14 +111,16 @@ public class AssetActivity extends AppCompatActivity {
         });
 
         // Setup fabs
-        FloatingActionButton fab = findViewById(R.id.asset_activity_fab_edit_wallets);
+        FloatingActionsMenu fabmenu = findViewById(R.id.asset_activity_fab_menu);
+
+        com.getbase.floatingactionbutton.FloatingActionButton fab = findViewById(R.id.asset_activity_fab_wallets);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolioId);
             this.startActivity(intent);
         });
 
-        FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_edit_portfolios);
+        com.getbase.floatingactionbutton.FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_portfolios);
         fab2.setOnClickListener(view -> startActivity(new Intent(this, PortfolioActivity.class)));
 
         // Initialise surfaceView
