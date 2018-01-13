@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
@@ -36,28 +37,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/asset_activity_fab_edit_wallets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:tint="#ffffff"
-        app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/asset_activity_fab_edit_portfolios"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:tint="#ffffff"
-        app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
-
     <SurfaceView
         android:id="@+id/asset_activity_surfaceView"
         android:layout_width="0dp"
@@ -68,5 +47,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/asset_activity_fab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
+        app:layout_constraintEnd_toEndOf="parent"
+        fab:fab_addButtonColorNormal="@color/colorAccent"
+        fab:fab_addButtonColorPressed="@color/MainAccent"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/asset_activity_fab_wallets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/MainAccent"
+            fab:fab_colorPressed="@color/AccentPressed"
+            fab:fab_icon="@drawable/walletsicon"
+            fab:fab_size="mini"
+            fab:fab_title="wallets" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/asset_activity_fab_portfolios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/MainAccent"
+            fab:fab_colorPressed="@color/AccentPressed"
+            fab:fab_icon="@drawable/portfoliosicon"
+            fab:fab_size="mini"
+            fab:fab_title="Portfolios" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.constraint.ConstraintLayout>

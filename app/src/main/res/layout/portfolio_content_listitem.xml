@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,43 +11,72 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        card_view:cardCornerRadius="4dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="0dp"
+        android:theme="@style/cards">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/portfolio_listitem_textView_label_name"
-                android:layout_width="match_parent"
-                android:layout_height="37dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:gravity="center"
                 android:text="Name"
+                android:textAlignment="gravity"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:theme="@style/TitleText"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/portfolio_listitem_button_assets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/portfolio_listitem_textView_label_name"
-                android:text="@string/assets" />
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/assets"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/portfolio_listitem_button_wallet"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toEndOf="@+id/portfolio_listitem_button_delete"
+                card_view:layout_constraintTop_toBottomOf="@+id/portfolio_listitem_textView_label_name" />
 
             <Button
                 android:id="@+id/portfolio_listitem_button_wallet"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/portfolio_listitem_button_assets"
-                android:text="@string/wallets" />
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/wallets"
+                card_view:layout_constraintBottom_toBottomOf="@+id/portfolio_listitem_button_assets"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toEndOf="@+id/portfolio_listitem_button_assets"
+                card_view:layout_constraintTop_toBottomOf="@+id/portfolio_listitem_textView_label_name" />
 
             <Button
                 android:id="@+id/portfolio_listitem_button_delete"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/portfolio_listitem_button_wallet"
-                android:text="@string/delete" />
-        </RelativeLayout>
+                android:layout_marginBottom="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/delete"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/portfolio_listitem_button_assets"
+                card_view:layout_constraintHorizontal_bias="0.5"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/portfolio_listitem_textView_label_name" />
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 
