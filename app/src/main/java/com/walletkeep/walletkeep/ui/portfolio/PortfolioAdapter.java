@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.ui.portfolio;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -91,7 +92,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TextView name = (TextView)((RelativeLayout)holder.mCardView.getChildAt(0)).getChildAt(0);
+        TextView name = (TextView)((ConstraintLayout)holder.mCardView.getChildAt(0)).getChildAt(0);
         name.setText(portfolios.get(position).getName());
 
         holder.walletButton.setOnClickListener(view -> {
