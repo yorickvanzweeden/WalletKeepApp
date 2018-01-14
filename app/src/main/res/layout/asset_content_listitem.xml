@@ -39,15 +39,14 @@
             <TextView
                 android:id="@+id/asset_listitem_textView_price"
                 style="@style/InfoTextNormal"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
                 android:gravity="right"
-                android:textAlignment="gravity"
                 android:text="PriceVal"
+                android:textAlignment="gravity"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_label_price"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -55,10 +54,10 @@
                 style="@style/LabelTextNormal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="90dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/label_price"
-                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_label_holdings"
+                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_holdings"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -66,10 +65,10 @@
                 style="@style/LabelTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="140dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/label_holdings"
-                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_ticker"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -89,12 +88,12 @@
             <TextView
                 android:id="@+id/asset_listitem_textView_holdings"
                 style="@style/GuideText"
-                android:layout_width="0dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="200dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="10dp"
                 android:text="value"
-                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_label_holdings"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -103,21 +102,22 @@
                 android:layout_width="91dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="140dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="28dp"
                 android:text="Total"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_ticker"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 app:srcCompat="@drawable/ethereum"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="6dp" />
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

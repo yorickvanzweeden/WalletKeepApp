@@ -96,7 +96,7 @@ public class ApiServiceModule {
         switch (currency){
             case "ARK":
                 return (T) new ArkService();
-            case "ETH2":
+            case "BTC":
                 return (T) new BlockcypherService();
             case "ETH":
                 return (T) new EtherscanService();

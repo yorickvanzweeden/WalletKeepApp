@@ -11,6 +11,7 @@
 
     <string-array name="supported_currency_array">
         <item>ARK</item>
+        <item>BTC</item>
         <item>ETH</item>
         <item>NEO</item>
     </string-array>
