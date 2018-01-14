@@ -20,8 +20,8 @@ public class BlockcypherService extends ApiService {
     @Override
     public void fetch() {
          // Create request
-        EthereumApi api = RetrofitClient.getClient("https://api.blockcypher.com/v1/eth/main/").create(EthereumApi.class);
-        Call<BlockcypherService.BlockcypherResponse> responseCall = api.getBalance( address );
+        Api api = RetrofitClient.getClient("https://api.blockcypher.com/v1/btc/main/").create(Api.class);
+        Call<Response> responseCall = api.getBalance( address );
 
         // Perform request
         performRequest(responseCall);
@@ -30,10 +30,10 @@ public class BlockcypherService extends ApiService {
     /**
      * Retrofit request interfaces
      */
-    private interface EthereumApi {
+    private interface Api {
         @Headers("Content-Type: application/json")
         @GET("addrs/{address}/balance")
-        Call<BlockcypherService.BlockcypherResponse> getBalance(
+        Call<Response> getBalance(
                 @Path("address") String address
         );
     }
@@ -41,7 +41,7 @@ public class BlockcypherService extends ApiService {
     /**
      * POJO used for converting the JSON response to Java
      */
-    private class BlockcypherResponse extends AbstractResponse {
+    private class Response extends AbstractResponse {
 
         @SerializedName("address")
         @Expose
@@ -74,7 +74,7 @@ public class BlockcypherService extends ApiService {
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
-                add(new Asset(walletId, "ETH", Converters.amountToFloat(balance, 18)));
+                add(new Asset(walletId, "BTC", Converters.amountToFloat(finalBalance, 8)));
             }};
         }
     }

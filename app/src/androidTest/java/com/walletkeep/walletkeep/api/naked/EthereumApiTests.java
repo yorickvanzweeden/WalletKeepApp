@@ -33,7 +33,7 @@ public class EthereumApiTests extends ApiServiceTest {
     public void assetsIsNull(){
         WalletWithRelations wr = getDefaultWallet(credentialsValidCorrect);
         wr.assets = null;
-        runEntireFlow(wr, new I() {
+        runEntireFlow(wr, new ApiServiceTest.I() {
             @Override
             public void onResponseAssertion(List<Asset> assets) {
                 Assert.assertTrue(assets != null && assets.size() > 0);
