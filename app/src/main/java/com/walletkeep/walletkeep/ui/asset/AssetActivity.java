@@ -101,14 +101,11 @@ public class AssetActivity extends AppCompatActivity {
 
     private void setupOverlay(int portfolioId){
         // Setup volume change
-        TextView volumeChange = findViewById(R.id.asset_activity_textView_change_setting);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
-                R.array.price_change, android.R.layout.simple_spinner_item);
-        volumeChange.setOnClickListener(view -> {
-            int pos = adapter.getPosition(volumeChange.getText().toString());
-            String setting = adapter.getItem((pos + 1) % 3).toString();
-            volumeChange.setText(setting);
-            mAdapter.updateChangeSetting(setting);
+                R.array.currency_change, android.R.layout.simple_spinner_item);
+        findViewById(R.id.asset_activity_textView_portfolio_value).setOnClickListener(view -> {
+            int pos = adapter.getPosition(mAdapter.getCurrencySetting());
+            mAdapter.updateCurrencySetting(adapter.getItem((pos + 1) % 3).toString());
         });
 
         // Setup fabs

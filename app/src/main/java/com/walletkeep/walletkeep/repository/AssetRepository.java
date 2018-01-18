@@ -78,7 +78,7 @@ public class AssetRepository {
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
-            public void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete) {
+            public void onPricesUpdated(List<CurrencyPrice> prices, Boolean delete) {
                 Date newdate = new Date();
 
                 executors.diskIO().execute(() -> {

@@ -5,18 +5,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder> {
     // Data of the recycler view
     private List<AggregatedAsset> assets;
-    private String changeSetting;
+    private String currencySetting = "EUR";
 
     // Access to the view
     private Context context;
@@ -25,16 +27,15 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * Provide a reference to the views for each data item
      * Each data/list item gets access to its own elements
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        public TextView mTextViewTicker;
-        public TextView mTextViewAmount;
-        public TextView mTextViewPrice;
-        public TextView mTextViewTotal;
-        public TextView mTextViewChange;
-        public Button wallet;
+        TextView mTextViewTicker;
+        TextView mTextViewAmount;
+        TextView mTextViewPrice;
+        TextView mTextViewTotal;
+        TextView mTextViewChange;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             // Initialise UI elements
             mTextViewTicker = v.findViewById(R.id.asset_listitem_textView_ticker);
@@ -49,7 +50,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * Constructor: Sets context
      * @param context Allows for referencing of UI elements
      */
-    public AssetAdapter(Context context, List<AggregatedAsset> assets) {
+    AssetAdapter(Context context, List<AggregatedAsset> assets) {
         this.assets = assets;
         this.context = context;
     }
@@ -58,19 +59,20 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * Update data of the list
      * @param assets List of aggregated assets
      */
-    public void updateAggregatedAssets(List<AggregatedAsset> assets){
+    void updateAggregatedAssets(List<AggregatedAsset> assets){
         this.assets = assets;
         notifyDataSetChanged();
     }
 
     /**
-     * Update the change setting (1H, 24H, 7D)
-     * @param changeSetting change setting
+     * Update the currency setting (EUR, USD, BTC)
+     * @param currencySetting change setting
      */
-    public void updateChangeSetting(String changeSetting){
-        this.changeSetting = changeSetting;
+    void updateCurrencySetting(String currencySetting){
+        this.currencySetting = currencySetting;
         notifyDataSetChanged();
     }
+    String getCurrencySetting() { return this.currencySetting; }
 
     /**
      * Creates new view and specifies which layout to use
@@ -96,11 +98,14 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
     public void onBindViewHolder(com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder holder, int position) {
         AggregatedAsset asset = assets.get(position);
 
+        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        nf.setCurrency(Currency.getInstance(currencySetting));
+
         holder.mTextViewTicker.setText(asset.getTicker());
         holder.mTextViewAmount.setText(String.format("%.2f", asset.getAmount()));
-        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getPriceEur()));
-        holder.mTextViewTotal.setText(String.format("€%.2f", asset.getValueEur()));
-        holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(changeSetting)));
+        holder.mTextViewPrice.setText(nf.format(asset.getPrice(currencySetting)));
+        holder.mTextViewTotal.setText(nf.format(asset.getValue(currencySetting)));
+        holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(currencySetting)));
     }
 
     /**
