@@ -23,6 +23,21 @@
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
+
+    <color name="ui_general_elements">#BDBDBD</color>
+
+    <color name="portfolio_consistent">#c5e1a5</color>
+    <color name="portfolio_pressed_consistent">#c5e1a5</color>
+    <color name="wallets_consistent">#80deea</color>
+    <color name="wallets_pressed_consistent">#80deea</color>
+
+    <color name="exchange_consistent">#b2d6ef</color>
+    <color name="exchange_pressed_consistent">#83bbe5</color>
+    <color name="transaction_consistent">#ffdba9</color>
+    <color name="transaction_pressed_consistent">#ffc374</color>
+    <color name="nakedwallet_consistent">#99d5ca</color>
+    <color name="nakedwallet_pressed_consistent">#5abaa7</color>
+
     <array name="distributionbar">
         <item>#80CBC4</item>
         <item>#EF9A9A</item>

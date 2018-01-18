@@ -45,7 +45,6 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
             super(v);
             // Initialise UI elements
             mCardView = v.findViewById(R.id.portfolio_listitem_cardView);
-            walletButton = v.findViewById(R.id.portfolio_listitem_button_wallet);
             assetButton = v.findViewById(R.id.portfolio_listitem_button_assets);
             deleteButton = v.findViewById(R.id.portfolio_listitem_button_delete);
         }
@@ -95,11 +94,6 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         TextView name = (TextView)((ConstraintLayout)holder.mCardView.getChildAt(0)).getChildAt(0);
         name.setText(portfolios.get(position).getName());
 
-        holder.walletButton.setOnClickListener(view -> {
-            Intent intent = new Intent(context, WalletActivity.class);
-            intent.putExtra("portfolio_id", portfolios.get(position).getId());
-            context.startActivity(intent);
-        });
         holder.assetButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, AssetActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
