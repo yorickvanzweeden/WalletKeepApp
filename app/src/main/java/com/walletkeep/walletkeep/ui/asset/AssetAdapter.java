@@ -42,7 +42,6 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
             mTextViewPrice = v.findViewById(R.id.asset_listitem_textView_price);
             mTextViewTotal = v.findViewById(R.id.asset_listitem_textView_total);
             mTextViewChange = v.findViewById(R.id.asset_listitem_textView_change);
-            wallet = v.findViewById(R.id.portfolio_listitem_button_wallet);
         }
     }
 
