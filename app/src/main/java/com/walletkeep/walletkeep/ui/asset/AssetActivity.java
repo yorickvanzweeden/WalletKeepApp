@@ -35,8 +35,11 @@ import com.walletkeep.walletkeep.util.AssetDistribution;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
@@ -106,6 +109,7 @@ public class AssetActivity extends AppCompatActivity {
         findViewById(R.id.asset_activity_textView_portfolio_value).setOnClickListener(view -> {
             int pos = adapter.getPosition(mAdapter.getCurrencySetting());
             mAdapter.updateCurrencySetting(adapter.getItem((pos + 1) % 3).toString());
+            updatePortfolioValue();
         });
 
         // Setup fabs
@@ -213,12 +217,14 @@ public class AssetActivity extends AppCompatActivity {
         // Calculate total
         float total = 0;
         for (AggregatedAsset asset: this.assets) {
-            total += asset.getValueEur().floatValue();
+            total += asset.getValue(mAdapter.getCurrencySetting()).floatValue();
         }
 
         // Set text of TextView
-        TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio_value);
-        portfolioValueTextView.setText(String.format("€%.2f", total));
+        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        nf.setCurrency(Currency.getInstance(mAdapter.getCurrencySetting()));
+        ((TextView)findViewById(R.id.asset_activity_textView_portfolio_value))
+                .setText(nf.format(total));
     }
 
     /**
