@@ -120,10 +120,14 @@ public class AssetActivity extends AppCompatActivity {
             Intent intent = new Intent(this, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolioId);
             this.startActivity(intent);
+            fabmenu.collapse();
         });
 
         com.getbase.floatingactionbutton.FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_portfolios);
-        fab2.setOnClickListener(view -> startActivity(new Intent(this, PortfolioActivity.class)));
+        fab2.setOnClickListener(view -> {
+            startActivity(new Intent(this, PortfolioActivity.class));
+            fabmenu.collapse();
+        });
 
         // Initialise surfaceView
         mSurfaceView = findViewById(R.id.asset_activity_surfaceView);
