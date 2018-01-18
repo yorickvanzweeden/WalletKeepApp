@@ -1,6 +1,11 @@
 package com.walletkeep.walletkeep.db.entity;
 
+import android.arch.persistence.room.TypeConverters;
+
+import com.walletkeep.walletkeep.db.DateConverter;
+
 import java.util.Comparator;
+import java.util.Date;
 
 //Per portfolio
 public class AggregatedAsset {
@@ -10,6 +15,8 @@ public class AggregatedAsset {
     public float change1h;
     public float change24h;
     public float change7d;
+    @TypeConverters({DateConverter.class})
+    public Date priceTimeStamp;
 
     /**
      * Gets ticker of the currency
@@ -39,6 +46,8 @@ public class AggregatedAsset {
      */
     public float getEurValue(){ return price_eur * amount; }
 
+
+    public Date getPriceTimeStamp(){ return priceTimeStamp; }
     /**
      * Gets percentage of change of the last hour
      * @return Latest percentage of change of the last hour
@@ -54,6 +63,7 @@ public class AggregatedAsset {
                 return change24h;
         }
     }
+
     public static class AssetComparator implements Comparator<AggregatedAsset> {
         @Override
         public int compare(AggregatedAsset o1, AggregatedAsset o2) {

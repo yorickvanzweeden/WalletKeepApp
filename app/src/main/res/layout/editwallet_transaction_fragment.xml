@@ -16,6 +16,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="@string/example_currency"
+        android:textAppearance="@style/LabelTextNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_textView_label_currency" />
@@ -28,6 +29,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/currency"
+        android:textAppearance="@style/LabelTextNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,6 +42,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/amount"
+        android:textAppearance="@style/LabelTextNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_editText_currency" />
@@ -54,6 +57,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="@string/example_amount_float"
+        android:textAppearance="@style/LabelTextNormal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_textView_label_amount" />

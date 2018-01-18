@@ -8,11 +8,11 @@ import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -181,6 +181,12 @@ public class AssetActivity extends AppCompatActivity {
         // Sort on size
         Collections.sort(assets, new AggregatedAsset.AssetComparator());
 
+        // Update timestamp in portfolio bar
+        TextView TimeStampTextView = findViewById(R.id.asset_activity_textView_timestamp_last_update);
+        if (assets.size() > 0 && assets.get(0).getPriceTimeStamp() != null) {
+            Long date = assets.get(0).getPriceTimeStamp().getTime();
+            TimeStampTextView.setText(DateUtils.getRelativeTimeSpanString(date).toString());
+        }
         // Remove assets which are valued less than 1 euro
         int index = -1;
         int priceFetchIndex = -1;
@@ -262,6 +268,15 @@ public class AssetActivity extends AppCompatActivity {
 
         // Unlock canvas
         mSurfaceView.getHolder().unlockCanvasAndPost(canvas);
+    }
+
+    // Force exit to Homescreen on backbutton press in asset activity
+    public void onBackPressed() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+
     }
 
 }
