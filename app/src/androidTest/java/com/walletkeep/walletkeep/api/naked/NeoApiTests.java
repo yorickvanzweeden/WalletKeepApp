@@ -10,6 +10,7 @@ import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class NeoApiTests extends ApiServiceTest  {
         wallet.wallet = new Wallet(1);
         wallet.wallet.setAddressCurrency("NEO");
         wallet.wallet.setAddress(MyApiCredentials.getNeoAddress());
-        wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "NEO",  12)) ;}};
+        wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "NEO",  new BigDecimal(12))) ;}};
         return wallet;
     }
 

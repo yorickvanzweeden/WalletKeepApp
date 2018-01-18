@@ -8,6 +8,7 @@ import com.walletkeep.walletkeep.api.CurrencyTickerCorrection;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class KrakenService extends ApiService {
                             CurrencyTickerCorrection.correct(
                                     ((String)entry.getKey()).substring(1)
                             ),
-                            Float.parseFloat((String)entry.getValue())
+                            new BigDecimal((String)entry.getValue())
                     ));
                 }
             } catch (Exception e) {

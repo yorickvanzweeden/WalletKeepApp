@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.util.DeltaCalculation;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,7 +27,7 @@ public class DeltaCalculationTests {
             assetList.add(new Asset(
                     1,
                     ticker,
-                    r.nextInt(50)
+                    new BigDecimal(r.nextInt(50))
             ));
         }
 
@@ -84,7 +85,7 @@ public class DeltaCalculationTests {
         ArrayList<Asset> deltas = DeltaCalculation.get(oldList, newList);
         Assert.assertTrue(deltas != null &&
                 deltas.get(0).getCurrencyTicker().equals("ETH") &&
-                deltas.get(0).getAmount() == -3 &&
+                deltas.get(0).getAmount().equals(new BigDecimal(-3)) &&
                 deltas.size() == 1
         );
     }
@@ -97,7 +98,7 @@ public class DeltaCalculationTests {
         ArrayList<Asset> deltas = DeltaCalculation.get(oldList, newList);
         Assert.assertTrue(deltas != null &&
                 deltas.get(0).getCurrencyTicker().equals("ETH") &&
-                deltas.get(0).getAmount() == 3 &&
+                deltas.get(0).getAmount().equals(new BigDecimal(3)) &&
                 deltas.size() == 1
         );
     }
@@ -110,7 +111,7 @@ public class DeltaCalculationTests {
         ArrayList<Asset> deltas = DeltaCalculation.get(oldList, newList);
         Assert.assertTrue(deltas != null &&
                 deltas.get(0).getCurrencyTicker().equals("BTC") &&
-                deltas.get(0).getAmount() == 3 &&
+                deltas.get(0).getAmount().equals(new BigDecimal(3)) &&
                 deltas.size() == 1
         );
     }
@@ -123,7 +124,7 @@ public class DeltaCalculationTests {
         ArrayList<Asset> deltas = DeltaCalculation.get(oldList, newList);
         Assert.assertTrue(deltas != null &&
                 deltas.get(0).getCurrencyTicker().equals("BTC") &&
-                deltas.get(0).getAmount() == -3 &&
+                deltas.get(0).getAmount().equals(new BigDecimal(-3)) &&
                 deltas.size() == 1
         );
     }
@@ -131,22 +132,22 @@ public class DeltaCalculationTests {
 
     private ArrayList<Asset> listOneTicker(){
         return new ArrayList<Asset>() {{
-            add(new Asset(_id, "BTC", 3));
+            add(new Asset(_id, "BTC", new BigDecimal(3)));
         }};
     }
 
     private ArrayList<Asset> listTwoTickers(){
         return new ArrayList<Asset>() {{
-            add(new Asset(_id, "ETH", 3));
-            add(new Asset(_id, "BTC", 3));
+            add(new Asset(_id, "ETH", new BigDecimal(3)));
+            add(new Asset(_id, "BTC", new BigDecimal(3)));
         }};
     }
 
     private ArrayList<Asset> listThreeTickers(){
         return new ArrayList<Asset>() {{
-            add(new Asset(_id, "ETH", 1));
-            add(new Asset(_id, "ETH", 2));
-            add(new Asset(_id, "BTC", 3));
+            add(new Asset(_id, "ETH", new BigDecimal(1)));
+            add(new Asset(_id, "ETH", new BigDecimal(2)));
+            add(new Asset(_id, "BTC", new BigDecimal(3)));
         }};
     }
 }

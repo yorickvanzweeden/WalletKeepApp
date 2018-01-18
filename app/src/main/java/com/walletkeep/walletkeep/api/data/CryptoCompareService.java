@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -106,9 +107,9 @@ public class CryptoCompareService {
                 for (Map.Entry<String, Response> entry: response.body().entrySet()) {
                     prices.add(
                             new CurrencyPrice(entry.getKey(),
-                                    entry.getValue().priceUsd,
-                                    entry.getValue().priceEur,
-                                    entry.getValue().priceBtc)
+                                    new BigDecimal(entry.getValue().priceUsd),
+                                    new BigDecimal(entry.getValue().priceEur),
+                                    new BigDecimal(entry.getValue().priceBtc))
                     );
                 }
 
@@ -153,12 +154,12 @@ public class CryptoCompareService {
     class Response {
         @SerializedName("EUR")
         @Expose
-        private Float priceEur;
+        private String priceEur;
         @SerializedName("BTC")
         @Expose
-        private Float priceBtc;
+        private String priceBtc;
         @SerializedName("USD")
         @Expose
-        private Float priceUsd;
+        private String priceUsd;
     }
 }

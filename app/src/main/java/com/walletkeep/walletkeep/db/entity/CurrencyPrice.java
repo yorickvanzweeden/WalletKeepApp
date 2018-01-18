@@ -7,10 +7,10 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 
-import com.walletkeep.walletkeep.db.DateConverter;
+import com.walletkeep.walletkeep.db.TypeConverters;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(indices = {@Index("currency_ticker")},
@@ -30,13 +30,16 @@ public class CurrencyPrice {
     private String currencyTicker;
 
     @ColumnInfo(name = "price_usd")
-    private float priceUsd;
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    private BigDecimal priceUsd;
 
     @ColumnInfo(name = "price_eur")
-    private float priceEur;
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    private BigDecimal priceEur;
 
     @ColumnInfo(name = "price_btc")
-    private float priceBtc;
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    private BigDecimal priceBtc;
 
     @ColumnInfo(name = "change1h")
     private float change1h;
@@ -48,7 +51,7 @@ public class CurrencyPrice {
     private float change7d;
 
     @ColumnInfo(name = "last_updated")
-    @TypeConverters({DateConverter.class})
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
     private Date lastUpdated;
 
     public CurrencyPrice(String currencyTicker) {
@@ -56,7 +59,7 @@ public class CurrencyPrice {
     }
 
     @Ignore
-    public CurrencyPrice(String currencyTicker, float priceUsd, float priceEur, float priceBtc,
+    public CurrencyPrice(String currencyTicker, BigDecimal priceUsd, BigDecimal priceEur, BigDecimal priceBtc,
                          float change1h, float change24h, float change7d, Date lastUpdated) {
         this.currencyTicker = currencyTicker;
         this.priceUsd = priceUsd;
@@ -69,7 +72,7 @@ public class CurrencyPrice {
     }
 
     @Ignore
-    public CurrencyPrice(String currencyTicker, float priceUsd, float priceEur, float priceBtc) {
+    public CurrencyPrice(String currencyTicker, BigDecimal priceUsd, BigDecimal priceEur, BigDecimal priceBtc) {
         this.currencyTicker = currencyTicker;
         this.priceUsd = priceUsd;
         this.priceEur = priceEur;
@@ -89,17 +92,17 @@ public class CurrencyPrice {
 
     public void setCurrencyTicker(String currencyTicker) { this.currencyTicker = currencyTicker; }
 
-    public float getPriceUsd() { return priceUsd; }
+    public BigDecimal getPriceUsd() { return priceUsd; }
 
-    public void setPriceUsd(float priceUsd) { this.priceUsd = priceUsd; }
+    public void setPriceUsd(BigDecimal priceUsd) { this.priceUsd = priceUsd; }
 
-    public float getPriceEur() { return priceEur; }
+    public BigDecimal getPriceEur() { return priceEur; }
 
-    public void setPriceEur(float priceEur) { this.priceEur = priceEur; }
+    public void setPriceEur(BigDecimal priceEur) { this.priceEur = priceEur; }
 
-    public float getPriceBtc() { return priceBtc; }
+    public BigDecimal getPriceBtc() { return priceBtc; }
 
-    public void setPriceBtc(float priceBtc) { this.priceBtc = priceBtc; }
+    public void setPriceBtc(BigDecimal priceBtc) { this.priceBtc = priceBtc; }
 
     public Date getLastUpdated() { return lastUpdated; }
 

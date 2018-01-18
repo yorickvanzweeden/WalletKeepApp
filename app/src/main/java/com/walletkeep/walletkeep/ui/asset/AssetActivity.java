@@ -34,6 +34,7 @@ import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
 import com.walletkeep.walletkeep.util.AssetDistribution;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -192,8 +193,8 @@ public class AssetActivity extends AppCompatActivity {
         int priceFetchIndex = -1;
 
         for (int i = assets.size() - 1; i >= 0; i--) {
-            if (assets.get(i).getLatestCurrencyPrice() == 0) priceFetchIndex = i;
-            if (assets.get(i).getEurValue() > 1) break;
+            if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
+            if (assets.get(i).getValueEur().compareTo(BigDecimal.ONE) > 0) break;
             index = i;
         }
         if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
@@ -215,7 +216,7 @@ public class AssetActivity extends AppCompatActivity {
         // Calculate total
         float total = 0;
         for (AggregatedAsset asset: this.assets) {
-            total += asset.getAmount() * asset.getLatestCurrencyPrice();
+            total += asset.getValueEur().floatValue();
         }
 
         // Set text of TextView

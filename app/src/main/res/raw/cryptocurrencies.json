@@ -185,7 +185,7 @@
   {"ticker" : "AVT", "name" : "Aventus"},
   {"ticker" : "AXIOM", "name" : "Axiom Coin"},
   {"ticker" : "AXR", "name" : "AXRON"},
-  {"ticker" : "AXT", "name" : "AIX"},
+  {"ticker" : "AIX", "name" : "AXT"},
   {"ticker" : "B2B", "name" : "B2B"},
   {"ticker" : "B2X", "name" : "SegWit2x [Futures]"},
   {"ticker" : "B3", "name" : "B3 Coin"},
