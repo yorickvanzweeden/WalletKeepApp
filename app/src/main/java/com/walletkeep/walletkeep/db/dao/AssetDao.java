@@ -17,6 +17,8 @@ public abstract class AssetDao implements BaseDao<Asset> {
     @Query("SELECT assets.currency_ticker AS currencyTicker," +
             "  assets.amount AS amount," +
             "  prices.price_eur AS price_eur, " +
+            "  prices.price_usd AS price_usd, " +
+            "  prices.price_btc AS price_btc, " +
             "  prices.change1h AS change1h, " +
             "  prices.change24h AS change24h, " +
             "  prices.change7d AS change7d, " +

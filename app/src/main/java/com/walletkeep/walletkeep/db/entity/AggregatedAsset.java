@@ -1,21 +1,29 @@
 package com.walletkeep.walletkeep.db.entity;
 
-import android.arch.persistence.room.TypeConverters;
+import com.walletkeep.walletkeep.db.TypeConverters;
 
-import com.walletkeep.walletkeep.db.DateConverter;
-
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Date;
 
 //Per portfolio
 public class AggregatedAsset {
     public String currencyTicker;
-    public float amount;
-    public float price_eur;
+
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    public BigDecimal amount;
+
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    public BigDecimal price_eur;
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    public BigDecimal price_usd;
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    public BigDecimal price_btc;
+
     public float change1h;
     public float change24h;
     public float change7d;
-    @TypeConverters({DateConverter.class})
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
     public Date priceTimeStamp;
 
     /**
@@ -30,7 +38,7 @@ public class AggregatedAsset {
      * Gets the amount owned of the currency
      * @return The amount owned of the currency
      */
-    public float getAmount(){
+    public BigDecimal getAmount(){
         return amount;
     }
 
@@ -38,13 +46,45 @@ public class AggregatedAsset {
      * Gets latest price_eur of the currency
      * @return Latest price_eur of the currency
      */
-    public float getLatestCurrencyPrice(){ return price_eur; }
+    public BigDecimal getPriceEur(){ return price_eur == null ? BigDecimal.ZERO : price_eur; }
+
+    /**
+     * Gets latest price_eur of the currency
+     * @return Latest price_eur of the currency
+     */
+    public BigDecimal getPriceUsd(){ return price_usd == null ? BigDecimal.ZERO : price_usd; }
+
+    /**
+     * Gets latest price_eur of the currency
+     * @return Latest price_eur of the currency
+     */
+    public BigDecimal getPriceBtc(){ return price_btc == null ? BigDecimal.ZERO : price_btc; }
 
     /**
      * Gets the value of the asset (amount*price)
      * @return Latest value of the asset
      */
-    public float getEurValue(){ return price_eur * amount; }
+    public BigDecimal getValueEur(){
+        return price_eur == null ? BigDecimal.ZERO : price_eur.multiply(amount);
+    }
+
+    /**
+     * Gets the value of the asset (amount*price)
+     * @return Latest value of the asset
+     */
+    public BigDecimal getValueUsd(){
+        return price_usd == null ? BigDecimal.ZERO : price_usd.multiply(amount);
+
+    }
+
+    /**
+     * Gets the value of the asset (amount*price)
+     * @return Latest value of the asset
+     */
+    public BigDecimal getValueBtc(){
+        return price_btc == null ? BigDecimal.ZERO : price_btc.multiply(amount);
+
+    }
 
 
     public Date getPriceTimeStamp(){ return priceTimeStamp; }
@@ -67,7 +107,7 @@ public class AggregatedAsset {
     public static class AssetComparator implements Comparator<AggregatedAsset> {
         @Override
         public int compare(AggregatedAsset o1, AggregatedAsset o2) {
-            return Float.valueOf(o2.getEurValue()).compareTo(o1.getEurValue());
+            return o2.getValueEur().compareTo(o1.getValueEur());
         }
     }
 }

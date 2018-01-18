@@ -55,7 +55,7 @@ public class DeltaCalculation {
             // Overwrite entry with summed value
             if (hashMap.containsKey(ticker)) {
                 Asset sum = new Asset(a.getWalletId(), ticker,
-                        a.getAmount() + hashMap.get(ticker).getAmount());
+                        a.getAmount().add(hashMap.get(ticker).getAmount()));
                 hashMap.put(ticker, sum);
             }
             // Normal insertion into hashMap
@@ -88,15 +88,14 @@ public class DeltaCalculation {
                 oldHashMap.remove(pair.getKey());
 
                 // Values match --> No delta
-                if (Float.floatToIntBits(pair.getValue().getAmount()) ==
-                        Float.floatToIntBits(x.getAmount())) {
+                if (pair.getValue().getAmount().equals(x.getAmount())) {
                     it.remove();
                     continue;
                 }
 
                 // Values don't match --> Calculate delta
                 delta.add(new Asset(x.getWalletId(), x.getCurrencyTicker(),
-                        pair.getValue().getAmount() - x.getAmount()));
+                        pair.getValue().getAmount().subtract(x.getAmount())));
             } else {
                 delta.add(pair.getValue());
             }
@@ -108,7 +107,7 @@ public class DeltaCalculation {
         while (it.hasNext()) {
             Map.Entry<String, Asset> pair = (Map.Entry)it.next();
             Asset x = pair.getValue();
-            delta.add(new Asset(x.getWalletId(),x.getCurrencyTicker(), -1 * x.getAmount()));
+            delta.add(new Asset(x.getWalletId(),x.getCurrencyTicker(), x.getAmount().negate()));
             it.remove(); // avoids a ConcurrentModificationException
         }
 

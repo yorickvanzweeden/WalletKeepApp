@@ -74,7 +74,7 @@ public class BlockcypherService extends ApiService {
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
-                add(new Asset(walletId, "BTC", Converters.amountToFloat(finalBalance, 8)));
+                add(new Asset(walletId, "BTC", Converters.amountToBD(finalBalance, 8)));
             }};
         }
     }

@@ -97,9 +97,9 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         AggregatedAsset asset = assets.get(position);
 
         holder.mTextViewTicker.setText(asset.getTicker());
-        holder.mTextViewAmount.setText(String.format("%.3f", asset.getAmount()));
-        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getLatestCurrencyPrice()));
-        holder.mTextViewTotal.setText(String.format("€%.2f", asset.getAmount() * asset.getLatestCurrencyPrice()));
+        holder.mTextViewAmount.setText(String.format("%.2f", asset.getAmount()));
+        holder.mTextViewPrice.setText(String.format("€%.2f", asset.getPriceEur()));
+        holder.mTextViewTotal.setText(String.format("€%.2f", asset.getValueEur()));
         holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(changeSetting)));
     }
 

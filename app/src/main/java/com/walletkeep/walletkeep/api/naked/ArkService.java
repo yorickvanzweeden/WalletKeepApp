@@ -67,7 +67,7 @@ public class ArkService extends ApiService {
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
-                add(new Asset(walletId, "ARK", Converters.amountToFloat(balance, 8)));
+                add(new Asset(walletId, "ARK", Converters.amountToBD(balance, 8)));
             }};
         }
 

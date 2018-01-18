@@ -6,10 +6,10 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 
-import com.walletkeep.walletkeep.db.DateConverter;
+import com.walletkeep.walletkeep.db.TypeConverters;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(indices = {@Index("wallet_id"), @Index("currency_ticker")},
@@ -38,14 +38,15 @@ public class Asset {
     private String currencyTicker;
 
     @ColumnInfo(name = "amount")
-    private float amount;
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
+    private BigDecimal amount;
 
     @ColumnInfo(name = "timestamp")
-    @TypeConverters({DateConverter.class})
+    @android.arch.persistence.room.TypeConverters({TypeConverters.class})
     private Date timestamp;
 
     // Constructors
-    public Asset(int walletId, String currencyTicker, float amount){
+    public Asset(int walletId, String currencyTicker, BigDecimal amount){
         this.walletId = walletId;
         this.currencyTicker = currencyTicker;
         this.amount = amount;
@@ -64,9 +65,9 @@ public class Asset {
 
     public void setCurrencyTicker(String currencyTicker) { this.currencyTicker = currencyTicker; }
 
-    public float getAmount() { return amount; }
+    public BigDecimal getAmount() { return amount; }
 
-    public void setAmount(float amount) { this.amount = amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
 
     public Date getTimestamp() { return timestamp; }
 
@@ -90,7 +91,7 @@ public class Asset {
         Asset that = (Asset)aThat;
 
         //now a proper field-by-field evaluation can be made
-        return Float.floatToIntBits(this.amount) == Float.floatToIntBits(that.amount) &&
+        return this.amount.equals(that.amount) &&
                 this.currencyTicker.equals(that.currencyTicker);
     }
 }

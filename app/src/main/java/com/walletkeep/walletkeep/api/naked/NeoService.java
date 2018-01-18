@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class NeoService extends ApiService {
             String NEOhash = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
             String GAShash = "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 
-            return new Asset(walletId, NEOhash.equals(balance.asset) ? "NEO" : "GAS", balance.value);
+            return new Asset(walletId, NEOhash.equals(balance.asset) ? "NEO" : "GAS", new BigDecimal(balance.value));
         }
 
         @Override
@@ -93,7 +94,7 @@ public class NeoService extends ApiService {
         private String asset;
         @SerializedName("value")
         @Expose
-        private float value;
+        private String value;
 
         public String getAsset() {
             return asset;
@@ -103,11 +104,11 @@ public class NeoService extends ApiService {
             this.asset = asset;
         }
 
-        public float getValue() {
+        public String getValue() {
             return value;
         }
 
-        public void setValue(float value) {
+        public void setValue(String value) {
             this.value = value;
         }
 
