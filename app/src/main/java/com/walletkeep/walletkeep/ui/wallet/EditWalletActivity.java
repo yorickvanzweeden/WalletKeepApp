@@ -48,7 +48,7 @@ public class EditWalletActivity extends AppCompatActivity {
         // Observe wallet --> Update form if changed
         viewModel.loadWallet().observe(this, wallet -> {
             this.wallet = wallet;
-            if (wallet == null) return;
+            if (wallet == null || fragment == null) return;
             ((IWalletFragment) fragment).updateForm(wallet);
 
             // Set name
