@@ -19,7 +19,8 @@ public abstract class AssetDao implements BaseDao<Asset> {
             "  prices.price_eur AS price_eur, " +
             "  prices.change1h AS change1h, " +
             "  prices.change24h AS change24h, " +
-            "  prices.change7d AS change7d " +
+            "  prices.change7d AS change7d, " +
+            "  prices.last_updated AS priceTimeStamp " +
             "FROM " +
             "  ( SELECT asset.currency_ticker, SUM(asset.amount) AS amount " +
             "    FROM asset JOIN wallet ON asset.wallet_id = wallet.id " +

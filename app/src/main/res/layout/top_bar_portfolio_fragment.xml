@@ -88,19 +88,27 @@
                 android:id="@+id/asset_activity_textView_portfolio_value"
                 style="@style/InfoTextTitle"
                 android:layout_width="147dp"
-                android:layout_height="37dp"
-                android:layout_marginBottom="8dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="0"
                 android:gravity="center"
                 android:text="Portfolio Value"
                 android:textAlignment="center"
                 android:textSize="26dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.521" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/asset_activity_textView_timestamp_last_update"
+                style="@style/GuideText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="4dp"
+                android:text=""
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/asset_activity_textView_portfolio_value" />
 
         </android.support.constraint.ConstraintLayout>
 

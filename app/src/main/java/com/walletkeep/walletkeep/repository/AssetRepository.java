@@ -79,8 +79,11 @@ public class AssetRepository {
 
             @Override
             public void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete) {
+                Date newdate = new Date();
+
                 executors.diskIO().execute(() -> {
                     if (delete) database.currencyPriceDao().deleteAll();
+                    for (CurrencyPrice price: prices) price.setLastUpdated(newdate);
                     database.currencyPriceDao().insertAll(prices);
                 });
             }
