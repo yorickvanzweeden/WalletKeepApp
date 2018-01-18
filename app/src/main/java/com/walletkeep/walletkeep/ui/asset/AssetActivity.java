@@ -35,8 +35,11 @@ import com.walletkeep.walletkeep.util.AssetDistribution;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
@@ -101,14 +104,12 @@ public class AssetActivity extends AppCompatActivity {
 
     private void setupOverlay(int portfolioId){
         // Setup volume change
-        TextView volumeChange = findViewById(R.id.asset_activity_textView_change_setting);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
-                R.array.price_change, android.R.layout.simple_spinner_item);
-        volumeChange.setOnClickListener(view -> {
-            int pos = adapter.getPosition(volumeChange.getText().toString());
-            String setting = adapter.getItem((pos + 1) % 3).toString();
-            volumeChange.setText(setting);
-            mAdapter.updateChangeSetting(setting);
+                R.array.currency_change, android.R.layout.simple_spinner_item);
+        findViewById(R.id.asset_activity_textView_portfolio_value).setOnClickListener(view -> {
+            int pos = adapter.getPosition(mAdapter.getCurrencySetting());
+            mAdapter.updateCurrencySetting(adapter.getItem((pos + 1) % 3).toString());
+            updatePortfolioValue();
         });
 
         // Setup fabs
@@ -119,10 +120,14 @@ public class AssetActivity extends AppCompatActivity {
             Intent intent = new Intent(this, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolioId);
             this.startActivity(intent);
+            fabmenu.collapse();
         });
 
         com.getbase.floatingactionbutton.FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_portfolios);
-        fab2.setOnClickListener(view -> startActivity(new Intent(this, PortfolioActivity.class)));
+        fab2.setOnClickListener(view -> {
+            startActivity(new Intent(this, PortfolioActivity.class));
+            fabmenu.collapse();
+        });
 
         // Initialise surfaceView
         mSurfaceView = findViewById(R.id.asset_activity_surfaceView);
@@ -216,12 +221,14 @@ public class AssetActivity extends AppCompatActivity {
         // Calculate total
         float total = 0;
         for (AggregatedAsset asset: this.assets) {
-            total += asset.getValueEur().floatValue();
+            total += asset.getValue(mAdapter.getCurrencySetting()).floatValue();
         }
 
         // Set text of TextView
-        TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio_value);
-        portfolioValueTextView.setText(String.format("€%.2f", total));
+        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        nf.setCurrency(Currency.getInstance(mAdapter.getCurrencySetting()));
+        ((TextView)findViewById(R.id.asset_activity_textView_portfolio_value))
+                .setText(nf.format(total));
     }
 
     /**

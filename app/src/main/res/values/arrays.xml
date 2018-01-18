@@ -16,10 +16,10 @@
         <item>NEO</item>
     </string-array>
 
-    <string-array name="price_change">
-        <item>1H</item>
-        <item>24H</item>
-        <item>7D</item>
+    <string-array name="currency_change">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>BTC</item>
     </string-array>
 
     <string-array name="tokens">

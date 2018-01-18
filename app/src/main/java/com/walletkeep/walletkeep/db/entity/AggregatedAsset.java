@@ -20,9 +20,9 @@ public class AggregatedAsset {
     @android.arch.persistence.room.TypeConverters({TypeConverters.class})
     public BigDecimal price_btc;
 
-    public float change1h;
-    public float change24h;
-    public float change7d;
+    public float change24hEur;
+    public float change24hUsd;
+    public float change24hBtc;
     @android.arch.persistence.room.TypeConverters({TypeConverters.class})
     public Date priceTimeStamp;
 
@@ -93,14 +93,37 @@ public class AggregatedAsset {
      * @return Latest percentage of change of the last hour
      */
     public float getChange(String s){
-        if (s == null) return change24h;
+        if (s == null) return change24hEur;
         switch (s.trim().toUpperCase()) {
-            case "1H":
-                return change1h;
-            case "7D":
-                return change7d;
+            case "USD":
+                return change24hUsd;
+            case "BTC":
+                return change24hBtc;
             default:
-                return change24h;
+                return change24hEur;
+        }
+    }
+
+    public BigDecimal getPrice(String s){
+        if (s == null) return getPriceEur();
+        switch (s.trim().toUpperCase()) {
+            case "USD":
+                return getPriceUsd();
+            case "BTC":
+                return getPriceBtc();
+            default:
+                return getPriceEur();
+        }
+    }
+    public BigDecimal getValue(String s){
+        if (s == null) return getValueEur();
+        switch (s.trim().toUpperCase()) {
+            case "USD":
+                return getValueUsd();
+            case "BTC":
+                return getValueBtc();
+            default:
+                return getValueEur();
         }
     }
 

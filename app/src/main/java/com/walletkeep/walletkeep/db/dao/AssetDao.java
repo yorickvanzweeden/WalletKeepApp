@@ -20,9 +20,9 @@ public abstract class AssetDao implements BaseDao<Asset> {
             "  prices.price_eur AS price_eur, " +
             "  prices.price_usd AS price_usd, " +
             "  prices.price_btc AS price_btc, " +
-            "  prices.change1h AS change1h, " +
-            "  prices.change24h AS change24h, " +
-            "  prices.change7d AS change7d, " +
+            "  prices.change24hEur AS change24hEur, " +
+            "  prices.change24hUsd AS change24hUsd, " +
+            "  prices.change24hBtc AS change24hBtc, " +
             "  prices.last_updated AS priceTimeStamp " +
             "FROM " +
             "  ( SELECT asset.currency_ticker, SUM(asset.amount) AS amount " +
