@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class BitcoinApiTests extends ApiServiceTest {
         wallet.wallet = new Wallet(1);
         wallet.wallet.setAddressCurrency("BTC");
         wallet.wallet.setAddress(MyApiCredentials.getBtcAddress());
-        wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "ETH",  12)) ;}};
+        wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "BTC",  new BigDecimal(12))) ;}};
         return wallet;
     }
 
