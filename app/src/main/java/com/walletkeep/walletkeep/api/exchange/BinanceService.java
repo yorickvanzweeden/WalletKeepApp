@@ -10,6 +10,7 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,7 +138,7 @@ public class BinanceService extends ApiService {
         private String locked;
 
         Asset getAsset(int walletId){
-            return new Asset(walletId, CurrencyTickerCorrection.correct(asset), Float.parseFloat(free));
+            return new Asset(walletId, CurrencyTickerCorrection.correct(asset), new BigDecimal(free));
         }
     }
 

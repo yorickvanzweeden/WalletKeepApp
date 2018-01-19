@@ -10,6 +10,7 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class KucoinService extends ApiService {
             return new Asset(
                     walletId,
                     CurrencyTickerCorrection.correct(coinType),
-                    Float.parseFloat(balance));
+                    new BigDecimal(balance));
         }
     }
 

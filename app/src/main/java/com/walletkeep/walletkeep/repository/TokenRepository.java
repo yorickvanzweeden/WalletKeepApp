@@ -37,5 +37,6 @@ public class TokenRepository {
 
     public void deleteTokens(List<WalletToken> tokens) {
         executors.diskIO().execute(() -> database.walletTokenDao().deleteTokens(tokens));
+        executors.diskIO().execute(() -> database.assetDao().deleteTokens(tokens));
     }
 }

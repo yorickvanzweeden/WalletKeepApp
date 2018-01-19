@@ -2,6 +2,7 @@ package com.walletkeep.walletkeep.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 
 public class Converters {
     /**
@@ -10,7 +11,7 @@ public class Converters {
      * @param decimalPlace The place at which to place decimal dot
      * @return Balance as float
      */
-    public static Float amountToFloat(String balance, int decimalPlace) {
+    public static BigDecimal amountToBD(String balance, int decimalPlace) {
         int split = balance.length() - decimalPlace;
         if (split < 0){
             String prefix = "";
@@ -22,7 +23,7 @@ public class Converters {
         }
         String firstPart = balance.substring(0, split);
         String lastPart = balance.substring(split, balance.length());
-        return Float.parseFloat(firstPart + "." + lastPart);
+        return new BigDecimal(firstPart + "." + lastPart);
     }
 
     /**
@@ -30,13 +31,13 @@ public class Converters {
      * @param amount String to convert
      * @return Amount as float
      */
-    public static Float userInputToFloat(String amount) {
+    public static BigDecimal userInputToBD(String amount) {
         amount = amount.replace(" ", "").replace(',', '.');
 
         try {
-            return Float.parseFloat(amount);
+            return new BigDecimal(amount);
         } catch (NumberFormatException e) {
-            return 0f;
+            return new BigDecimal(0);
         }
     }
 

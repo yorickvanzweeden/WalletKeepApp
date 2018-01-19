@@ -13,6 +13,7 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.util.Converters;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +58,7 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
         ((EditText)view.findViewById(R.id.editWallet_transaction_editText_currency))
                 .setText(wallet.assets.get(0).getCurrencyTicker());
         ((EditText)view.findViewById(R.id.editWallet_transaction_editText_amount))
-                .setText(Float.toString(wallet.assets.get(0).getAmount()));
+                .setText(wallet.assets.get(0).getAmount().toString());
     }
 
     /**
@@ -72,7 +73,7 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
         String amountString = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_amount)).getText().toString();
 
         // Check user input
-        float amount = Converters.userInputToFloat(amountString);
+        BigDecimal amount = Converters.userInputToBD(amountString);
 
         // Define new asset
         List<Asset> assets = new ArrayList<Asset>() {{

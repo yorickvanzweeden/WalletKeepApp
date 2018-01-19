@@ -8,11 +8,11 @@ import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -34,8 +34,12 @@ import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
 import com.walletkeep.walletkeep.util.AssetDistribution;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
@@ -100,14 +104,12 @@ public class AssetActivity extends AppCompatActivity {
 
     private void setupOverlay(int portfolioId){
         // Setup volume change
-        TextView volumeChange = findViewById(R.id.asset_activity_textView_change_setting);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
-                R.array.price_change, android.R.layout.simple_spinner_item);
-        volumeChange.setOnClickListener(view -> {
-            int pos = adapter.getPosition(volumeChange.getText().toString());
-            String setting = adapter.getItem((pos + 1) % 3).toString();
-            volumeChange.setText(setting);
-            mAdapter.updateChangeSetting(setting);
+                R.array.currency_change, android.R.layout.simple_spinner_item);
+        findViewById(R.id.asset_activity_textView_portfolio_value).setOnClickListener(view -> {
+            int pos = adapter.getPosition(mAdapter.getCurrencySetting());
+            mAdapter.updateCurrencySetting(adapter.getItem((pos + 1) % 3).toString());
+            updatePortfolioValue();
         });
 
         // Setup fabs
@@ -118,10 +120,14 @@ public class AssetActivity extends AppCompatActivity {
             Intent intent = new Intent(this, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolioId);
             this.startActivity(intent);
+            fabmenu.collapse();
         });
 
         com.getbase.floatingactionbutton.FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_portfolios);
-        fab2.setOnClickListener(view -> startActivity(new Intent(this, PortfolioActivity.class)));
+        fab2.setOnClickListener(view -> {
+            startActivity(new Intent(this, PortfolioActivity.class));
+            fabmenu.collapse();
+        });
 
         // Initialise surfaceView
         mSurfaceView = findViewById(R.id.asset_activity_surfaceView);
@@ -181,13 +187,19 @@ public class AssetActivity extends AppCompatActivity {
         // Sort on size
         Collections.sort(assets, new AggregatedAsset.AssetComparator());
 
+        // Update timestamp in portfolio bar
+        TextView TimeStampTextView = findViewById(R.id.asset_activity_textView_timestamp_last_update);
+        if (assets.size() > 0 && assets.get(0).getPriceTimeStamp() != null) {
+            Long date = assets.get(0).getPriceTimeStamp().getTime();
+            TimeStampTextView.setText(DateUtils.getRelativeTimeSpanString(date).toString());
+        }
         // Remove assets which are valued less than 1 euro
         int index = -1;
         int priceFetchIndex = -1;
 
         for (int i = assets.size() - 1; i >= 0; i--) {
-            if (assets.get(i).getLatestCurrencyPrice() == 0) priceFetchIndex = i;
-            if (assets.get(i).getEurValue() > 1) break;
+            if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
+            if (assets.get(i).getValueEur().compareTo(BigDecimal.ONE) > 0) break;
             index = i;
         }
         if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
@@ -209,12 +221,14 @@ public class AssetActivity extends AppCompatActivity {
         // Calculate total
         float total = 0;
         for (AggregatedAsset asset: this.assets) {
-            total += asset.getAmount() * asset.getLatestCurrencyPrice();
+            total += asset.getValue(mAdapter.getCurrencySetting()).floatValue();
         }
 
         // Set text of TextView
-        TextView portfolioValueTextView = findViewById(R.id.asset_activity_textView_portfolio_value);
-        portfolioValueTextView.setText(String.format("€%.2f", total));
+        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        nf.setCurrency(Currency.getInstance(mAdapter.getCurrencySetting()));
+        ((TextView)findViewById(R.id.asset_activity_textView_portfolio_value))
+                .setText(nf.format(total));
     }
 
     /**
@@ -262,6 +276,15 @@ public class AssetActivity extends AppCompatActivity {
 
         // Unlock canvas
         mSurfaceView.getHolder().unlockCanvasAndPost(canvas);
+    }
+
+    // Force exit to Homescreen on backbutton press in asset activity
+    public void onBackPressed() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+
     }
 
 }

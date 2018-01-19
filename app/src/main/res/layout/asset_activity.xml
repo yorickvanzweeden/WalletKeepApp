@@ -55,31 +55,32 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/asset_activity_surfaceView"
         app:layout_constraintEnd_toEndOf="parent"
-        fab:fab_addButtonColorNormal="@color/colorAccent"
-        fab:fab_addButtonColorPressed="@color/MainAccent"
+        fab:fab_addButtonColorNormal="@color/ui_general_elements"
+        fab:fab_addButtonColorPressed="@color/ui_general_elements"
         fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_labelsPosition="left">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/asset_activity_fab_wallets"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/MainAccent"
-            fab:fab_colorPressed="@color/AccentPressed"
-            fab:fab_icon="@drawable/walletsicon"
-            fab:fab_size="mini"
-            fab:fab_title="wallets" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/asset_activity_fab_portfolios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/MainAccent"
-            fab:fab_colorPressed="@color/AccentPressed"
+            fab:fab_colorNormal="@color/portfolio_consistent"
+            fab:fab_colorPressed="@color/portfolio_pressed_consistent"
             fab:fab_icon="@drawable/portfoliosicon"
             fab:fab_size="mini"
             fab:fab_title="Portfolios" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/asset_activity_fab_wallets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/wallets_consistent"
+            fab:fab_colorPressed="@color/wallets_pressed_consistent"
+            fab:fab_icon="@drawable/walletsicon"
+            fab:fab_size="mini"
+            fab:fab_title="Wallets" />
+
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

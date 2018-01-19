@@ -14,6 +14,7 @@ import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.util.Converters;
 import com.walletkeep.walletkeep.util.SynchronisedTicket;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -53,7 +54,7 @@ public class EtherscanService extends ApiService {
         ResponseHandler responseHandler = new ResponseHandler(  new ResponseHandler.ResponseListener() {
             @Override
             public void onAssetsUpdated(ArrayList<Asset> assets) {
-                for (Asset asset: assets) if (asset.getAmount() != 0) assetList.add(asset);
+                for (Asset asset: assets) if (asset.getAmount().compareTo(BigDecimal.ZERO) != 0) assetList.add(asset);
                 if (ticketing.isLast()) apiServiceResponseHandler.returnAssets(assetList);
             }
 
@@ -131,13 +132,13 @@ public class EtherscanService extends ApiService {
         @Override
         public ArrayList<Asset> getAssets(int walletId) {
             return new ArrayList<Asset>() {{
-                add(new Asset(walletId, "ETH", Converters.amountToFloat(result, 18)));
+                add(new Asset(walletId, "ETH", Converters.amountToBD(result, 18)));
             }};
         }
 
         public ArrayList<Asset> getAssets(int walletId, String currency) {
             return new ArrayList<Asset>() {{
-               add(new Asset(walletId, currency, Converters.amountToFloat(result, 18)));
+               add(new Asset(walletId, currency, Converters.amountToBD(result, 18)));
             }};
         }
     }

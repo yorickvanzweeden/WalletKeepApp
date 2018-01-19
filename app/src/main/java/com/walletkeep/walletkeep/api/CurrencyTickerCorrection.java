@@ -30,6 +30,7 @@ public class CurrencyTickerCorrection {
      */
     private static void addEntries(){
         hashMap.put("ANCC", "ANC");
+        hashMap.put("AXT", "AIX");
         hashMap.put("BCCOIN", "BCC");
         hashMap.put("BTE", "BCN");
         hashMap.put("BTCL", "BTLC");

@@ -10,6 +10,7 @@ import com.walletkeep.walletkeep.api.ErrorParser;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.Asset;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +113,7 @@ public class GDAXService extends ApiService {
         private String profileId;
 
         Asset getAsset(int walletId){
-            return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(balance));
+            return new Asset(walletId, CurrencyTickerCorrection.correct(currency), new BigDecimal(balance));
         }
 
         @Override

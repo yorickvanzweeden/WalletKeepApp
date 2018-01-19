@@ -1,12 +1,14 @@
 package com.walletkeep.walletkeep.api.data;
 
 import android.text.TextUtils;
+import android.util.ArrayMap;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -86,10 +88,10 @@ public class CryptoCompareService {
      * Perform request and handle callback
      * @param responseCall Call to perform
      */
-    private void performRequest(Call<Map<String, Response>> responseCall){
-        responseCall.enqueue(new Callback<Map<String, Response>>() {
+    private void performRequest(Call<Response> responseCall){
+        responseCall.enqueue(new Callback<Response>() {
             @Override
-            public void onResponse(Call<Map<String, Response>> call, retrofit2.Response<Map<String, Response>> response) {
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 // Success
                 if (response.code() == 200) {
                     handleSuccessResponse(response);
@@ -100,23 +102,13 @@ public class CryptoCompareService {
                 }
             }
 
-            private void handleSuccessResponse(retrofit2.Response<Map<String, Response>> response) {
-                ArrayList<CurrencyPrice> prices = new ArrayList<>();
-
-                for (Map.Entry<String, Response> entry: response.body().entrySet()) {
-                    prices.add(
-                            new CurrencyPrice(entry.getKey(),
-                                    entry.getValue().priceUsd,
-                                    entry.getValue().priceEur,
-                                    entry.getValue().priceBtc)
-                    );
-                }
-
+            private void handleSuccessResponse(retrofit2.Response<Response> response) {
+                List<CurrencyPrice> prices = response.body().getPrices();
                 listener.onPricesUpdated(prices, deleteManager.getDelete());
             }
 
             @Override
-            public void onFailure(Call<Map<String, Response>> call, Throwable t) {
+            public void onFailure(Call<Response> call, Throwable t) {
                 try {
                     String s = call.request().url().queryParameter("fsyms");
                     listener.onError(String.format("%1$s %2$s could not be fetched", (s.indexOf(',') < 0 ? "Currency" : "Currencies"), s));
@@ -132,7 +124,7 @@ public class CryptoCompareService {
      * Interface for returning data to the repository
      */
     public interface PricesResponseListener {
-        void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete);
+        void onPricesUpdated(List<CurrencyPrice> prices, Boolean delete);
         void onError(String message);
     }
 
@@ -141,8 +133,8 @@ public class CryptoCompareService {
      */
     private interface CryptoCompareAPI {
         @Headers("Content-Type: application/json")
-        @GET("pricemulti?tsyms=EUR,BTC,USD")
-        Call<Map<String, Response>> getCurrencyData(
+        @GET("pricemultifull?tsyms=EUR,BTC,USD")
+        Call<Response> getCurrencyData(
                 @Query("fsyms") String currenciesToFetch
         );
     }
@@ -151,14 +143,41 @@ public class CryptoCompareService {
      * POJO used for converting the JSON response to Java
      */
     class Response {
+        @SerializedName("RAW")
+        @Expose
+        private Map<String, ArrayMap<String, ToCurrency>> response;
+
         @SerializedName("EUR")
         @Expose
-        private Float priceEur;
+        private String priceEur;
         @SerializedName("BTC")
         @Expose
-        private Float priceBtc;
+        private String priceBtc;
         @SerializedName("USD")
         @Expose
-        private Float priceUsd;
+        private String priceUsd;
+
+        List<CurrencyPrice> getPrices(){
+            List<CurrencyPrice> prices = new ArrayList<>();
+            for (Map.Entry<String, ArrayMap<String, ToCurrency>> entry: response.entrySet()) {
+                prices.add(new CurrencyPrice(entry.getKey(),
+                        new BigDecimal(entry.getValue().get("EUR").price),
+                        new BigDecimal(entry.getValue().get("USD").price),
+                        new BigDecimal(entry.getValue().get("BTC").price),
+                        entry.getValue().get("EUR").change24h,
+                        entry.getValue().get("USD").change24h,
+                        entry.getValue().get("BTC").change24h));
+            }
+            return prices;
+        }
+    }
+
+    private class ToCurrency {
+        @SerializedName("PRICE")
+        @Expose
+        private String price;
+        @SerializedName("CHANGEPCT24HOUR")
+        @Expose
+        private Float change24h;
     }
 }

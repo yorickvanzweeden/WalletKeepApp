@@ -10,6 +10,7 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class BitfinexService extends ApiService {
         private String available;
 
         private Asset getAsset(int walletId) {
-            return new Asset(walletId, CurrencyTickerCorrection.correct(currency), Float.parseFloat(amount));
+            return new Asset(walletId, CurrencyTickerCorrection.correct(currency), new BigDecimal(amount));
 
         }
 

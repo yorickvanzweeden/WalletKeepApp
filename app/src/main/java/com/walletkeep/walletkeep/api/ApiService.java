@@ -6,6 +6,7 @@ import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletToken;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,14 +91,14 @@ public abstract class ApiService {
                 try{
                     Response<AbstractResponse> response = (Response<AbstractResponse>) responseObject;
                     for(Asset asset: response.body().getAssets(walletId)) {
-                        if (asset.getAmount() != 0) assets.add(asset);
+                        if (asset.getAmount().compareTo(BigDecimal.ZERO) != 0) assets.add(asset);
                     }
 
                 } catch (Exception e){
                     Response<ArrayList<AbstractResponse>> responseList = (Response<ArrayList<AbstractResponse>>) responseObject;
                     for(AbstractResponse response: responseList.body()) {
                         for(Asset asset: response.getAssets(walletId)) {
-                            if (asset.getAmount() != 0) assets.add(asset);
+                            if (asset.getAmount().compareTo(BigDecimal.ZERO) > 0) assets.add(asset);
                         }
                     }
                 }
