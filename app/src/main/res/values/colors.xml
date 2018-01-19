@@ -24,19 +24,20 @@
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
 
-    <color name="ui_general_elements">#BDBDBD</color>
+    <color name="ui_general_elements">#e0e0e0</color>
+    <color name="ui_general_elements_pressed">#ffffff</color>
 
-    <color name="portfolio_consistent">#c5e1a5</color>
-    <color name="portfolio_pressed_consistent">#c5e1a5</color>
-    <color name="wallets_consistent">#80deea</color>
-    <color name="wallets_pressed_consistent">#80deea</color>
+    <color name="portfolio_consistent">#e57373</color>
+    <color name="portfolio_pressed_consistent">#ffa4a2</color>
+    <color name="wallets_consistent">#64b5f6</color>
+    <color name="wallets_pressed_consistent">#9be7ff</color>
 
-    <color name="exchange_consistent">#b2d6ef</color>
-    <color name="exchange_pressed_consistent">#83bbe5</color>
-    <color name="transaction_consistent">#ffdba9</color>
-    <color name="transaction_pressed_consistent">#ffc374</color>
-    <color name="nakedwallet_consistent">#99d5ca</color>
-    <color name="nakedwallet_pressed_consistent">#5abaa7</color>
+    <color name="exchange_consistent">#7986cb</color>
+    <color name="exchange_pressed_consistent">#aab6fe</color>
+    <color name="transaction_consistent">#ffb74d</color>
+    <color name="transaction_pressed_consistent">#ffe97d</color>
+    <color name="nakedwallet_consistent">#aed581</color>
+    <color name="nakedwallet_pressed_consistent">#e1ffb1</color>
 
     <array name="distributionbar">
         <item>#80CBC4</item>
