@@ -220,8 +220,11 @@ public class AssetActivity extends AppCompatActivity {
     private void updatePortfolioValue() {
         // Calculate total
         float total = 0;
+        float total24h = 0;
+        String setting = mAdapter.getCurrencySetting();
         for (AggregatedAsset asset: this.assets) {
-            total += asset.getValue(mAdapter.getCurrencySetting()).floatValue();
+            total += asset.getValue(setting).floatValue();
+            total24h += asset.getValue(setting).floatValue() / (100 + asset.getChange(setting)) * 100;
         }
 
         // Set text of TextView
@@ -229,6 +232,9 @@ public class AssetActivity extends AppCompatActivity {
         nf.setCurrency(Currency.getInstance(mAdapter.getCurrencySetting()));
         ((TextView)findViewById(R.id.asset_activity_textView_portfolio_value))
                 .setText(nf.format(total));
+
+        ((TextView)findViewById(R.id.asset_activity_textView_you_change))
+                .setText(String.format("%.2f%%", (total / total24h - 1) * 100));
     }
 
     /**
