@@ -159,6 +159,7 @@ public class CryptoCompareService {
 
         List<CurrencyPrice> getPrices(){
             List<CurrencyPrice> prices = new ArrayList<>();
+            if (response == null) return prices;
             for (Map.Entry<String, ArrayMap<String, ToCurrency>> entry: response.entrySet()) {
                 prices.add(new CurrencyPrice(entry.getKey(),
                         new BigDecimal(entry.getValue().get("EUR").price),
