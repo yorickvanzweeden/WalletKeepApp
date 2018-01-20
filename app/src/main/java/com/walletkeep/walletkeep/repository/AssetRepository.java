@@ -70,7 +70,10 @@ public class AssetRepository {
      */
     public void fetchPrices(@NonNull List<String> currencies, ErrorListener errorListener, boolean delete){
         // Don't execute API calls if rate limit is applied
-        if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
+        if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) {
+            errorListener.onError("###");
+            return;
+        }
 
         // Don't execute API calls if no currencies are provided
         if(currencies.size() == 0) return;

@@ -142,9 +142,8 @@ public class AssetActivity extends AppCompatActivity {
         // Refresh --> Update wallets
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
-            viewModel.assetFetch(wallets, errorListener);
             viewModel.priceFetch(assets_orig, errorListener, true);
-            swipeContainer.setRefreshing(false);
+            viewModel.assetFetch(wallets, errorListener);
         });
     }
 
@@ -164,7 +163,10 @@ public class AssetActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Add error listener
-        errorListener = message -> Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        errorListener = message -> {
+            if (message.equals("###")) ((SwipeRefreshLayout)findViewById(R.id.asset_content_swipeContainer)).setRefreshing(false);
+            else Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        };
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
@@ -179,8 +181,15 @@ public class AssetActivity extends AppCompatActivity {
 
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
+            ((SwipeRefreshLayout)findViewById(R.id.asset_content_swipeContainer)).setRefreshing(false);
+            assets_orig = aggregatedAssets;
+
+            // Case when assets are fetched for first time
+            if (assets == null && aggregatedAssets != null) {
+                viewModel.priceFetch(aggregatedAssets, errorListener, true);
+            }
+
             this.assets = aggregatedAssets;
-            this.assets_orig = aggregatedAssets;
             onUpdated();
         });
     }
@@ -197,14 +206,14 @@ public class AssetActivity extends AppCompatActivity {
         }
         // Remove assets which are valued less than 1 euro
         int index = -1;
-        int priceFetchIndex = -1;
+//        int priceFetchIndex = -1;
 
         for (int i = assets.size() - 1; i >= 0; i--) {
-            if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
+//            if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
             if (assets.get(i).getValueEur().compareTo(BigDecimal.ONE) > 0) break;
             index = i;
         }
-        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
+//        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
         if (index != -1) assets = assets.subList(0, index);
 
         // Update recycler view
