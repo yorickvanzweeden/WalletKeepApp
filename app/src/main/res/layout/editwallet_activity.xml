@@ -87,26 +87,27 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:text="@string/save"
-                    android:theme="@style/TitleText"
+                    android:text="Confirm"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/editWallet_activity_button_delete"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/editWallet_activity_button_delete"
+                    style="@style/ButtonGeneral"/>
 
                 <Button
                     android:id="@+id/editWallet_activity_button_delete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
                     android:text="@string/delete"
-                    android:theme="@style/TitleText"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/editWallet_activity_button_save"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/editWallet_activity_button_save" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    style="@style/ButtonGeneral"/>
 
             </android.support.constraint.ConstraintLayout>
 

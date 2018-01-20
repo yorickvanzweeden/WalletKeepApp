@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity"
-    android:padding="5dp"
+    android:padding="6dp"
     tools:showIn="@layout/portfolio_activity">
 
     <android.support.v7.widget.RecyclerView
