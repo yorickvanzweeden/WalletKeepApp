@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class CryptoCompareApiTests {
@@ -18,7 +19,7 @@ public class CryptoCompareApiTests {
     public void credentialsValidCorrect(){
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
             @Override
-            public void onPricesUpdated(ArrayList<CurrencyPrice> prices, Boolean delete) {
+            public void onPricesUpdated(List<CurrencyPrice> prices, boolean delete) {
                 stillRunning = false;
                 return;
             }

@@ -34,6 +34,7 @@ public class KucoinApiTests extends ApiServiceTest {
         wallet.exchangeCredentials = new ArrayList<ExchangeCredentials>(){{add(exchangeCredentials);}};
         wallet.wallet = new Wallet(1);
         wallet.wallet.setExchangeName("Kucoin");
+        wallet.wallet.setType(1);
         wallet.assets = new ArrayList<Asset>() {{ add(new Asset(1, "ETH",  new BigDecimal(12))) ;}};
         return wallet;
     }
