@@ -19,5 +19,8 @@ public abstract class CurrencyDao implements BaseDao<Currency>{
     public abstract LiveData<Currency> getByTicker(String ticker);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    public abstract void insert(Currency currency);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void insertAll(List<Currency> currency);
 }

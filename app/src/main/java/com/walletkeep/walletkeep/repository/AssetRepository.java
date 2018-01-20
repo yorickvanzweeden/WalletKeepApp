@@ -10,6 +10,7 @@ import com.walletkeep.walletkeep.api.data.CryptoCompareService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
+import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
@@ -157,8 +158,19 @@ public class AssetRepository {
             }
 
             void insertAssetsOnLastWallet() {
-                if (ticket.isLast()) executors.diskIO().execute(() ->
-                        database.assetDao().insertAll((ArrayList<Asset>) ticket.get()));
+                if (ticket.isLast()) executors.diskIO().execute(() -> {
+                    try { database.assetDao().insertAll((ArrayList<Asset>) ticket.get()); }
+                    catch (Exception e) {
+                        try {
+                            for (Asset asset : (ArrayList<Asset>) ticket.get()) {
+                                database.currencyDao().insert(new Currency(asset.getCurrencyTicker()+ "**", asset.getCurrencyTicker()));
+                            }
+                            database.assetDao().insertAll((ArrayList<Asset>) ticket.get());
+                        } catch (Exception f) {
+                            errorListener.onError("Could not save assets");
+                        }
+                    }
+                });
             }
         };
 
