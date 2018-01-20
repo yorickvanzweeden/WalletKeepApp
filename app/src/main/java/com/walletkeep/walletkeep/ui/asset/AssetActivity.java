@@ -45,6 +45,7 @@ public class AssetActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
     private List<WalletWithRelations> wallets;
     private List<AggregatedAsset> assets;
+    private List<AggregatedAsset> assets_orig;
     private AssetAdapter mAdapter;
     private SurfaceView mSurfaceView;
     private AssetRepository.ErrorListener errorListener;
@@ -142,7 +143,7 @@ public class AssetActivity extends AppCompatActivity {
         SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
         swipeContainer.setOnRefreshListener(() -> {
             viewModel.assetFetch(wallets, errorListener);
-            viewModel.priceFetch(assets, errorListener, true);
+            viewModel.priceFetch(assets_orig, errorListener, true);
             swipeContainer.setRefreshing(false);
         });
     }
@@ -179,6 +180,8 @@ public class AssetActivity extends AppCompatActivity {
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
             this.assets = aggregatedAssets;
+            this.assets_orig = aggregatedAssets;
+            //updatePortfolioValue();
             onUpdated();
         });
     }
@@ -188,21 +191,21 @@ public class AssetActivity extends AppCompatActivity {
         Collections.sort(assets, new AggregatedAsset.AssetComparator());
 
         // Update timestamp in portfolio bar
-        TextView TimeStampTextView = findViewById(R.id.asset_activity_textView_timestamp_last_update);
         if (assets.size() > 0 && assets.get(0).getPriceTimeStamp() != null) {
+            TextView TimeStampTextView = findViewById(R.id.asset_activity_textView_timestamp_last_update);
             Long date = assets.get(0).getPriceTimeStamp().getTime();
             TimeStampTextView.setText(DateUtils.getRelativeTimeSpanString(date).toString());
         }
         // Remove assets which are valued less than 1 euro
         int index = -1;
-        int priceFetchIndex = -1;
+        //int priceFetchIndex = -1;
 
         for (int i = assets.size() - 1; i >= 0; i--) {
-            if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
+            //if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
             if (assets.get(i).getValueEur().compareTo(BigDecimal.ONE) > 0) break;
             index = i;
         }
-        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
+        //if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
         if (index != -1) assets = assets.subList(0, index);
 
         // Update recycler view
