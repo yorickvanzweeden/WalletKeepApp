@@ -34,7 +34,8 @@ public class BinanceService extends ApiService {
             @Override
             public void onResponse(@NonNull Call<TimestampResponse> call,
                                    @NonNull  Response<TimestampResponse> response) {
-                fetch(response.body().getServerTime() + ApiService.slow_device_delay * 1000);
+                if (response.body() == null) fetch(System.currentTimeMillis());
+                else fetch(response.body().getServerTime() + ApiService.slow_device_delay * 1000);
             }
 
             @Override
@@ -149,6 +150,7 @@ public class BinanceService extends ApiService {
         private Long serverTime;
 
         Long getServerTime() {
+            if (serverTime == null) return System.currentTimeMillis();
             return serverTime;
         }
 
