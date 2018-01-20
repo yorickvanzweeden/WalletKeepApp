@@ -16,30 +16,20 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/asset_activity_textView_market_change"
-                style="@style/InfoTextNormal"
-                android:layout_width="73dp"
-                android:layout_height="19dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="0"
-                android:gravity="start"
-                android:text="+11.43%"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/asset_activity_textView_change_setting" />
-
-            <TextView
                 android:id="@+id/asset_activity_textView_you_change"
                 style="@style/InfoTextNormal"
                 android:layout_width="73dp"
                 android:layout_height="22dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="0"
                 android:gravity="start"
                 android:text="+ 9.37%"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/asset_activity_textView_change_setting"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.625" />
 
             <TextView
                 android:id="@+id/asset_activity_textView_change_setting"
@@ -57,32 +47,19 @@
                 android:layout_marginRight="8dp" />
 
             <TextView
-                android:id="@+id/asset_activity_textView_label_market"
-                style="@style/LabelTextNormal"
-                android:layout_width="62dp"
-                android:layout_height="20dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="0"
-                android:gravity="end"
-                android:text="@string/label_market"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/asset_activity_textView_market_change" />
-
-            <TextView
                 android:id="@+id/asset_activity_textView_label_you"
                 style="@style/LabelTextNormal"
                 android:layout_width="62dp"
                 android:layout_height="21dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="0"
                 android:gravity="end"
                 android:text="@string/label_you"
-                app:layout_constraintBottom_toTopOf="@+id/asset_activity_textView_label_market"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/asset_activity_textView_you_change"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/asset_activity_textView_portfolio_value"
