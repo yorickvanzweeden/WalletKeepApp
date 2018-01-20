@@ -37,7 +37,6 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         public CardView mCardView;
-        public Button walletButton;
         public Button assetButton;
         public Button deleteButton;
 
