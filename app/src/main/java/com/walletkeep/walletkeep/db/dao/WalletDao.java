@@ -21,6 +21,7 @@ public abstract class WalletDao implements BaseDao<Wallet> {
     @Query("SELECT * FROM wallet WHERE portfolio_id LIKE :portfolioId")
     public abstract LiveData<List<WalletWithRelations>> getAll(int portfolioId);
 
+    @Transaction
     @Query("SELECT * FROM wallet WHERE id LIKE :id LIMIT 1")
     public abstract LiveData<WalletWithRelations> getById(int id);
 

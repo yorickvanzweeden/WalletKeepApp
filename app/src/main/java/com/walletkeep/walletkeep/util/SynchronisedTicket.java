@@ -1,11 +1,15 @@
 package com.walletkeep.walletkeep.util;
 
-public class SynchronisedTicket {
-    private static final Object lock = new Object();
+import java.util.ArrayList;
+import java.util.List;
 
-    private static int ticketCount;
-    private static int ticket = 0;
-    private static boolean resetAtLast = true;
+public class SynchronisedTicket<T> {
+    private final Object lock = new Object();
+
+    private int ticketCount;
+    private int ticket = 0;
+    private boolean resetAtLast = true;
+    private List<T> list = new ArrayList<>();
 
     /**
      * Constructor: Set the amount of tickets to be distributed
@@ -20,15 +24,16 @@ public class SynchronisedTicket {
     }
 
     // Reset synchronisedTicker
-    static void resetTicketCount(int ticketCount) {
+    private void resetTicketCount(int ticketCount) {
         synchronized (lock) {
-            SynchronisedTicket.ticketCount = ticketCount;
+            this.ticketCount = ticketCount;
+            this.ticket = 0;
         }
     }
     // Set if the ticketing should reset to 0 at resetAtLast
-    static void setResetAtLast(boolean resetAtLast) {
+    private void setResetAtLast(boolean resetAtLast) {
         synchronized (lock) {
-            SynchronisedTicket.resetAtLast = resetAtLast;
+            this.resetAtLast = resetAtLast;
         }
     }
 
@@ -51,5 +56,14 @@ public class SynchronisedTicket {
             if (resetAtLast && ticket == ticketCount) ticket = 0;
             return result;
         }
+    }
+
+    public void add(List<T> list) {
+        try{ this.list.addAll(list); }
+        catch (Exception ignored) {}
+    }
+    public <T> List<T> get() {
+        try { return (ArrayList<T>) list; }
+        catch (Exception e) { return null; }
     }
 }

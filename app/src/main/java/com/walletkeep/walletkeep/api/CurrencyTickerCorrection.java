@@ -30,6 +30,7 @@ public class CurrencyTickerCorrection {
      */
     private static void addEntries(){
         hashMap.put("ANCC", "ANC");
+        hashMap.put("ACT", "ACT*"); // ACT* = Achain, which is actually used rather than ACT
         hashMap.put("AXT", "AIX");
         hashMap.put("BCCOIN", "BCC");
         hashMap.put("BTE", "BCN");

@@ -17,6 +17,7 @@ import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
 import com.walletkeep.walletkeep.di.module.ApiServiceModule;
 import com.walletkeep.walletkeep.util.DeltaCalculation;
 import com.walletkeep.walletkeep.util.RateLimiter;
+import com.walletkeep.walletkeep.util.SynchronisedTicket;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -69,7 +70,10 @@ public class AssetRepository {
      */
     public void fetchPrices(@NonNull List<String> currencies, ErrorListener errorListener, boolean delete){
         // Don't execute API calls if rate limit is applied
-        if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) { return; }
+        if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) {
+            errorListener.onError("###");
+            return;
+        }
 
         // Don't execute API calls if no currencies are provided
         if(currencies.size() == 0) return;
@@ -78,12 +82,12 @@ public class AssetRepository {
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
-            public void onPricesUpdated(List<CurrencyPrice> prices, Boolean delete) {
-                Date newdate = new Date();
+            public void onPricesUpdated(List<CurrencyPrice> prices, boolean delete) {
+                Date newDate = new Date();
 
                 executors.diskIO().execute(() -> {
                     if (delete) database.currencyPriceDao().deleteAll();
-                    for (CurrencyPrice price: prices) price.setLastUpdated(newdate);
+                    for (CurrencyPrice price : prices) price.setLastUpdated(newDate);
                     database.currencyPriceDao().insertAll(prices);
                 });
             }
@@ -112,13 +116,18 @@ public class AssetRepository {
 
             if (!internet)
                 executors.mainThread().execute(() -> errorListener.onError("No Internet connection"));
-            else
+            else {
+                SynchronisedTicket ticket = new SynchronisedTicket<Asset>(wallets.size());
                 for (WalletWithRelations wallet : wallets)
                     if (wallet.getType() != WalletWithRelations.Type.Transaction)
-                        fetchWallet(wallet, errorListener);
-            });
+                        fetchWallet(wallet, errorListener, ticket);
+                    else
+                        ticket.isLast(); // Increase counter
+
+            }
+        });
     }
-    private void fetchWallet(WalletWithRelations wallet, ErrorListener errorListener) {
+    private void fetchWallet(WalletWithRelations wallet, ErrorListener errorListener, SynchronisedTicket ticket) {
         // Don't execute API calls if rate limit is applied
         if (!apiRateLimit.shouldFetch(Integer.toString(wallet.wallet.getId()))) { return; }
 
@@ -130,12 +139,13 @@ public class AssetRepository {
 
                     assets = DeltaCalculation.get(wallet.assets, assets);
                     // In case assets are not updated
-                    if (assets == null) return;
-
-                    // Do versioning
-                    Date timestamp = new Date();
-                    for (Asset asset : assets) asset.setTimestamp(timestamp);
-                    for (Asset asset : assets) executors.diskIO().execute(() -> database.assetDao().insert(asset));
+                    if (assets != null) {
+                        // Do versioning
+                        Date timestamp = new Date();
+                        for (Asset asset : assets) asset.setTimestamp(timestamp);
+                        ticket.add(assets);
+                    }
+                    insertAssetsOnLastWallet();
                 }
             }
 
@@ -143,6 +153,12 @@ public class AssetRepository {
             public void onError(String message) {
                 String origin = wallet.getExchangeName() == null ? wallet.getAddressCurrency() : wallet.getExchangeName();
                 errorListener.onError(origin + ": " + message);
+                insertAssetsOnLastWallet();
+            }
+
+            void insertAssetsOnLastWallet() {
+                if (ticket.isLast()) executors.diskIO().execute(() ->
+                        database.assetDao().insertAll((ArrayList<Asset>) ticket.get()));
             }
         };
 
