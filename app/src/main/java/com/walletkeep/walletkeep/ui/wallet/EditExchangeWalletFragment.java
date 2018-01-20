@@ -4,16 +4,23 @@ package com.walletkeep.walletkeep.ui.wallet;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
+import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.ExchangeCredentials;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
+import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
+import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 
 import java.util.ArrayList;
 
@@ -57,6 +64,34 @@ public class EditExchangeWalletFragment extends Fragment implements EditWalletAc
                 R.array.exchange_array, android.R.layout.simple_spinner_item);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(mAdapter);
+
+        // Set Passphrase when right exchanges are picked
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (mAdapter.getPosition("GDAX") == position) setupRecyclerView();
+                else resetRecyclerView();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { resetRecyclerView(); }
+        });
+    }
+
+    // Set passphrase content
+    private void setupRecyclerView(){
+        EditText mEditPassphrase = view.findViewById(R.id.editWallet_exchange_editText_passphrase);
+        TextView mPassphraseText = view.findViewById(R.id.editWallet_exchange_textView_label_passphrase);
+        mPassphraseText.setVisibility(View.VISIBLE);
+        mEditPassphrase.setVisibility(View.VISIBLE);
+    }
+
+    // Remove passphrase content
+    private void resetRecyclerView() {
+        // Link to the right UI item
+        EditText mEditPassphrase = view.findViewById(R.id.editWallet_exchange_editText_passphrase);
+        TextView mPassphraseText = view.findViewById(R.id.editWallet_exchange_textView_label_passphrase);
+        mPassphraseText.setVisibility(View.INVISIBLE);
+        mEditPassphrase.setVisibility(View.INVISIBLE);
     }
 
     /**

@@ -85,7 +85,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
 
         TextView mTokenText = view.findViewById(R.id.editWallet_naked_tokenLabel);
-        mTokenText.setText("Tokens:");
+        mTokenText.setVisibility(View.VISIBLE);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -111,7 +111,7 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         // Link to the right UI item
         RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
         TextView mTokenText = view.findViewById(R.id.editWallet_naked_tokenLabel);
-        mTokenText.setText("");
+        mTokenText.setVisibility(View.INVISIBLE);
         tokenAdapter = null;
         mRecyclerView.setAdapter(null);
         mRecyclerView.setLayoutManager(null);
