@@ -6,6 +6,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
 
 import com.walletkeep.walletkeep.db.entity.WalletToken;
 import com.walletkeep.walletkeep.db.entity.WalletTokenWithoutAddress;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Dao
 public abstract class WalletTokenDao implements BaseDao<WalletTokenWithoutAddress> {
+    @Transaction
     @Query("SELECT * FROM WalletTokenWithoutAddress WHERE wallet_id LIKE :walletId")
     public abstract LiveData<List<WalletToken>> getByWalletId(int walletId);
 
