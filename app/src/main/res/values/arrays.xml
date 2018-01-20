@@ -23,18 +23,52 @@
     </string-array>
 
     <string-array name="tokens">
+        <item>AE</item>
+        <item>AION</item>
+        <item>BAT</item>
+        <item>BNB</item>
+        <item>BNT</item>
+        <item>BTM</item>
         <item>C20</item>
+        <item>CLD</item>
         <item>DATA</item>
+        <item>DCN</item>
+        <item>DGD</item>
+        <item>DRGN</item>
+        <item>ELF</item>
+        <item>ENG</item>
+        <item>EOS</item>
+        <item>ETHOS</item>
+        <item>FUN</item>
         <item>GNT</item>
         <item>GVT</item>
+        <item>ICN</item>
+        <item>ICX</item>
         <item>KCS</item>
+        <item>KIN</item>
+        <item>KNC</item>
         <item>LINK</item>
+        <item>LRC</item>
+        <item>MKR</item>
+        <item>NAS</item>
         <item>OMG</item>
+        <item>PAY</item>
         <item>PBL</item>
+        <item>POWR</item>
+        <item>PPT</item>
         <item>QASH</item>
+        <item>QSP</item>
         <item>RDN*</item>
+        <item>REP</item>
         <item>REQ</item>
+        <item>RHOC</item>
+        <item>SALT</item>
+        <item>SNT</item>
+        <item>SUB</item>
         <item>VEN</item>
+        <item>VERI</item>
+        <item>WAX</item>
         <item>WTC</item>
+        <item>ZRX</item>
     </string-array>
 </resources>
