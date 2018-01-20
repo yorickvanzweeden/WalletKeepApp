@@ -23,6 +23,10 @@ public class Currency {
     @ColumnInfo(name = "token_address")
     private String tokenAddress;
 
+    @SerializedName("decimals") @Expose
+    @ColumnInfo(name = "decimals")
+    private int decimals;
+
     // Constructor
     public Currency(String name,@NonNull String ticker){
         this.name = name;
@@ -31,14 +35,15 @@ public class Currency {
 
     // Getters and setters
     public String getName() { return name; }
-
     public void setName(String name) { this.name = name; }
 
     public String getTicker() { return ticker; }
-
     public void setTicker(@NonNull String ticker) { this.ticker = ticker; }
 
     public String getTokenAddress() { return tokenAddress; }
-
     public void setTokenAddress(String tokenAddress) { this.tokenAddress = tokenAddress; }
+
+    public int getDecimals() { return decimals; }
+
+    public void setDecimals(int decimals) { this.decimals = decimals; }
 }
