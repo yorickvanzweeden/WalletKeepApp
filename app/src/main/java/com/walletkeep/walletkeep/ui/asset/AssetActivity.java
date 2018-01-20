@@ -181,7 +181,6 @@ public class AssetActivity extends AppCompatActivity {
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
             this.assets = aggregatedAssets;
             this.assets_orig = aggregatedAssets;
-            //updatePortfolioValue();
             onUpdated();
         });
     }
@@ -198,14 +197,14 @@ public class AssetActivity extends AppCompatActivity {
         }
         // Remove assets which are valued less than 1 euro
         int index = -1;
-        //int priceFetchIndex = -1;
+        int priceFetchIndex = -1;
 
         for (int i = assets.size() - 1; i >= 0; i--) {
-            //if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
+            if (assets.get(i).getPriceEur().compareTo(BigDecimal.ZERO) == 0) priceFetchIndex = i;
             if (assets.get(i).getValueEur().compareTo(BigDecimal.ONE) > 0) break;
             index = i;
         }
-        //if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
+        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
         if (index != -1) assets = assets.subList(0, index);
 
         // Update recycler view
