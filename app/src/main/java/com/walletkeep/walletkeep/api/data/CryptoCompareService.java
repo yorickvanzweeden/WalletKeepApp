@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.walletkeep.walletkeep.api.RetrofitClient;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
+import com.walletkeep.walletkeep.util.SynchronisedTicket;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import retrofit2.http.Query;
 public class CryptoCompareService {
     private PricesResponseListener listener;
     private String baseUrl = "https://min-api.cryptocompare.com/data/";
+    private priceSynchronisedTicket ticket;
 
     public CryptoCompareService(PricesResponseListener listener) { this.listener = listener; }
 
@@ -32,45 +34,41 @@ public class CryptoCompareService {
         // Create request
         CryptoCompareAPI api = RetrofitClient.getClient(baseUrl).create(CryptoCompareAPI.class);
 
-        deleteManager.toggleDeletion(delete);
-
         String s = TextUtils.join(",", toFetch);
         if (s.length() >= 300) {
             List<String> strings = partitionString(s);
-            deleteManager.reset(strings.size());
+            ticket = new priceSynchronisedTicket(strings.size());
             for (String subString: strings) {
                 // Perform request
                 performRequest(api.getCurrencyData(subString));
             }
         } else {
             // Perform request
+            ticket = new priceSynchronisedTicket(1);
             performRequest(api.getCurrencyData(s));
         }
     }
 
-    private static class deleteManager {
+    private static class priceSynchronisedTicket extends SynchronisedTicket {
         private static final Object lock = new Object();
         
-        private static int ticket;
-        private static int last;
-        static void reset(int requestCount) {
+        private List<CurrencyPrice> prices = new ArrayList<>();
+
+        priceSynchronisedTicket(int ticketCount) {
+            super(ticketCount);
+        }
+
+        void addPrices(List<CurrencyPrice> prices) {
             synchronized (lock) {
-                deleteManager.last = requestCount;
+                this.prices.addAll(prices);
             }
         }
-        static void toggleDeletion(boolean shouldDelete) {
+        List<CurrencyPrice> getPrices() {
             synchronized (lock) {
-                deleteManager.ticket = shouldDelete ? 0 : -10000;
+                return this.prices;
             }
         }
-        static boolean getDelete() {
-            synchronized (lock) {
-                boolean result = ticket == 0;
-                ticket++;
-                if (ticket == last) ticket = 0;
-                return result;
-            }
-        }
+
     }
     private List<String> partitionString(String s) {
         List<String> stringList = new ArrayList<>();
@@ -103,8 +101,8 @@ public class CryptoCompareService {
             }
 
             private void handleSuccessResponse(retrofit2.Response<Response> response) {
-                List<CurrencyPrice> prices = response.body().getPrices();
-                listener.onPricesUpdated(prices, deleteManager.getDelete());
+                ticket.addPrices(response.body().getPrices());
+                if (ticket.isLast()) listener.onPricesUpdated(ticket.getPrices());
             }
 
             @Override
@@ -124,7 +122,7 @@ public class CryptoCompareService {
      * Interface for returning data to the repository
      */
     public interface PricesResponseListener {
-        void onPricesUpdated(List<CurrencyPrice> prices, Boolean delete);
+        void onPricesUpdated(List<CurrencyPrice> prices);
         void onError(String message);
     }
 
