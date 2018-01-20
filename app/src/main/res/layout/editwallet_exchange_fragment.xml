@@ -9,13 +9,10 @@
         android:id="@+id/editWallet_exchange_textView_label_passphrase"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/passphrase"
-        android:textAppearance="@style/LabelTextNormal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_editText_secret" />
 
@@ -23,12 +20,10 @@
         android:id="@+id/editWallet_exchange_textView_label_secret"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/secret"
-        android:textAppearance="@style/LabelTextNormal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_editText_key" />
 
@@ -36,12 +31,10 @@
         android:id="@+id/editWallet_exchange_textView_label_key"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:text="@string/key"
-        android:textAppearance="@style/LabelTextNormal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_spinner_exchange" />
 
@@ -53,10 +46,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:theme="@style/InfoTextTitle"
-        android:hint="@string/key"
+        android:theme="@style/WalletInfoTextTitle"
+        android:background="@color/white"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_key" />
 
@@ -68,14 +62,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:theme="@style/InfoTextTitle"
-        android:hint="@string/passphrase"
+        android:theme="@style/WalletInfoTextTitle"
+        android:background="@color/white"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_passphrase" />
-
 
     <EditText
         android:id="@+id/editWallet_exchange_editText_secret"
@@ -85,38 +78,51 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:theme="@style/InfoTextTitle"
-        android:hint="@string/secret"
+        android:theme="@style/WalletInfoTextTitle"
+        android:background="@color/white"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_secret" />
 
     <TextView
         android:id="@+id/editWallet_exchange_textView_label_exchange"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="@string/exchange"
-        android:theme="@style/LabelTextNormal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:theme="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/editWallet_exchange_spinner_exchange"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_width="160dp"
+        android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:theme="@style/InfoTextTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:theme="@style/WalletInfoTextTitle"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_exchange_textView_label_exchange" />
+
+    <TextView
+        android:id="@+id/exchange_description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Here you can enter your exchange API information"
+        android:theme="@style/TitleText"
+        app:layout_constraintBottom_toTopOf="@+id/editWallet_exchange_editText_key"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editWallet_exchange_spinner_exchange"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

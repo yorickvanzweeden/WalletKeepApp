@@ -26,7 +26,7 @@ public class WalletActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallet_activity);
         int portfolioId = getIntent().getExtras().getInt("portfolio_id");
-
+        setTitle("My Wallets");
         setupOverlay(portfolioId);
         setupRecyclerView(portfolioId);
     }

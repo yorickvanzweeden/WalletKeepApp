@@ -1,9 +1,15 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,7 +34,6 @@ public class EditWalletActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.editwallet_activity);
 
         // Get intent data
         int walletId = getIntent().getExtras().getInt("wallet_id");
@@ -36,7 +41,12 @@ public class EditWalletActivity extends AppCompatActivity {
         fragmentType = getIntent().getExtras().getInt("fragment_type");
 
         // Setup fragment
-        setupFragment(savedInstanceState, fragmentType);
+        getFragment(fragmentType);
+
+        // Set theme first
+        setContentView(R.layout.editwallet_activity);
+        setupFragment(savedInstanceState);
+
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
@@ -66,29 +76,40 @@ public class EditWalletActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup the fragment
-     * @param savedInstanceState
+     * Get the fragment
      * @param fragmentType Type of fragment (exchange|naked|transaction)
      */
-    private void setupFragment(Bundle savedInstanceState, int fragmentType){
-        // Check if fragment exists
-        if (findViewById(R.id.editwallet_activity_fragmentContainer) == null || savedInstanceState != null) {
-            return;
-        }
-
+    private void getFragment(int fragmentType){
         // Add exchange fragment for exchange wallets, naked fragment for naked wallets
         switch (WalletWithRelations.Type.values()[fragmentType]) {
+
             case Exchange:
                 fragment = new EditExchangeWalletFragment();
+                setTheme(R.style.ExchangeTheme);
+                setTitle("Exchange Account");
                 break;
             case Naked:
                 fragment = new EditNakedWalletFragment();
+                setTheme(R.style.NakedWalletTheme);
+                setTitle("Wallet Adress");
                 break;
             case Transaction:
                 fragment = new EditTransactionFragment();
+                setTheme(R.style.TransactionTheme);
+                setTitle("Transaction");
                 break;
         }
+    }
 
+    /**
+     * Set the fragment
+     * @param savedInstanceState Previous instance of activity
+     */
+    private void setupFragment(Bundle savedInstanceState) {
+        // Check if fragment exists
+        if (fragment == null || savedInstanceState != null) {
+            return;
+        }
         // Place fragment in container
         fragment.setArguments(getIntent().getExtras()); //TODO: Is this line necessary?
         getSupportFragmentManager().beginTransaction()

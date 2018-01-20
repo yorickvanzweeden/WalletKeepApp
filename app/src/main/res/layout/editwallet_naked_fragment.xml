@@ -1,8 +1,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.walletkeep.walletkeep.ui.wallet.EditNakedWalletFragment">
 
 
@@ -10,64 +10,73 @@
         android:id="@+id/editWallet_naked_textView_label_currency"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/currency"
-        android:textAppearance="@style/LabelTextNormal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/editWallet_naked_spinner_currency"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_width="160dp"
+        android:layout_height="35dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:theme="@style/InfoTextTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:background="@color/white"
+        android:theme="@style/WalletInfoTextTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_textView_label_currency" />
+
+    <TextView
+        android:id="@+id/nakedwallet_description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:text="Here you can enter your wallet adress and relevant assets"
+        android:theme="@style/TitleText"
+        app:layout_constraintBottom_toTopOf="@+id/editWallet_naked_editText_address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editWallet_naked_spinner_currency"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/editWallet_naked_textView_label_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/address"
-        android:textAppearance="@style/LabelTextNormal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_spinner_currency" />
 
     <EditText
         android:id="@+id/editWallet_naked_editText_address"
-        android:theme="@style/InfoTextTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/white"
         android:ems="10"
-        android:hint="@string/address"
         android:inputType="textPersonName"
+        android:theme="@style/WalletInfoTextTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_textView_label_address" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/editWallet_naked_tokenLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/tokens"
-        android:textAppearance="@style/LabelTextNormal"
+        android:textAppearance="@style/TitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_editText_address" />
 
@@ -75,18 +84,16 @@
         android:id="@+id/editWallet_naked_recyclerView_token"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/white"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0"
-        android:scrollbars="vertical"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_tokenLabel"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

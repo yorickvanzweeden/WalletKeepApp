@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
@@ -80,8 +81,11 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
      * Sets up the recycler view containing the wallets
      */
     private void setupRecyclerView(){
-        // Link to the right UI item
+        // Link to the right UI items
         RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
+
+        TextView mTokenText = view.findViewById(R.id.editWallet_naked_tokenLabel);
+        mTokenText.setVisibility(View.VISIBLE);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -102,9 +106,12 @@ public class EditNakedWalletFragment extends Fragment implements EditWalletActiv
         tokenAdapter = new TokenAdapter(view.getResources().getStringArray(R.array.tokens), walletId);
         mRecyclerView.setAdapter(tokenAdapter);
     }
+
     private void resetRecyclerView() {
         // Link to the right UI item
         RecyclerView mRecyclerView = view.findViewById(R.id.editWallet_naked_recyclerView_token);
+        TextView mTokenText = view.findViewById(R.id.editWallet_naked_tokenLabel);
+        mTokenText.setVisibility(View.INVISIBLE);
         tokenAdapter = null;
         mRecyclerView.setAdapter(null);
         mRecyclerView.setLayoutManager(null);
