@@ -107,7 +107,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/editWallet_activity_button_save"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    style="@style/ButtonGeneral"/>
+                    style="@style/ButtonGeneral"
+                    android:textColor="@color/colorAccent"/>
 
             </android.support.constraint.ConstraintLayout>
 
