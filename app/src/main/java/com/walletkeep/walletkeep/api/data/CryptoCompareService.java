@@ -23,7 +23,7 @@ import retrofit2.http.Query;
 public class CryptoCompareService {
     private PricesResponseListener listener;
     private String baseUrl = "https://min-api.cryptocompare.com/data/";
-    private priceSynchronisedTicket ticket;
+    private SynchronisedTicket ticket;
 
     public CryptoCompareService(PricesResponseListener listener) { this.listener = listener; }
 
@@ -37,39 +37,18 @@ public class CryptoCompareService {
         String s = TextUtils.join(",", toFetch);
         if (s.length() >= 300) {
             List<String> strings = partitionString(s);
-            ticket = new priceSynchronisedTicket(strings.size());
+            ticket = new SynchronisedTicket<CurrencyPrice>(strings.size());
             for (String subString: strings) {
                 // Perform request
-                performRequest(api.getCurrencyData(subString));
+                performRequest(api.getCurrencyData(subString), delete);
             }
         } else {
             // Perform request
-            ticket = new priceSynchronisedTicket(1);
-            performRequest(api.getCurrencyData(s));
+            ticket = new SynchronisedTicket(1);
+            performRequest(api.getCurrencyData(s), delete);
         }
     }
 
-    private static class priceSynchronisedTicket extends SynchronisedTicket {
-        private static final Object lock = new Object();
-        
-        private List<CurrencyPrice> prices = new ArrayList<>();
-
-        priceSynchronisedTicket(int ticketCount) {
-            super(ticketCount);
-        }
-
-        void addPrices(List<CurrencyPrice> prices) {
-            synchronized (lock) {
-                this.prices.addAll(prices);
-            }
-        }
-        List<CurrencyPrice> getPrices() {
-            synchronized (lock) {
-                return this.prices;
-            }
-        }
-
-    }
     private List<String> partitionString(String s) {
         List<String> stringList = new ArrayList<>();
         if (s.length() > 300) {
@@ -86,27 +65,30 @@ public class CryptoCompareService {
      * Perform request and handle callback
      * @param responseCall Call to perform
      */
-    private void performRequest(Call<Response> responseCall){
+    private void performRequest(Call<Response> responseCall, boolean delete){
         responseCall.enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 // Success
                 if (response.code() == 200) {
-                    handleSuccessResponse(response);
+                    ticket.add(response.body().getPrices());
+                    insertPricesOnLastResponse();
                 } else {
+                    insertPricesOnLastResponse();
                     // If failure, return the server error (or the error for returning that)
                     try{ listener.onError(response.errorBody().string()); }
                     catch (Exception e) { listener.onError(e.getMessage()); }
                 }
             }
 
-            private void handleSuccessResponse(retrofit2.Response<Response> response) {
-                ticket.addPrices(response.body().getPrices());
-                if (ticket.isLast()) listener.onPricesUpdated(ticket.getPrices());
+            private void insertPricesOnLastResponse(){
+                if (ticket.isLast()) listener.onPricesUpdated((List<CurrencyPrice>)ticket.get(), delete);
             }
 
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
+                insertPricesOnLastResponse();
+
                 try {
                     String s = call.request().url().queryParameter("fsyms");
                     listener.onError(String.format("%1$s %2$s could not be fetched", (s.indexOf(',') < 0 ? "Currency" : "Currencies"), s));
@@ -122,7 +104,7 @@ public class CryptoCompareService {
      * Interface for returning data to the repository
      */
     public interface PricesResponseListener {
-        void onPricesUpdated(List<CurrencyPrice> prices);
+        void onPricesUpdated(List<CurrencyPrice> prices, boolean delete);
         void onError(String message);
     }
 

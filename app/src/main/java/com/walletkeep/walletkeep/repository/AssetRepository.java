@@ -79,11 +79,11 @@ public class AssetRepository {
         CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
 
             @Override
-            public void onPricesUpdated(List<CurrencyPrice> prices) {
+            public void onPricesUpdated(List<CurrencyPrice> prices, boolean delete) {
                 Date newDate = new Date();
 
                 executors.diskIO().execute(() -> {
-                    database.currencyPriceDao().deleteAll();
+                    if (delete) database.currencyPriceDao().deleteAll();
                     for (CurrencyPrice price : prices) price.setLastUpdated(newDate);
                     database.currencyPriceDao().insertAll(prices);
                 });
