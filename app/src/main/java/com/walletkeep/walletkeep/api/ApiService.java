@@ -107,7 +107,11 @@ public abstract class ApiService {
 
             @Override
             public void onFailure(@NonNull Call<AbstractResponse> call,@NonNull Throwable t) {
-                responseHandler.returnError(errorParser.parse(t));
+                try {
+                    responseHandler.returnError(errorParser.parse(t));
+                } catch (Exception e) {
+                    responseHandler.returnError(t.getMessage());
+                }
             }
         };
     }
