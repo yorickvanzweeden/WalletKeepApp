@@ -65,7 +65,8 @@
                 card_view:layout_constraintEnd_toStartOf="@+id/portfolio_listitem_button_assets"
                 card_view:layout_constraintHorizontal_bias="0.5"
                 card_view:layout_constraintStart_toEndOf="@+id/portfolio_listitem_textView_label_name"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/colorAccent"/>
 
         </android.support.constraint.ConstraintLayout>
 
