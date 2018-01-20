@@ -100,6 +100,7 @@
   {"ticker" : "ACOIN", "name" : "ACoin"},
   {"ticker" : "ACP", "name" : "Anarchists Prime"},
   {"ticker" : "ACT", "name" : "ACT"},
+  {"ticker" : "ACT*", "name" : "AChain"},
   {"ticker" : "ADA", "name" : "Cardano"},
   {"ticker" : "ADC", "name" : "AudioCoin"},
   {"ticker" : "ADCN", "name" : "Asiadigicoin"},
