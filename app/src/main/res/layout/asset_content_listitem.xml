@@ -24,17 +24,17 @@
             <TextView
                 android:id="@+id/asset_listitem_textView_change"
                 style="@style/InfoTextNormal"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="right"
-                android:textAlignment="gravity"
                 android:text="ChangeVal"
+                android:textAlignment="gravity"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintTop_toBottomOf="@+id/asset_listitem_textView_price" />
 
             <TextView
                 android:id="@+id/asset_listitem_textView_price"
@@ -50,35 +50,15 @@
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/asset_listitem_textView_label_price"
-                style="@style/LabelTextNormal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/label_price"
-                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_holdings"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/asset_listitem_textView_label_holdings"
-                style="@style/LabelTextNormal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/label_holdings"
-                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_ticker"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/asset_listitem_textView_ticker"
                 style="@style/TitleText"
-                android:layout_width="68dp"
+                android:layout_width="80dp"
                 android:layout_height="46dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:textAlignment="viewStart"
+                android:gravity="center"
                 android:text="Ticker"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/imageView"
@@ -88,26 +68,26 @@
             <TextView
                 android:id="@+id/asset_listitem_textView_holdings"
                 style="@style/GuideText"
-                android:layout_width="55dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
                 android:text="value"
-                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_label_holdings"
+                card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_ticker"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/asset_listitem_textView_total"
                 style="@style/InfoTextTitle"
-                android:layout_width="91dp"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="8dp"
                 android:text="Total"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/asset_listitem_textView_ticker"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintTop_toBottomOf="@+id/asset_listitem_textView_holdings" />
 
             <ImageView
                 android:id="@+id/imageView"
