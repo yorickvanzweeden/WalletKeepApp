@@ -221,7 +221,6 @@ public class AssetActivity extends AppCompatActivity {
             index = i;
         }
 
-
 //        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
         if (index != -1) assets = assets.subList(0, index);
 
