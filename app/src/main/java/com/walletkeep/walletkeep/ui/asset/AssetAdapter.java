@@ -5,8 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 
@@ -34,6 +36,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         TextView mTextViewPrice;
         TextView mTextViewTotal;
         TextView mTextViewChange;
+        ImageView mImageView;
 
         ViewHolder(View v) {
             super(v);
@@ -43,6 +46,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
             mTextViewPrice = v.findViewById(R.id.asset_listitem_textView_price);
             mTextViewTotal = v.findViewById(R.id.asset_listitem_textView_total);
             mTextViewChange = v.findViewById(R.id.asset_listitem_textView_change);
+            mImageView = v.findViewById(R.id.imageView);
         }
     }
 
@@ -106,6 +110,12 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         holder.mTextViewPrice.setText(nf.format(asset.getPrice(currencySetting)));
         holder.mTextViewTotal.setText(nf.format(asset.getValue(currencySetting)));
         holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(currencySetting)));
+        Glide.with(context)
+                .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", asset.getTicker().toLowerCase()))
+                .placeholder(R.drawable.ethereum)
+                .error(R.drawable.ethereum)
+                .centerCrop()
+                .into(holder.mImageView);
     }
 
     /**
