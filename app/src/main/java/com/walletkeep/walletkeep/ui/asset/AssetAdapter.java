@@ -107,6 +107,13 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         holder.mTextViewTotal.setText(nf.format(asset.getValue(currencySetting)));
         holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(currencySetting)));
 
+        if (asset.getChange(currencySetting) > 0)
+            holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_positive));
+        else if (asset.getChange(currencySetting) < 0)
+            holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_negative));
+        else if (asset.getChange(currencySetting)== 0);
+
+
     }
 
     /**
