@@ -122,8 +122,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         else if (asset.getChange(currencySetting) < 0)
             holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_negative));
         else if (asset.getChange(currencySetting)== 0);
-
-
+        
     }
 
     /**

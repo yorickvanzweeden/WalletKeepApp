@@ -21,8 +21,7 @@
             android:name=".ui.portfolio.PortfolioActivity"
             android:exported="true"
             android:label="@string/title_activity_portfolio"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.wallet.WalletActivity"
             android:label="@string/title_activity_wallet"
@@ -37,12 +36,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.walletkeep.walletkeep.ui.portfolio.PortfolioActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.wallet.EditWalletActivity"></activity>
+        <activity android:name=".ui.wallet.EditWalletActivity" />
+        <activity
+            android:name=".ui.assetScreen.SeperateAssetScreen"
+            android:label="@string/title_activity_seperate_asset_screen"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -69,4 +69,5 @@
     <string name="fab_wallet_address">Wallet address</string>
     <string name="fab_exchange_account">Exchange account</string>
     <string name="tokens">Tokens:</string>
+    <string name="title_activity_seperate_asset_screen">SeperateAssetScreen</string>
 </resources>
