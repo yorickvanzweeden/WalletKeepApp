@@ -48,6 +48,9 @@ public class UpdateWalletViewModel extends ViewModel{
         if (wallet.getCredentials() != null){
             this.walletRepository.updateCredentials(wallet.getCredentials());
         }
+        if (wallet.assets != null) {
+            this.walletRepository.updateAssets(wallet.assets);
+        }
     }
     public void deleteWallet(Wallet wallet){ this.walletRepository.deleteWallet(wallet); }
 }

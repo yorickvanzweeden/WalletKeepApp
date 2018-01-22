@@ -20,6 +20,8 @@ import java.util.List;
 
 public class EditTransactionFragment extends Fragment implements EditWalletActivity.IWalletFragment {
     private View view;
+    private List<Asset> assets;
+    private BigDecimal sum = BigDecimal.ZERO;
 
     /**
      * Constructor: Required empty public constructor
@@ -55,10 +57,16 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
+        this.assets = wallet.assets;
+
         ((EditText)view.findViewById(R.id.editWallet_transaction_editText_currency))
-                .setText(wallet.assets.get(0).getCurrencyTicker());
+                .setText(wallet.assets.get(wallet.assets.size() - 1).getCurrencyTicker());
+
+        for (Asset asset: this.assets) {
+            sum = sum.add(asset.getAmount());
+        }
         ((EditText)view.findViewById(R.id.editWallet_transaction_editText_amount))
-                .setText(wallet.assets.get(0).getAmount().toString());
+                .setText(sum.toString());
     }
 
     /**
@@ -71,17 +79,20 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
         // Retrieve data from form
         String currency = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_currency)).getText().toString().trim().toUpperCase();
         String amountString = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_amount)).getText().toString();
-
         // Check user input
         BigDecimal amount = Converters.userInputToBD(amountString);
 
-        // Define new asset
+        if (amount.compareTo(sum) == 0) {
+            wallet.assets = null;
+            return wallet;
+        }
+
+        // Assets have changed
         List<Asset> assets = new ArrayList<Asset>() {{
             add(new Asset(wallet.wallet.getId(), currency, amount));
         }};
         assets.get(0).setTimestamp(new Date());
 
-        // Overwrite wallet's assets
         wallet.assets = assets;
 
         return wallet;
