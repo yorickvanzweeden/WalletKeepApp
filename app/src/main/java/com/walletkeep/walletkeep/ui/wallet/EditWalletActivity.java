@@ -1,15 +1,9 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -134,6 +128,13 @@ public class EditWalletActivity extends AppCompatActivity {
         // Update wallet with form data
         wallet = ((IWalletFragment) fragment).updateWallet(wallet);
         String name = ((EditText)findViewById(R.id.editwallet_activity_textView_name)).getText().toString();
+        if (name.trim().length() == 0) {
+            if (wallet.getType() == WalletWithRelations.Type.Exchange) {
+                name = wallet.getExchangeName() + " Wallet";
+            } else if (wallet.getType() == WalletWithRelations.Type.Naked) {
+                name = wallet.getAddressCurrency() + " Wallet";
+            } else { name = wallet.assets.get(0).getCurrencyTicker() + " Wallet"; }
+        }
         wallet.wallet.setName(name);
 
         // Save wallet to database

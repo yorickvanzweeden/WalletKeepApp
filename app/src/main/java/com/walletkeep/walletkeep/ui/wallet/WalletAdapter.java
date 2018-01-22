@@ -96,15 +96,12 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
 
         switch (wallets.get(position).getType()){
             case Exchange:
-                if (walletName.length() == 0) walletName = wallets.get(position).getExchangeName() + " Wallet";
                 holder.mImageView.setImageResource(R.drawable.xc);
                 break;
             case Naked:
-                if (walletName.length() == 0) walletName = wallets.get(position).getAddressCurrency() + " Wallet";
                 holder.mImageView.setImageResource(R.drawable.wl);
                 break;
             case Transaction:
-                if (walletName.length() == 0) walletName = wallets.get(position).assets.get(0).getCurrencyTicker() + " Wallet";
                 holder.mImageView.setImageResource(R.drawable.tx);
                 break;
         }
