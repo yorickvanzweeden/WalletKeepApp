@@ -68,4 +68,7 @@ dependencies {
     // Leak checking
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    // Image loading
+    compile 'com.github.bumptech.glide:glide:3.8.0'
 }
