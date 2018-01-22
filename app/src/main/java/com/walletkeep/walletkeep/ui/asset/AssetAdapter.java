@@ -1,6 +1,7 @@
 package com.walletkeep.walletkeep.ui.asset;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +107,11 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         holder.mTextViewPrice.setText(nf.format(asset.getPrice(currencySetting)));
         holder.mTextViewTotal.setText(nf.format(asset.getValue(currencySetting)));
         holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(currencySetting)));
+        if (asset.getChange(currencySetting) > 0)
+            holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_positive));
+        else if (asset.getChange(currencySetting) < 0)
+            holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_negative));
+
     }
 
     /**
