@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/asset_listitem_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +9,10 @@
         android:layout_marginTop="4dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp"
-        android:theme="@style/cards">
+        android:theme="@style/cards"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -101,7 +98,4 @@
                 card_view:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
-
-
-</LinearLayout>
+</android.support.v7.widget.CardView>
