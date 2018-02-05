@@ -9,7 +9,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/editwallet_mainbody_cardView"
+        android:id="@+id/editwallet_activity_cardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
@@ -28,12 +28,13 @@
             android:id="@+id/editwallet_activity_mainholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintBottom_toTopOf="@+id/editWallet_activity_constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editwallet_activity_textView_name"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="0.0"
+            card_view:layout_constraintBottom_toTopOf="@+id/editWallet_activity_constraintLayout">
 
             <TextView
                 android:id="@+id/editwallet_activity_textView_label_name"
@@ -68,13 +69,13 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintVertical_bias="0.0"
-                card_view:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+                card_view:layout_constraintBottom_toTopOf="@+id/editWallet_activity_constraintLayout"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/editwallet_activity_textView_name" />
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout2"
+                android:id="@+id/editWallet_activity_constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"

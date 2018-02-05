@@ -16,6 +16,9 @@ import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {
     // Data of the recycler view
     private List<WalletWithRelations> wallets;
@@ -25,66 +28,61 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     // Access to the view
     private Context context;
 
-    /**
-     * Provide a reference to the views for each data item
-     * Each data/list item gets access to its own elements
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // UI elements to use of the list item layout
-        public TextView mTextView;
-        public CardView mCardView;
-        public ImageView mImageView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.wallet_listitem_textView_name) TextView textViewName;
+        @BindView(R.id.wallet_listitem_imageView) ImageView imageView;
+        @BindView(R.id.wallet_listitem_cardView) CardView cardView;
 
-        public ViewHolder(View v) {
-            super(v);
-            // Initialise UI elements
-            mTextView = v.findViewById(R.id.wallet_listitem_textView_name);
-            mCardView = v.findViewById(R.id.wallet_listitem_cardView);
-            mImageView = v.findViewById(R.id.wallet_listitem_imageView);
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
-
     /**
      * Constructor: Sets context
+     *
      * @param context Allows for referencing of UI elements
      */
-    public WalletAdapter(Context context, WalletViewModel viewModel) {
+    WalletAdapter(Context context, WalletViewModel viewModel) {
         this.context = context;
         this.viewModel = viewModel;
     }
 
     /**
      * Update data of the list
+     *
      * @param wallets Wallets containing assets, exchange credentials
      */
-    public void updateWallets(List<WalletWithRelations> wallets){
+    void updateWallets(List<WalletWithRelations> wallets) {
         this.wallets = wallets;
         notifyDataSetChanged();
     }
 
     /**
      * Creates new view and specifies which layout to use
+     *
      * @param parent
      * @param viewType
      * @return ViewHolder
      */
     @Override
-    public WalletAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                                 int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent,
+                                         int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.wallet_content_listitem, parent, false);
 
-        return new com.walletkeep.walletkeep.ui.wallet.WalletAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     /**
      * Specifies the UI elements and actions per list item
-     * @param holder View holder (list item) to use
+     *
+     * @param holder   View holder (list item) to use
      * @param position The index of the data item
      */
     @Override
-    public void onBindViewHolder(WalletAdapter.ViewHolder holder, int position) {
-        holder.mCardView.setOnClickListener(view -> {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.cardView.setOnClickListener(view -> {
             Intent intent = new Intent(context, EditWalletActivity.class);
             intent.putExtra("wallet_id", wallets.get(position).wallet.getId());
             intent.putExtra("fragment_type", wallets.get(position).getType().getValue());
@@ -94,22 +92,23 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         // Set wallet name and type icon
         String walletName = wallets.get(position).getWalletName();
 
-        switch (wallets.get(position).getType()){
+        switch (wallets.get(position).getType()) {
             case Exchange:
-                holder.mImageView.setImageResource(R.drawable.xc);
+                holder.imageView.setImageResource(R.drawable.xc);
                 break;
             case Naked:
-                holder.mImageView.setImageResource(R.drawable.wl);
+                holder.imageView.setImageResource(R.drawable.wl);
                 break;
             case Transaction:
-                holder.mImageView.setImageResource(R.drawable.tx);
+                holder.imageView.setImageResource(R.drawable.tx);
                 break;
         }
-        holder.mTextView.setText(walletName);
+        holder.textViewName.setText(walletName);
     }
 
     /**
      * Return item count of the data set
+     *
      * @return Item count of the data set
      */
     @Override

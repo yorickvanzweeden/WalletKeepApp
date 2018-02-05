@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
@@ -41,19 +42,33 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
+    @BindView(R.id.asset_activity_textView_you_change) TextView textViewYouChange;
+    @BindView(R.id.asset_activity_textView_label_you) TextView textViewYouLabel;
+    @BindView(R.id.asset_activity_textView_portfolio_value) TextView textViewPortfolioValue;
+    @BindView(R.id.asset_activity_textView_timestamp_last_update) TextView textViewLastUpdated;
+    @BindView(R.id.asset_content_recyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.asset_content_swipeContainer) SwipeRefreshLayout mSwipeContainer;
+    @BindView(R.id.asset_activity_surfaceView) SurfaceView mSurfaceView;
+    @BindView(R.id.asset_activity_fab_portfolios) FloatingActionButton fabPortfolios;
+    @BindView(R.id.asset_activity_fab_wallets) FloatingActionButton fabWallets;
+    @BindView(R.id.asset_activity_fab_menu) FloatingActionsMenu fabMenu;
+
     private AssetViewModel viewModel;
     private List<WalletWithRelations> wallets;
     private List<AggregatedAsset> assets;
     private List<AggregatedAsset> assets_orig;
     private AssetAdapter mAdapter;
-    private SurfaceView mSurfaceView;
     private AssetRepository.ErrorListener errorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.asset_activity);
+        ButterKnife.bind(this);
 
         // Check if IntroSlider should be shown
         checkFirstRun();
@@ -65,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setupOverlay(portfolioId);
-        setupRecyclerView(  portfolioId);
+        setupRecyclerView(portfolioId);
         setupSwipeRefreshLayout();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         // When the surfaceView is ready, draw distribution bar
@@ -81,10 +96,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {}
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+            }
 
             @Override
-            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {}
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+            }
         };
         mSurfaceView.getHolder().addCallback(mSurfaceHolderCallback);
     }
@@ -103,45 +120,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setupOverlay(int portfolioId){
+    private void setupOverlay(int portfolioId) {
         // Setup volume change
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this,
                 R.array.currency_change, android.R.layout.simple_spinner_item);
-        findViewById(R.id.asset_activity_textView_portfolio_value).setOnClickListener(view -> {
+        textViewPortfolioValue.setOnClickListener(view -> {
             int pos = adapter.getPosition(mAdapter.getCurrencySetting());
             mAdapter.updateCurrencySetting(adapter.getItem((pos + 1) % 3).toString());
             updatePortfolioValue();
         });
 
         // Setup fabs
-        FloatingActionsMenu fabmenu = findViewById(R.id.asset_activity_fab_menu);
-
-        com.getbase.floatingactionbutton.FloatingActionButton fab = findViewById(R.id.asset_activity_fab_wallets);
-        fab.setOnClickListener(view -> {
+        fabWallets.setOnClickListener(view -> {
             Intent intent = new Intent(this, WalletActivity.class);
             intent.putExtra("portfolio_id", portfolioId);
             this.startActivity(intent);
-            fabmenu.collapse();
+            fabMenu.collapse();
         });
 
-        com.getbase.floatingactionbutton.FloatingActionButton fab2 = findViewById(R.id.asset_activity_fab_portfolios);
-        fab2.setOnClickListener(view -> {
+        fabPortfolios.setOnClickListener(view -> {
             startActivity(new Intent(this, PortfolioActivity.class));
-            fabmenu.collapse();
+            fabMenu.collapse();
         });
 
         // Initialise surfaceView
-        mSurfaceView = findViewById(R.id.asset_activity_surfaceView);
         mSurfaceView.setVisibility(View.GONE);
     }
 
-    private void setupSwipeRefreshLayout(){
+    private void setupSwipeRefreshLayout() {
         // Observe wallets
         viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
         // Refresh --> Update wallets
-        SwipeRefreshLayout swipeContainer = findViewById(R.id.asset_content_swipeContainer);
-        swipeContainer.setOnRefreshListener(() -> {
+        mSwipeContainer.setOnRefreshListener(() -> {
             viewModel.priceFetch(assets_orig, errorListener, true);
             viewModel.assetFetch(wallets, errorListener);
         });
@@ -150,10 +161,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sets up the recycler view containing the wallets
      */
-    private void setupRecyclerView(int portfolioId){
-        // Link to the right UI item
-        RecyclerView mRecyclerView = findViewById(R.id.asset_content_recyclerView);
-
+    private void setupRecyclerView(int portfolioId) {
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -164,13 +172,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Add error listener
         errorListener = message -> {
-            if (message.equals("###")) ((SwipeRefreshLayout)findViewById(R.id.asset_content_swipeContainer)).setRefreshing(false);
+            if (message.equals("###"))
+                mSwipeContainer.setRefreshing(false);
             else Toast.makeText(this.getApplicationContext(), message, Toast.LENGTH_LONG).show();
         };
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .repositoryComponent(((WalletKeepApp) getApplication()).component())
                 .build();
         viewModel = component.getAssetViewModel();
         viewModel.init(portfolioId, errorListener);
@@ -181,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Update recycler view and portfolio value if portfolios are changed
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
-            ((SwipeRefreshLayout)findViewById(R.id.asset_content_swipeContainer)).setRefreshing(false);
+            mSwipeContainer.setRefreshing(false);
             assets_orig = aggregatedAssets;
 
             // Case when assets are fetched for first time
@@ -192,8 +201,8 @@ public class MainActivity extends AppCompatActivity {
             this.assets = aggregatedAssets;
 
             if (aggregatedAssets != null) {
-                findViewById(R.id.asset_activity_textView_you_change).setVisibility(View.VISIBLE);
-                findViewById(R.id.asset_activity_textView_label_you).setVisibility(View.VISIBLE);
+                textViewYouChange.setVisibility(View.VISIBLE);
+                textViewYouLabel.setVisibility(View.VISIBLE);
             }
 
             onUpdated();
@@ -206,9 +215,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Update timestamp in portfolio bar
         if (assets.size() > 0 && assets.get(0).getPriceTimeStamp() != null) {
-            TextView TimeStampTextView = findViewById(R.id.asset_activity_textView_timestamp_last_update);
             Long date = assets.get(0).getPriceTimeStamp().getTime();
-            TimeStampTextView.setText(DateUtils.getRelativeTimeSpanString(date).toString());
+            textViewLastUpdated.setText(DateUtils.getRelativeTimeSpanString(date).toString());
         }
         // Remove assets which are valued less than 1 euro
         int index = -1;
@@ -240,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         float total = 0;
         float total24h = 0;
         String setting = mAdapter.getCurrencySetting();
-        for (AggregatedAsset asset: this.assets) {
+        for (AggregatedAsset asset : this.assets) {
             total += asset.getValue(setting).floatValue();
             total24h += asset.getValue(setting).floatValue() / (100 + asset.getChange(setting)) * 100;
         }
@@ -248,11 +256,8 @@ public class MainActivity extends AppCompatActivity {
         // Set text of TextView
         NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
         nf.setCurrency(Currency.getInstance(mAdapter.getCurrencySetting()));
-        ((TextView)findViewById(R.id.asset_activity_textView_portfolio_value))
-                .setText(nf.format(total));
-
-        ((TextView)findViewById(R.id.asset_activity_textView_you_change))
-                .setText(String.format("%.2f%%", (total / total24h - 1) * 100));
+        textViewPortfolioValue.setText(nf.format(total));
+        textViewYouChange.setText(String.format("%.2f%%", (total / total24h - 1) * 100));
     }
 
     /**
@@ -284,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         int[] colors = this.getResources().getIntArray(R.array.distributionbar);
 
         // Paint canvas
-        for (int i =0; i<distribution.elements.size(); i++) {
+        for (int i = 0; i < distribution.elements.size(); i++) {
             AssetDistribution.DistributedElement element = distribution.elements.get(i);
             ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
             mDrawable.getPaint().setColor(colors[i % 18]);
@@ -292,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
             mDrawable.draw(canvas);
             if (element.getPercentage() > 5)
                 canvas.drawText(element.getTicker(),
-                        element.getBounds().centerX() - paint.measureText(element.getTicker())/2,
+                        element.getBounds().centerX() - paint.measureText(element.getTicker()) / 2,
                         element.getBounds().centerY() + paint.getTextSize() / 2,
                         paint);
             color = !color;

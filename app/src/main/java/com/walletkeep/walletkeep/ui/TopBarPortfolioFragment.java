@@ -9,16 +9,9 @@ import android.view.ViewGroup;
 
 import com.walletkeep.walletkeep.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class TopBarPortfolioFragment extends Fragment {
 
-
-    public TopBarPortfolioFragment() {
-        // Required empty public constructor
-    }
-
+    public TopBarPortfolioFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

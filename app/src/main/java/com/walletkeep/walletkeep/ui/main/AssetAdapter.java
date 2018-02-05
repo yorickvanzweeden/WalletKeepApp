@@ -20,6 +20,9 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.main.AssetAdapter.ViewHolder> {
     // Data of the recycler view
     private List<AggregatedAsset> assets;
@@ -32,26 +35,19 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * Provide a reference to the views for each data item
      * Each data/list item gets access to its own elements
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        TextView mTextViewTicker;
-        TextView mTextViewAmount;
-        TextView mTextViewPrice;
-        TextView mTextViewTotal;
-        TextView mTextViewChange;
-        CardView mCardView;
-        ImageView mImageView;
+        @BindView(R.id.asset_listitem_textView_ticker) TextView mTextViewTicker;
+        @BindView(R.id.asset_listitem_textView_holdings) TextView mTextViewAmount;
+        @BindView(R.id.asset_listitem_textView_price) TextView mTextViewPrice;
+        @BindView(R.id.asset_listitem_textView_total) TextView mTextViewTotal;
+        @BindView(R.id.asset_listitem_textView_change) TextView mTextViewChange;
+        @BindView(R.id.editWallet_naked_token_listitem_cardView) CardView mCardView;
+        @BindView(R.id.imageView) ImageView mImageView;
 
-        ViewHolder(View v) {
-            super(v);
-            // Initialise UI elements
-            mTextViewTicker = v.findViewById(R.id.asset_listitem_textView_ticker);
-            mTextViewAmount = v.findViewById(R.id.asset_listitem_textView_holdings);
-            mTextViewPrice = v.findViewById(R.id.asset_listitem_textView_price);
-            mTextViewTotal = v.findViewById(R.id.asset_listitem_textView_total);
-            mTextViewChange = v.findViewById(R.id.asset_listitem_textView_change);
-            mCardView = v.findViewById(R.id.asset_listitem_card_view);
-            mImageView = v.findViewById(R.id.imageView);
+        ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(itemView);
         }
     }
 

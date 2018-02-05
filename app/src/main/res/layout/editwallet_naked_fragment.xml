@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editWallet_naked_textView_label_currency" />
 
     <TextView
-        android:id="@+id/nakedwallet_description"
+        android:id="@+id/editWallet_naked_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

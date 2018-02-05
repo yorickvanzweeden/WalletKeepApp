@@ -19,6 +19,9 @@ import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.ViewHolder> {
     // Data of the recycler view
     private List<Portfolio> portfolios;
@@ -32,26 +35,24 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
      * Provide a reference to the views for each data item
      * Each data/list item gets access to its own elements
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
-        public CardView mCardView;
-        public Button assetButton;
-        public Button deleteButton;
+        @BindView(R.id.portfolio_listitem_button_assets) Button buttonAssets;
+        @BindView(R.id.portfolio_listitem_button_delete) Button buttonDelete;
+        @BindView(R.id.portfolio_listitem_cardView) CardView cardView;
 
-        public ViewHolder(View v) {
-            super(v);
-            // Initialise UI elements
-            mCardView = v.findViewById(R.id.portfolio_listitem_cardView);
-            assetButton = v.findViewById(R.id.portfolio_listitem_button_assets);
-            deleteButton = v.findViewById(R.id.portfolio_listitem_button_delete);
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 
     /**
      * Constructor: Sets context
+     *
      * @param context Allows for referencing of UI elements
      */
-    public PortfolioAdapter(Context context, List<Portfolio> portfolios, PortfolioViewModel viewModel) {
+    PortfolioAdapter(Context context, List<Portfolio> portfolios, PortfolioViewModel viewModel) {
         this.portfolios = portfolios;
         this.context = context;
         this.viewModel = viewModel;
@@ -59,44 +60,47 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
 
     /**
      * Update data of the list
+     *
      * @param portfolios List of portfolios
      */
-    public void updatePortfolios(List<Portfolio> portfolios){
+    void updatePortfolios(List<Portfolio> portfolios) {
         this.portfolios = portfolios;
         notifyDataSetChanged();
     }
 
     /**
      * Creates new view and specifies which layout to use
+     *
      * @param parent
      * @param viewType
      * @return ViewHolder
      */
     @Override
-    public PortfolioAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent,
+                                         int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.portfolio_content_listitem, parent, false);
 
         return new ViewHolder(v);
     }
-    
+
     /**
      * Specifies the UI elements and actions per list item
-     * @param holder View holder (list item) to use
+     *
+     * @param holder   View holder (list item) to use
      * @param position The index of the data item
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TextView name = (TextView)((ConstraintLayout)holder.mCardView.getChildAt(0)).getChildAt(0);
+        TextView name = (TextView) ((ConstraintLayout) holder.cardView.getChildAt(0)).getChildAt(0);
         name.setText(portfolios.get(position).getName());
 
-        holder.assetButton.setOnClickListener(view -> {
+        holder.buttonAssets.setOnClickListener(view -> {
             Intent intent = new Intent(context, MainActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
             context.startActivity(intent);
         });
-        holder.deleteButton.setOnClickListener(view -> {
+        holder.buttonDelete.setOnClickListener(view -> {
             // Ask for confirmation
             new AlertDialog.Builder(this.context)
                     .setMessage(R.string.confirmation_delete_portfolio)
@@ -109,6 +113,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
 
     /**
      * Return item count of the data set
+     *
      * @return Item count of the data set
      */
     @Override

@@ -1,5 +1,6 @@
 package com.walletkeep.walletkeep.ui.wallet;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> {
     // Data of the recycler view
     private String[] supportedTokens;
@@ -28,21 +32,20 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      * Provide a reference to the views for each data item
      * Each data/list item gets access to its own elements
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // UI elements to use of the list item layout
-        TextView tokenLabel;
-        ToggleButton toggleButton;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.editWallet_naked_token_button_toggle) ToggleButton toggleButton;
+        @BindView(R.id.editWallet_naked_token_textView_label_ticker) TextView textViewlabelTicker;
+        @BindView(R.id.editWallet_naked_token_listitem_cardView) CardView cardView;
 
         ViewHolder(View v) {
             super(v);
-            // Initialise UI elements
-            tokenLabel = v.findViewById(R.id.editwallet_naked_token_tickertext);
-            toggleButton = v.findViewById(R.id.editwallet_naked_token_togglebutton);
+            ButterKnife.bind(this, v);
         }
     }
 
     /**
      * Constructor: Sets lists of supported supportedTokens
+     *
      * @param supportedTokens
      */
     TokenAdapter(String[] supportedTokens, int walletId) {
@@ -52,7 +55,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     }
 
     void setWalletTokens(List<WalletToken> walletTokenList) {
-        for(WalletToken token: walletTokenList)
+        for (WalletToken token : walletTokenList)
             walletTokens.put(token.getCurrencyTicker(), token);
         notifyDataSetChanged();
     }
@@ -60,37 +63,38 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     List<WalletToken> getWalletTokens(Boolean add) {
         List<WalletToken> list = new ArrayList<>();
         if (changeRecord.isEmpty()) return list;
-        for (Map.Entry<String, Boolean> entry: changeRecord.entrySet()) {
+        for (Map.Entry<String, Boolean> entry : changeRecord.entrySet()) {
             if (entry.getValue() == add) list.add(walletTokens.get(entry.getKey()));
         }
         return list;
     }
 
 
-
     /**
      * Creates new view and specifies which layout to use
+     *
      * @param parent
      * @param viewType
      * @return ViewHolder
      */
     @Override
-    public TokenAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                       int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent,
+                                         int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.editwallet_naked_token_fragment, parent, false);
 
-        return new com.walletkeep.walletkeep.ui.wallet.TokenAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     /**
      * Specifies the UI elements and actions per list item
-     * @param holder View holder (list item) to use
+     *
+     * @param holder   View holder (list item) to use
      * @param position The index of the data item
      */
     @Override
-    public void onBindViewHolder(TokenAdapter.ViewHolder holder, int position) {
-        holder.tokenLabel.setText(supportedTokens[position]);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.textViewlabelTicker.setText(supportedTokens[position]);
         holder.toggleButton.setChecked(walletTokens.containsKey(supportedTokens[position]));
 
         holder.toggleButton.setOnClickListener((view) -> {
@@ -108,6 +112,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
 
     /**
      * Return item count of the data set
+     *
      * @return Item count of the data set
      */
     @Override

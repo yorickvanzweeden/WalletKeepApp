@@ -2,10 +2,13 @@ package com.walletkeep.walletkeep.ui.wallet;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
@@ -15,7 +18,19 @@ import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class EditWalletActivity extends AppCompatActivity {
+    @BindView(R.id.editwallet_activity_textView_label_name) TextView textViewLabelName;
+    @BindView(R.id.editwallet_activity_textView_name) EditText textViewName;
+    @BindView(R.id.editwallet_activity_fragmentContainer) ConstraintLayout fragmentContainer;
+    @BindView(R.id.editWallet_activity_button_save) Button buttonSave;
+    @BindView(R.id.editWallet_activity_button_delete) Button buttonDelete;
+    @BindView(R.id.editWallet_activity_constraintLayout) ConstraintLayout constraintLayout2;
+    @BindView(R.id.editwallet_activity_mainholder) ConstraintLayout mainholder;
+    @BindView(R.id.editwallet_activity_cardView) CardView editwalletMainbodyCardView;
+
     private UpdateWalletViewModel viewModel;
     private WalletWithRelations wallet;
     private Fragment fragment;
@@ -23,6 +38,7 @@ public class EditWalletActivity extends AppCompatActivity {
 
     /**
      * Setup the activity
+     *
      * @param savedInstanceState Previous state of the activity
      */
     @Override
@@ -39,12 +55,13 @@ public class EditWalletActivity extends AppCompatActivity {
 
         // Set theme first
         setContentView(R.layout.editwallet_activity);
+        ButterKnife.bind(this);
         setupFragment(savedInstanceState);
 
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .repositoryComponent(((WalletKeepApp) getApplication()).component())
                 .build();
         viewModel = component.getUpdateWalletViewModel();
         viewModel.init(walletId);
@@ -57,23 +74,22 @@ public class EditWalletActivity extends AppCompatActivity {
 
             // Set name
             String name = wallet.wallet.getName();
-            ((EditText)findViewById(R.id.editwallet_activity_textView_name)).setText(name);
+            textViewName.setText(name);
         });
 
         // Setup save button
-        Button saveButton = findViewById(R.id.editWallet_activity_button_save);
-        saveButton.setOnClickListener(view -> saveWallet(portfolioId));
+        buttonSave.setOnClickListener(view -> saveWallet(portfolioId));
 
         // Setup delete button
-        Button deleteButton = findViewById(R.id.editWallet_activity_button_delete);
-        deleteButton.setOnClickListener(view -> deleteWallet());
+        buttonDelete.setOnClickListener(view -> deleteWallet());
     }
 
     /**
      * Get the fragment
+     *
      * @param fragmentType Type of fragment (exchange|naked|transaction)
      */
-    private void getFragment(int fragmentType){
+    private void getFragment(int fragmentType) {
         // Add exchange fragment for exchange wallets, naked fragment for naked wallets
         switch (WalletWithRelations.Type.values()[fragmentType]) {
 
@@ -85,7 +101,7 @@ public class EditWalletActivity extends AppCompatActivity {
             case Naked:
                 fragment = new EditNakedWalletFragment();
                 setTheme(R.style.NakedWalletTheme);
-                setTitle("Wallet Adress");
+                setTitle("Wallet Address");
                 break;
             case Transaction:
                 fragment = new EditTransactionFragment();
@@ -97,6 +113,7 @@ public class EditWalletActivity extends AppCompatActivity {
 
     /**
      * Set the fragment
+     *
      * @param savedInstanceState Previous instance of activity
      */
     private void setupFragment(Bundle savedInstanceState) {
@@ -112,9 +129,10 @@ public class EditWalletActivity extends AppCompatActivity {
 
     /**
      * Save a wallet
+     *
      * @param portfolioId Id of the portfolio the wallet belongs to
      */
-    private void saveWallet(int portfolioId){
+    private void saveWallet(int portfolioId) {
         Boolean shouldInsert = false;
 
         // Create wallet if not existent
@@ -127,19 +145,24 @@ public class EditWalletActivity extends AppCompatActivity {
 
         // Update wallet with form data
         wallet = ((IWalletFragment) fragment).updateWallet(wallet);
-        String name = ((EditText)findViewById(R.id.editwallet_activity_textView_name)).getText().toString();
+        String name = textViewName.getText().toString();
         if (name.trim().length() == 0) {
             if (wallet.getType() == WalletWithRelations.Type.Exchange) {
                 name = wallet.getExchangeName() + " Wallet";
             } else if (wallet.getType() == WalletWithRelations.Type.Naked) {
                 name = wallet.getAddressCurrency() + " Wallet";
-            } else { name = wallet.assets.get(0).getCurrencyTicker() + " Wallet"; }
+            } else {
+                name = wallet.assets.get(0).getCurrencyTicker() + " Wallet";
+            }
         }
         wallet.wallet.setName(name);
 
         // Save wallet to database
-        if(shouldInsert) { viewModel.addWallet(wallet);
-        } else { viewModel.updateWallet(wallet); }
+        if (shouldInsert) {
+            viewModel.addWallet(wallet);
+        } else {
+            viewModel.updateWallet(wallet);
+        }
 
         // Kill activity --> Return to previous activity
         finish();
@@ -150,7 +173,7 @@ public class EditWalletActivity extends AppCompatActivity {
      */
     private void deleteWallet() {
         // Don't delete if not saved
-        if(wallet == null) {
+        if (wallet == null) {
             finish();
             return;
         }
@@ -171,8 +194,9 @@ public class EditWalletActivity extends AppCompatActivity {
     /**
      * Interface for naked and exchange wallet fragments
      */
-    public interface IWalletFragment{
+    public interface IWalletFragment {
         void updateForm(WalletWithRelations wallet);
+
         WalletWithRelations updateWallet(WalletWithRelations wallet);
     }
 }

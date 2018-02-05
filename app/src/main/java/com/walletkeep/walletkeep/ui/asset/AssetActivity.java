@@ -11,13 +11,26 @@ import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.SeperateAssetViewModel;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AssetActivity extends AppCompatActivity {
+    @BindView(R.id.asset_name) TextView mTextViewName;
+    @BindView(R.id.holdings_text) TextView mTextViewHoldings;
+    @BindView(R.id.asset_price) TextView mTextViewPrice;
+    @BindView(R.id.asset_change) TextView mTextViewChange;
+    @BindView(R.id.asset_icon) ImageView mImageView;
+    @BindView(R.id.asset_market_cap) TextView mTextViewMarketCap;
+    @BindView(R.id.asset_volume) TextView mTextViewVolume;
+    @BindView(R.id.exposure_text) TextView mTextViewExposure;
+
     private SeperateAssetViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seperate_asset_screen);
+        ButterKnife.bind(this);
 
         String currencyTicker = "ETH";
 
@@ -39,21 +52,10 @@ public class AssetActivity extends AppCompatActivity {
         viewModel.init(currencyTicker);
 
         // Initialise UI elements
-        TextView mTextViewName = findViewById(R.id.asset_name);
-        TextView mTextViewHoldings = findViewById(R.id.holdings_text);
-        TextView mTextViewPrice = findViewById(R.id.asset_price);
-        TextView mTextViewChange = findViewById(R.id.asset_change);
-        ImageView mImageView = findViewById(R.id.asset_icon);
-        TextView mTextViewMarketCap = findViewById(R.id.asset_market_cap);
-        TextView mTextViewVolume = findViewById(R.id.asset_volume);
-        TextView mTextViewExposure = findViewById(R.id.exposure_text);
-
         viewModel.loadCurrency().observe(this, currency -> {
             if (currency == null) return;
 
             mTextViewName.setText(currency.getName());
         });
-
-
     }
 }

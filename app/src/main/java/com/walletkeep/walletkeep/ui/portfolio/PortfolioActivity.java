@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
@@ -21,15 +20,22 @@ import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PortfolioActivity extends AppCompatActivity
         implements AddPortfolioDialog.AddPortfolioDialogListener {
     @Inject
     public PortfolioViewModel viewModel;
+    @BindView(R.id.portfolio_toolbar) Toolbar mToolbar;
+    @BindView(R.id.portfolio_content_recyclerView) RecyclerView mRecyclerView;
+    @BindView(R.id.portfolio_activity_fab) FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.portfolio_activity);
+        ButterKnife.bind(this);
 
         setupOverlay();
         setupRecyclerView();
@@ -38,34 +44,24 @@ public class PortfolioActivity extends AppCompatActivity
     /**
      * Setup overlay items such as the toolbar and the fab
      */
-    private void setupOverlay(){
+    private void setupOverlay() {
         // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.portfolio_dialog_editText_name);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            }
-        });
+        mToolbar.setNavigationOnClickListener(v
+                -> startActivity(new Intent(getApplicationContext(), MainActivity.class)));
 
         // Setup fab
-        FloatingActionButton fab = findViewById(R.id.portfolio_activity_fab);
-        fab.setOnClickListener(view -> buildPortfolioDialog());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mFab.setOnClickListener(view -> buildPortfolioDialog());
     }
 
     /**
      * Sets up the recycler view containing the wallets
      */
-    private void setupRecyclerView(){
-        // Link to the right UI item
-        RecyclerView mRecyclerView = findViewById(R.id.portfolio_content_recyclerView);
-
+    private void setupRecyclerView() {
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -76,7 +72,7 @@ public class PortfolioActivity extends AppCompatActivity
 
         // Initialise view model
         ViewModelComponent component = DaggerViewModelComponent.builder()
-                .repositoryComponent(((WalletKeepApp)getApplication()).component())
+                .repositoryComponent(((WalletKeepApp) getApplication()).component())
                 .build();
         viewModel = component.getPortfolioViewModel();
         viewModel.init();
@@ -86,23 +82,25 @@ public class PortfolioActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdapter);
 
         // Update recycler view if portfolios are changed
-        viewModel.loadPortfolios().observe(this, portfolios ->
-                mAdapter.updatePortfolios(portfolios));
+        viewModel.loadPortfolios().observe(this, mAdapter::updatePortfolios);
     }
 
     /**
      * Display portfolio dialog to add a new portfolio
      */
-    private void buildPortfolioDialog(){
+    private void buildPortfolioDialog() {
         FragmentManager manager = getFragmentManager();
         Fragment frag = manager.findFragmentByTag("portfolio_add_dialog_fragment");
-        if (frag != null) { manager.beginTransaction().remove(frag).commit(); }
+        if (frag != null) {
+            manager.beginTransaction().remove(frag).commit();
+        }
         AddPortfolioDialog editNameDialog = new AddPortfolioDialog();
         editNameDialog.show(manager, "portfolio_add_dialog_fragment");
     }
 
     /**
      * Callback from the dialog listener: Add portfolio with given name
+     *
      * @param portfolioName Name of the portfolio
      */
     @Override

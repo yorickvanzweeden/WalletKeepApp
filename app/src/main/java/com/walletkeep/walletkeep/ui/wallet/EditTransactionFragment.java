@@ -18,34 +18,29 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class EditTransactionFragment extends Fragment implements EditWalletActivity.IWalletFragment {
+    @BindView(R.id.editWallet_transaction_editText_currency) EditText editTextCurrency;
+    @BindView(R.id.editWallet_transaction_editText_amount) EditText editTextAmount;
+    Unbinder unbinder;
+
     private View view;
     private List<Asset> assets;
     private BigDecimal sum = BigDecimal.ZERO;
 
-    /**
-     * Constructor: Required empty public constructor
-     */
     public EditTransactionFragment() {}
 
-    /**
-     * Inflate view
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.editwallet_transaction_fragment, container, false);
+        View view = inflater.inflate(R.layout.editwallet_transaction_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
-    /**
-     * Initialise view
-     * @param view View of the fragment
-     * @param savedInstanceState Previous state of the fragment
-     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         this.view = getView();
@@ -53,32 +48,32 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
 
     /**
      * Update form with saved wallet data
+     *
      * @param wallet Wallet containing the data for the form
      */
     @Override
     public void updateForm(WalletWithRelations wallet) {
         this.assets = wallet.assets;
 
-        ((EditText)view.findViewById(R.id.editWallet_transaction_editText_currency))
-                .setText(wallet.assets.get(wallet.assets.size() - 1).getCurrencyTicker());
+        editTextCurrency.setText(wallet.assets.get(wallet.assets.size() - 1).getCurrencyTicker());
 
-        for (Asset asset: this.assets) {
+        for (Asset asset : this.assets) {
             sum = sum.add(asset.getAmount());
         }
-        ((EditText)view.findViewById(R.id.editWallet_transaction_editText_amount))
-                .setText(sum.toString());
+        editTextAmount.setText(sum.toString());
     }
 
     /**
      * Save form data to a wallet
+     *
      * @param wallet Wallet to save data in
      * @return Updated wallet
      */
     @Override
     public WalletWithRelations updateWallet(WalletWithRelations wallet) {
         // Retrieve data from form
-        String currency = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_currency)).getText().toString().trim().toUpperCase();
-        String amountString = ((EditText)getView().findViewById(R.id.editWallet_transaction_editText_amount)).getText().toString();
+        String currency = editTextCurrency.getText().toString().trim().toUpperCase();
+        String amountString = editTextAmount.getText().toString();
         // Check user input
         BigDecimal amount = Converters.userInputToBD(amountString);
 
@@ -96,5 +91,11 @@ public class EditTransactionFragment extends Fragment implements EditWalletActiv
         wallet.assets = assets;
 
         return wallet;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

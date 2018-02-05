@@ -5,7 +5,7 @@
     tools:context="com.walletkeep.walletkeep.ui.portfolio.AddPortfolioDialog">
 
     <EditText
-        android:id="@+id/portfolio_dialog_editText_name"
+        android:id="@+id/portfolio_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
