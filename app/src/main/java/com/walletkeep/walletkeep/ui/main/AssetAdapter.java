@@ -1,4 +1,4 @@
-package com.walletkeep.walletkeep.ui.asset;
+package com.walletkeep.walletkeep.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,14 +13,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
-import com.walletkeep.walletkeep.ui.assetScreen.SeperateAssetScreen;
+import com.walletkeep.walletkeep.ui.asset.AssetActivity;
 
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder> {
+public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep.ui.main.AssetAdapter.ViewHolder> {
     // Data of the recycler view
     private List<AggregatedAsset> assets;
     private String currencySetting = "EUR";
@@ -90,12 +90,12 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * @return ViewHolder
      */
     @Override
-    public com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                                 int viewType) {
+    public com.walletkeep.walletkeep.ui.main.AssetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                        int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.asset_content_listitem, parent, false);
 
-        return new com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder(v);
+        return new com.walletkeep.walletkeep.ui.main.AssetAdapter.ViewHolder(v);
     }
 
     /**
@@ -104,7 +104,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * @param position The index of the data item
      */
     @Override
-    public void onBindViewHolder(com.walletkeep.walletkeep.ui.asset.AssetAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(com.walletkeep.walletkeep.ui.main.AssetAdapter.ViewHolder holder, int position) {
         AggregatedAsset asset = assets.get(position);
 
         NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
@@ -129,7 +129,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         else if (asset.getChange(currencySetting)== 0);
 
         holder.mCardView.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), SeperateAssetScreen.class);
+            Intent intent = new Intent(view.getContext(), AssetActivity.class);
             intent.putExtra("currency_ticker", asset.getTicker());
             view.getContext().startActivity(intent);
         });

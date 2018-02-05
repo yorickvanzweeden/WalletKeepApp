@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/FullscreenTheme"
-    tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity">
+    tools:context="com.walletkeep.walletkeep.ui.main.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"

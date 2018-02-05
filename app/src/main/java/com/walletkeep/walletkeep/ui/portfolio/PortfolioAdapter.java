@@ -10,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
-import com.walletkeep.walletkeep.ui.asset.AssetActivity;
-import com.walletkeep.walletkeep.ui.wallet.WalletActivity;
+import com.walletkeep.walletkeep.ui.main.MainActivity;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import java.util.List;
@@ -94,7 +92,7 @@ public class PortfolioAdapter extends RecyclerView.Adapter<PortfolioAdapter.View
         name.setText(portfolios.get(position).getName());
 
         holder.assetButton.setOnClickListener(view -> {
-            Intent intent = new Intent(context, AssetActivity.class);
+            Intent intent = new Intent(context, MainActivity.class);
             intent.putExtra("portfolio_id", portfolios.get(position).getId());
             context.startActivity(intent);
         });

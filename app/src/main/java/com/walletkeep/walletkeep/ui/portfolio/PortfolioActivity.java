@@ -16,7 +16,7 @@ import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.Portfolio;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
-import com.walletkeep.walletkeep.ui.asset.AssetActivity;
+import com.walletkeep.walletkeep.ui.main.MainActivity;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
 
 import javax.inject.Inject;
@@ -49,7 +49,7 @@ public class PortfolioActivity extends AppCompatActivity
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),AssetActivity.class));
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
 

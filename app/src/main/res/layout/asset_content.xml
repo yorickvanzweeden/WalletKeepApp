@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.walletkeep.walletkeep.ui.asset.AssetActivity"
+    tools:context="com.walletkeep.walletkeep.ui.main.MainActivity"
     tools:showIn="@layout/asset_activity"
     android:padding="5dp"
     android:background="@color/background">

@@ -35,12 +35,15 @@
     <string name="label_price">Price:</string>
     <string name="label_holdings">Holdings:</string>
 
+    <string name="title_activity_assets">Assets</string>
 
     <!-- - - - - - - - - - - EditWallet - - - - - - - - - - -->
     <string name="confirmation_delete_wallet">Do you want to delete this wallet?</string>
 
 
     <!-- - - - - - - - - - - IntroSlider - - - - - - - - - - -->
+    <string name="title_activity_introslider">Intro</string>
+
     <string name="Splash1">WalletKeep is the app that makes tracking your cryptocurrency portfolio truly easy and effortless.</string>
     <string name="Splash2">You enter your wallet address and exchange API View Key and WalletKeep will keep automatic track of all your balances, no more manual editing necessary.</string>
     <string name="Splash3">All the keys, addresses and work is done and stored only on your phone, so no one else has access to your portfolio</string>
@@ -69,5 +72,4 @@
     <string name="fab_wallet_address">Wallet address</string>
     <string name="fab_exchange_account">Exchange account</string>
     <string name="tokens">Tokens:</string>
-    <string name="title_activity_seperate_asset_screen">SeperateAssetScreen</string>
 </resources>
