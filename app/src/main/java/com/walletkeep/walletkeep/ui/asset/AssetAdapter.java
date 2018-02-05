@@ -1,6 +1,8 @@
 package com.walletkeep.walletkeep.ui.asset;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.ui.assetScreen.SeperateAssetScreen;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -29,13 +32,14 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
      * Provide a reference to the views for each data item
      * Each data/list item gets access to its own elements
      */
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         // UI elements to use of the list item layout
         TextView mTextViewTicker;
         TextView mTextViewAmount;
         TextView mTextViewPrice;
         TextView mTextViewTotal;
         TextView mTextViewChange;
+        CardView mCardView;
         ImageView mImageView;
 
         ViewHolder(View v) {
@@ -46,6 +50,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
             mTextViewPrice = v.findViewById(R.id.asset_listitem_textView_price);
             mTextViewTotal = v.findViewById(R.id.asset_listitem_textView_total);
             mTextViewChange = v.findViewById(R.id.asset_listitem_textView_change);
+            mCardView = v.findViewById(R.id.asset_listitem_card_view);
             mImageView = v.findViewById(R.id.imageView);
         }
     }
@@ -116,6 +121,19 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
                 .error(R.drawable.ethereum)
                 .centerCrop()
                 .into(holder.mImageView);
+
+        if (asset.getChange(currencySetting) > 0)
+            holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_positive));
+        else if (asset.getChange(currencySetting) < 0)
+            holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_negative));
+        else if (asset.getChange(currencySetting)== 0);
+
+        holder.mCardView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), SeperateAssetScreen.class);
+            intent.putExtra("currency_ticker", asset.getTicker());
+            view.getContext().startActivity(intent);
+        });
+
     }
 
     /**

@@ -4,6 +4,7 @@ import com.walletkeep.walletkeep.di.module.ViewModelModule;
 import com.walletkeep.walletkeep.di.scope.ActivityScope;
 import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 import com.walletkeep.walletkeep.viewmodel.PortfolioViewModel;
+import com.walletkeep.walletkeep.viewmodel.SeperateAssetViewModel;
 import com.walletkeep.walletkeep.viewmodel.TokenViewModel;
 import com.walletkeep.walletkeep.viewmodel.UpdateWalletViewModel;
 import com.walletkeep.walletkeep.viewmodel.WalletViewModel;
@@ -23,5 +24,7 @@ public interface ViewModelComponent {
     UpdateWalletViewModel getUpdateWalletViewModel();
 
     TokenViewModel getTokenViewModel();
+
+    SeperateAssetViewModel getSeperateAssetViewModel();
 
 }

@@ -16,6 +16,7 @@ import android.text.format.DateUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,7 +66,7 @@ public class AssetActivity extends AppCompatActivity {
         }
 
         setupOverlay(portfolioId);
-        setupRecyclerView(portfolioId);
+        setupRecyclerView(  portfolioId);
         setupSwipeRefreshLayout();
     }
 
@@ -190,6 +191,12 @@ public class AssetActivity extends AppCompatActivity {
             }
 
             this.assets = aggregatedAssets;
+
+            if (aggregatedAssets != null) {
+                findViewById(R.id.asset_activity_textView_you_change).setVisibility(View.VISIBLE);
+                findViewById(R.id.asset_activity_textView_label_you).setVisibility(View.VISIBLE);
+            }
+
             onUpdated();
         });
     }
@@ -213,6 +220,7 @@ public class AssetActivity extends AppCompatActivity {
             if (assets.get(i).getValueEur().compareTo(BigDecimal.ONE) > 0) break;
             index = i;
         }
+
 //        if (priceFetchIndex != -1) viewModel.priceFetch(assets.subList(priceFetchIndex, assets.size()), errorListener, false);
         if (index != -1) assets = assets.subList(0, index);
 

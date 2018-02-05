@@ -15,7 +15,7 @@
         android:background="@color/white"
         android:ems="10"
         android:inputType="textPersonName"
-        android:textAppearance="@style/WalletInfoTextTitle"
+        android:textAppearance="@style/LargeInfoTextTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_textView_label_currency" />
 
@@ -66,7 +66,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:background="@color/white"
-        android:textAppearance="@style/WalletInfoTextTitle"
+        android:textAppearance="@style/LargeInfoTextTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWallet_transaction_textView_label_amount" />
