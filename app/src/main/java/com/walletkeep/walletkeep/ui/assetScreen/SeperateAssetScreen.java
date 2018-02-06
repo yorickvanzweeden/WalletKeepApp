@@ -1,15 +1,13 @@
 package com.walletkeep.walletkeep.ui.assetScreen;
 
-import android.arch.lifecycle.Observer;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
-import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
 import com.walletkeep.walletkeep.viewmodel.SeperateAssetViewModel;
@@ -55,6 +53,13 @@ public class SeperateAssetScreen extends AppCompatActivity {
             if (currency == null) return;
 
             mTextViewName.setText(currency.getName());
+
+            Glide.with(this)
+                    .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", currency.getTicker().toUpperCase()))
+                    .placeholder(R.drawable.ethereum)
+                    .error(R.drawable.ethereum)
+                    .centerCrop()
+                    .into((ImageView)findViewById(R.id.asset_icon));
         });
 
 

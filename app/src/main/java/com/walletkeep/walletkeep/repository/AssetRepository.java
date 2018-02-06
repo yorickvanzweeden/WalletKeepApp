@@ -98,10 +98,21 @@ public class AssetRepository {
                 errorListener.onError("Error fetching prices: " + message);
             }
         };
-        CryptoCompareService service = new CryptoCompareService(listener);
 
-        // Fetch data
-        service.fetch(currencies, delete);
+        // Test internet connection
+        executors.networkIO().execute(() -> {
+            boolean internet = true;
+            try { InetAddress.getByName("www.google.com"); }
+            catch (UnknownHostException e) { internet = false; }
+
+            if (!internet)
+                executors.mainThread().execute(() -> errorListener.onError("No Internet connection"));
+            else {
+                CryptoCompareService service = new CryptoCompareService(listener);
+                // Fetch data
+                service.fetch(currencies, delete);
+            }
+        });
     }
 
     /**
