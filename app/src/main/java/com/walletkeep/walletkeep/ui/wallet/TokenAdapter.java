@@ -34,7 +34,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
      */
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.editWallet_naked_token_button_toggle) ToggleButton toggleButton;
-        @BindView(R.id.editWallet_naked_token_textView_label_ticker) TextView textViewlabelTicker;
+        @BindView(R.id.editwallet_naked_token_tickertext) TextView textViewlabelTicker;
         @BindView(R.id.editWallet_naked_token_listitem_cardView) CardView cardView;
 
         ViewHolder(View v) {

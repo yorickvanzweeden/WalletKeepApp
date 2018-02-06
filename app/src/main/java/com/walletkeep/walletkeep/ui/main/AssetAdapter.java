@@ -47,7 +47,7 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

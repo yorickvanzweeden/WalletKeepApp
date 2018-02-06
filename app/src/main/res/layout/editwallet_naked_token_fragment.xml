@@ -29,12 +29,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="ToggleButton"
                 android:textAppearance="@style/InfoTextNormal"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/editWallet_naked_token_textView_label_ticker"
+                card_view:layout_constraintStart_toEndOf="@+id/editwallet_naked_token_tickertext"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
