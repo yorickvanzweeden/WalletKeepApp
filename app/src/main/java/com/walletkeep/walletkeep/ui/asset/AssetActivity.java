@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
@@ -56,6 +57,13 @@ public class AssetActivity extends AppCompatActivity {
             if (currency == null) return;
 
             mTextViewName.setText(currency.getName());
+
+            Glide.with(this)
+                    .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", currency.getTicker().toUpperCase()))
+                    .placeholder(R.drawable.ethereum)
+                    .error(R.drawable.ethereum)
+                    .centerCrop()
+                    .into((ImageView)findViewById(R.id.asset_icon));
         });
     }
 }

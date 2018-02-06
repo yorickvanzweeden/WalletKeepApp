@@ -112,17 +112,16 @@ public class AssetAdapter extends RecyclerView.Adapter<com.walletkeep.walletkeep
         holder.mTextViewTotal.setText(nf.format(asset.getValue(currencySetting)));
         holder.mTextViewChange.setText(String.format("%.2f%%", asset.getChange(currencySetting)));
         Glide.with(context)
-                .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", asset.getTicker().toLowerCase()))
+                .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", asset.getTicker().toUpperCase()))
                 .placeholder(R.drawable.ethereum)
                 .error(R.drawable.ethereum)
                 .centerCrop()
                 .into(holder.mImageView);
 
-        if (asset.getChange(currencySetting) > 0)
+        if (asset.getChange(currencySetting) > 0.001)
             holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_positive));
-        else if (asset.getChange(currencySetting) < 0)
+        else if (asset.getChange(currencySetting) < -0.001)
             holder.mTextViewChange.setBackgroundColor(context.getResources().getColor(R.color.price_change_negative));
-        else if (asset.getChange(currencySetting)== 0);
 
         holder.mCardView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), AssetActivity.class);

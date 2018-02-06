@@ -33,8 +33,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editwallet_activity_textView_name"
-            app:layout_constraintVertical_bias="0.0"
-            card_view:layout_constraintBottom_toTopOf="@+id/editWallet_activity_constraintLayout">
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/editwallet_activity_textView_label_name"
