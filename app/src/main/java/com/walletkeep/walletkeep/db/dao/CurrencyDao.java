@@ -23,4 +23,7 @@ public abstract class CurrencyDao implements BaseDao<Currency>{
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void insertAll(List<Currency> currency);
+
+    @Query("DELETE FROM currency")
+    public abstract void deleteAll();
 }

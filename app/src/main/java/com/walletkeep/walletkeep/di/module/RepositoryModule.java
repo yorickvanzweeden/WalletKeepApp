@@ -4,7 +4,6 @@ import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.di.scope.AppScope;
 import com.walletkeep.walletkeep.repository.AssetRepository;
-import com.walletkeep.walletkeep.repository.CurrencyRepository;
 import com.walletkeep.walletkeep.repository.PortfolioRepository;
 import com.walletkeep.walletkeep.repository.TokenRepository;
 import com.walletkeep.walletkeep.repository.WalletRepository;
@@ -37,11 +36,5 @@ public class RepositoryModule {
     @Provides
     TokenRepository tokenRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
         return new TokenRepository(appDatabase, appExecutors);
-    }
-    
-    @AppScope
-    @Provides
-    CurrencyRepository currencyRepository(AppDatabase appDatabase, AppExecutors appExecutors) {
-        return new CurrencyRepository(appDatabase, appExecutors);
     }
 }

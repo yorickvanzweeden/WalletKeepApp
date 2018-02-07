@@ -5,12 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.walletkeep.walletkeep.R;
-import com.walletkeep.walletkeep.WalletKeepApp;
-import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
-import com.walletkeep.walletkeep.di.component.ViewModelComponent;
-import com.walletkeep.walletkeep.viewmodel.SeperateAssetViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,8 +19,6 @@ public class AssetActivity extends AppCompatActivity {
     @BindView(R.id.asset_market_cap) TextView mTextViewMarketCap;
     @BindView(R.id.asset_volume) TextView mTextViewVolume;
     @BindView(R.id.exposure_text) TextView mTextViewExposure;
-
-    private SeperateAssetViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +39,24 @@ public class AssetActivity extends AppCompatActivity {
 
     private void setupView(String currencyTicker) {
         // Initialise view model
-        ViewModelComponent component = DaggerViewModelComponent.builder()
-                .repositoryComponent(((WalletKeepApp) getApplication()).component())
-                .build();
-        viewModel = component.getSeperateAssetViewModel();
-        viewModel.init(currencyTicker);
-
-        // Initialise UI elements
-        viewModel.loadCurrency().observe(this, currency -> {
-            if (currency == null) return;
-
-            mTextViewName.setText(currency.getName());
-
-            Glide.with(this)
-                    .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", currency.getTicker().toUpperCase()))
-                    .placeholder(R.drawable.ethereum)
-                    .error(R.drawable.ethereum)
-                    .centerCrop()
-                    .into((ImageView)findViewById(R.id.asset_icon));
-        });
+//        ViewModelComponent component = DaggerViewModelComponent.builder()
+//                .repositoryComponent(((WalletKeepApp) getApplication()).component())
+//                .build();
+//        viewModel = component.getSeperateAssetViewModel();
+//        viewModel.init(currencyTicker);
+//
+//        // Initialise UI elements
+//        viewModel.loadCurrency().observe(this, currency -> {
+//            if (currency == null) return;
+//
+//            mTextViewName.setText(currency.getName());
+//
+//            Glide.with(this)
+//                    .load(String.format("https://yorickvanzweeden.nl/walletkeep/icons/%s.png", currency.getTicker().toUpperCase()))
+//                    .placeholder(R.drawable.ethereum)
+//                    .error(R.drawable.ethereum)
+//                    .centerCrop()
+//                    .into((ImageView)findViewById(R.id.asset_icon));
+//        });
     }
 }

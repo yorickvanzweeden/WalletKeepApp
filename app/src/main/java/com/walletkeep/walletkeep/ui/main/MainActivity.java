@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -23,15 +22,9 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
-import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
@@ -44,7 +37,6 @@ import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -71,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     private List<AggregatedAsset> assets_orig;
     private AssetAdapter mAdapter;
     private AssetRepository.ErrorListener errorListener;
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         setupOverlay(portfolioId);
         setupRecyclerView(portfolioId);
         setupSwipeRefreshLayout();
-        setupFirebase();
     }
 
     @Override
@@ -199,11 +189,6 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getAggregatedAssets().observe(this, aggregatedAssets -> {
             mSwipeContainer.setRefreshing(false);
             assets_orig = aggregatedAssets;
-
-            // Case when assets are fetched for first time
-            if (assets == null && aggregatedAssets != null) {
-                viewModel.priceFetch(aggregatedAssets, errorListener, true);
-            }
 
             this.assets = aggregatedAssets;
 
@@ -322,40 +307,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(startMain);
 
     }
-
-
-    private void setupFirebase(){
-        mDatabase = FirebaseDatabase.getInstance().getReference("prices");
-        currencies = new ArrayList<>();
-        currencies.add("ETH");
-        // Read from the database
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                Log.d("###", "Value is: " + dataSnapshot.child("BTC").toString());
-                for (String currency : currencies) {
-                    CurrencyPrice c = dataSnapshot.child(currency).getValue(CurrencyPrice.class);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("###", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    public static class Post {
-
-        public boolean value;
-        public Post(boolean value) {
-            this.value = value;
-        }
-
-    }
-
 }
