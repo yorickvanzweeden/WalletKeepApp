@@ -39,6 +39,12 @@ public abstract class AssetDao implements BaseDao<Asset> {
             "GROUP BY assets.currency_ticker")
     public abstract LiveData<List<AggregatedAsset>> getAggregatedAssets(int portfolioId);
 
+    //TODO: Ignore currencies with summed amount == 0
+    @Query(" SELECT DISTINCT(asset.currency_ticker)" +
+            "    FROM asset JOIN wallet ON asset.wallet_id = wallet.id " +
+            "    JOIN portfolio ON wallet.portfolio_id = portfolio.id ")
+    public abstract LiveData<List<String>> getActiveCurrencies();
+
     public void deleteTokens(List<WalletToken> tokens) {
         for(WalletToken token: tokens) deleteToken(token.token.getCurrencyTicker(), token.token.getWalletId());
     }

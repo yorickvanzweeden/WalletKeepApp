@@ -199,6 +199,9 @@ public class MainActivity extends AppCompatActivity {
 
             onUpdated();
         });
+
+        // Subscribe to Firebase price updates
+        viewModel.getCurrencies().observe(this, currencies -> viewModel.subscribePriceChanges(currencies));
     }
 
     private void onUpdated() {

@@ -11,33 +11,43 @@ import com.walletkeep.walletkeep.db.entity.Currency;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FirebaseService {
     private FirebaseDatabase mInstance;
     private UpdateListener mListener;
+    private ValueEventListener mValueEventListenerInstance;
+    private HashMap<String, DatabaseReference> watchList;
 
     public FirebaseService(UpdateListener listener) {
         mInstance = FirebaseDatabase.getInstance();
         mListener = listener;
-        setupPriceListener();
+        watchList = new HashMap<>();
         setupCurrencyListener();
     }
 
-    private void setupPriceListener() {
+    public void updateWatchList(List<String> currencies) {
         DatabaseReference ref = mInstance.getReference("prices");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) { onDataChangePrices(dataSnapshot); }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("###", "Failed to read value.", error.toException());
-                mListener.onError(error);
+        // Add new to watch list
+        for (String currency : currencies) {
+            if (!watchList.containsKey(currency)) {
+                DatabaseReference childRef = ref.child(currency);
+                watchList.put(currency, childRef);
+                childRef.addValueEventListener(getPriceListener());
             }
-        });
+        }
+
+        // Remove old
+        for (String old : watchList.keySet()) {
+            if (!currencies.contains(old)) {
+                watchList.get(old).removeEventListener(getPriceListener());
+                watchList.remove(old);
+            }
+        }
     }
+
     private void setupCurrencyListener() {
         DatabaseReference ref = mInstance.getReference("currencies");
         ref.addValueEventListener(new ValueEventListener() {
@@ -53,17 +63,32 @@ public class FirebaseService {
         });
     }
 
-    private void onDataChangePrices(DataSnapshot dataSnapshot) {
-        List<CurrencyPrice> prices = new ArrayList<>();
-        for (DataSnapshot priceSnapshot: dataSnapshot.getChildren()) {
-            Price price = priceSnapshot.getValue(Price.class);
-            prices.add(price.getCurrencyPrice(priceSnapshot.getKey()));
-        }
-        // This method is called once with the initial value and again
-        // whenever data at this location is updated.
-        mListener.insertPrices(prices);
-    }
+    private ValueEventListener getPriceListener() {
+        if (mValueEventListenerInstance == null) {
+            mValueEventListenerInstance = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
 
+                    Log.w("###", dataSnapshot.toString());
+                    try {
+                        Price price = dataSnapshot.getValue(Price.class);
+                        mListener.insertPrice(price.getCurrencyPrice(dataSnapshot.getKey()));
+                    } catch (Exception ignored) {}
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w("###", "Failed to read value.", error.toException());
+                    mListener.onError(error);
+                }
+            };
+        }
+        return mValueEventListenerInstance;
+    }
     private void onDataChangeCurrencies(DataSnapshot dataSnapshot) {
         // This method is called once with the initial value and again
         // whenever data at this location is updated.
@@ -75,7 +100,7 @@ public class FirebaseService {
     }
 
     public interface UpdateListener {
-        void insertPrices(List<CurrencyPrice> prices);
+        void insertPrice(CurrencyPrice price);
         void insertCurrencies(List<Currency> currencies);
         void onError(DatabaseError error);
     }

@@ -3,6 +3,7 @@ package com.walletkeep.walletkeep.di.module;
 
 import com.walletkeep.walletkeep.di.scope.ActivityScope;
 import com.walletkeep.walletkeep.repository.AssetRepository;
+import com.walletkeep.walletkeep.repository.CurrencyRepository;
 import com.walletkeep.walletkeep.repository.PortfolioRepository;
 import com.walletkeep.walletkeep.repository.TokenRepository;
 import com.walletkeep.walletkeep.repository.WalletRepository;
@@ -32,8 +33,8 @@ public class ViewModelModule {
 
     @ActivityScope
     @Provides
-    AssetViewModel assetViewModel(AssetRepository assetRepository) {
-        return new AssetViewModel(assetRepository);
+    AssetViewModel assetViewModel(AssetRepository assetRepository, CurrencyRepository currencyRepository) {
+        return new AssetViewModel(assetRepository, currencyRepository);
     }
 
     @ActivityScope
