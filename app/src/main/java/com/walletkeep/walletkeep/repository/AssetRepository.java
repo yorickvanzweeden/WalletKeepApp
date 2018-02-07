@@ -1,17 +1,14 @@
 package com.walletkeep.walletkeep.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
 
 import com.walletkeep.walletkeep.AppExecutors;
 import com.walletkeep.walletkeep.api.ApiService;
 import com.walletkeep.walletkeep.api.ResponseHandler;
-import com.walletkeep.walletkeep.api.data.CryptoCompareService;
 import com.walletkeep.walletkeep.db.AppDatabase;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.Asset;
 import com.walletkeep.walletkeep.db.entity.Currency;
-import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.ApiServiceComponent;
 import com.walletkeep.walletkeep.di.component.DaggerApiServiceComponent;
@@ -63,56 +60,6 @@ public class AssetRepository {
      */
     public LiveData<List<WalletWithRelations>> getWallets(int portfolioId) {
         return database.walletDao().getAll(portfolioId);
-    }
-
-
-    /**
-     * Update database with the latest currency prices from the api service
-     */
-    public void fetchPrices(@NonNull List<String> currencies, ErrorListener errorListener, boolean delete){
-        // Don't execute API calls if rate limit is applied
-        if (!priceApiRateLimit.shouldFetch(Integer.toString(1))) {
-            errorListener.onError("###");
-            return;
-        }
-
-        // Don't execute API calls if no currencies are provided
-        if(currencies.size() == 0) return;
-
-        // Observe callback and save to db if needed
-        CryptoCompareService.PricesResponseListener listener = new CryptoCompareService.PricesResponseListener() {
-
-            @Override
-            public void onPricesUpdated(List<CurrencyPrice> prices, boolean delete) {
-                Date newDate = new Date();
-
-                executors.diskIO().execute(() -> {
-                    if (delete) database.currencyPriceDao().deleteAll();
-                    for (CurrencyPrice price : prices) price.setLastUpdated(newDate);
-                    database.currencyPriceDao().insertAll(prices);
-                });
-            }
-
-            @Override
-            public void onError(String message) {
-                errorListener.onError("Error fetching prices: " + message);
-            }
-        };
-
-        // Test internet connection
-        executors.networkIO().execute(() -> {
-            boolean internet = true;
-            try { InetAddress.getByName("www.google.com"); }
-            catch (UnknownHostException e) { internet = false; }
-
-            if (!internet)
-                executors.mainThread().execute(() -> errorListener.onError("No Internet connection"));
-            else {
-                CryptoCompareService service = new CryptoCompareService(listener);
-                // Fetch data
-                service.fetch(currencies, delete);
-            }
-        });
     }
 
     /**

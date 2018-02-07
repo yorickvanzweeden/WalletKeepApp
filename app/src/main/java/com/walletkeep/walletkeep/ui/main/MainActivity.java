@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -22,9 +23,15 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.walletkeep.walletkeep.R;
 import com.walletkeep.walletkeep.WalletKeepApp;
 import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
+import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.di.component.DaggerViewModelComponent;
 import com.walletkeep.walletkeep.di.component.ViewModelComponent;
@@ -37,8 +44,8 @@ import com.walletkeep.walletkeep.viewmodel.AssetViewModel;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,9 +67,11 @@ public class MainActivity extends AppCompatActivity {
     private AssetViewModel viewModel;
     private List<WalletWithRelations> wallets;
     private List<AggregatedAsset> assets;
+    private List<String> currencies;
     private List<AggregatedAsset> assets_orig;
     private AssetAdapter mAdapter;
     private AssetRepository.ErrorListener errorListener;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         setupOverlay(portfolioId);
         setupRecyclerView(portfolioId);
         setupSwipeRefreshLayout();
+        setupFirebase();
     }
 
     @Override
@@ -152,10 +162,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getWallets().observe(this, wallets -> this.wallets = wallets);
 
         // Refresh --> Update wallets
-        mSwipeContainer.setOnRefreshListener(() -> {
-            viewModel.priceFetch(assets_orig, errorListener, true);
-            viewModel.assetFetch(wallets, errorListener);
-        });
+        mSwipeContainer.setOnRefreshListener(() -> viewModel.assetFetch(wallets, errorListener));
     }
 
     /**
@@ -255,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set text of TextView
         NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.getDefault());
-        nf.setCurrency(Currency.getInstance(mAdapter.getCurrencySetting()));
+        nf.setCurrency(java.util.Currency.getInstance(mAdapter.getCurrencySetting()));
         textViewPortfolioValue.setText(nf.format(total));
         textViewYouChange.setText(String.format("%.2f%%", (total / total24h - 1) * 100));
     }
@@ -313,6 +320,41 @@ public class MainActivity extends AppCompatActivity {
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
+
+    }
+
+
+    private void setupFirebase(){
+        mDatabase = FirebaseDatabase.getInstance().getReference("prices");
+        currencies = new ArrayList<>();
+        currencies.add("ETH");
+        // Read from the database
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                Log.d("###", "Value is: " + dataSnapshot.child("BTC").toString());
+                for (String currency : currencies) {
+                    CurrencyPrice c = dataSnapshot.child(currency).getValue(CurrencyPrice.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("###", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    public static class Post {
+
+        public boolean value;
+        public Post(boolean value) {
+            this.value = value;
+        }
 
     }
 

@@ -2,7 +2,6 @@ package com.walletkeep.walletkeep.api;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.walletkeep.walletkeep.api.data.CryptoCompareService;
 import com.walletkeep.walletkeep.db.entity.CurrencyPrice;
 
 import org.junit.Test;

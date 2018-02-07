@@ -8,7 +8,6 @@ import com.walletkeep.walletkeep.db.entity.AggregatedAsset;
 import com.walletkeep.walletkeep.db.entity.WalletWithRelations;
 import com.walletkeep.walletkeep.repository.AssetRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AssetViewModel extends ViewModel {
@@ -52,18 +51,6 @@ public class AssetViewModel extends ViewModel {
     public void assetFetch(List<WalletWithRelations> wallets, AssetRepository.ErrorListener errorListener){
         if (wallets != null) {
             this.assetRepository.fetchWallets(wallets, errorListener);
-        }
-    }
-
-    /**
-     * Update all prices
-     */
-    public void priceFetch(List<AggregatedAsset> assets, AssetRepository.ErrorListener errorListener, boolean delete) {
-        if (assets != null) {
-            ArrayList<String> currencies = new ArrayList<String>() {{
-                for (AggregatedAsset asset:assets) add(asset.currencyTicker);
-            }};
-            if (currencies.size() != 0) this.assetRepository.fetchPrices(currencies, errorListener, delete);
         }
     }
 }
